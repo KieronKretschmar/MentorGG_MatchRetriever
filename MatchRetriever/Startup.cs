@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,9 @@ using Microsoft.Extensions.Logging;
 
 namespace MatchRetriever
 {
+    /// <summary>
+    /// Requires env variables ["MYSQL_CONNECTION_STRING"]
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -26,6 +30,21 @@ namespace MatchRetriever
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // if a connectionString is set use mysql, else use InMemory
+            var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
+            if (connString != null)
+            {
+                services.AddDbContext<Database.MatchContext>(o => { o.UseMySql(connString); });
+            }
+            else
+            {
+                services.AddEntityFrameworkInMemoryDatabase()
+                    .AddDbContext<Database.MatchContext>((sp, options) =>
+                    {
+                        options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase").UseInternalServiceProvider(sp);
+                    });
+            }
 
             // Enable versioning
             // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
