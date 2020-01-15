@@ -14,5 +14,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\matchdb\Database\Database.csproj" />
+    <ProjectReference Include="..\matchdb\matchentities\MatchEntities\MatchEntities.csproj" />
+  </ItemGroup>
+
 
 </Project>

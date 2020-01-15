@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchRetriever", "MatchRetriever\MatchRetriever.csproj", "{8B4F7848-CAD2-491D-A436-0C212CC5EC13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetriever", "MatchRetriever\MatchRetriever.csproj", "{8B4F7848-CAD2-491D-A436-0C212CC5EC13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "matchdb\Database\Database.csproj", "{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "matchdb\matchentities\MatchEntities\MatchEntities.csproj", "{64103898-868E-46D2-A443-12217260E99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{8B4F7848-CAD2-491D-A436-0C212CC5EC13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B4F7848-CAD2-491D-A436-0C212CC5EC13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B4F7848-CAD2-491D-A436-0C212CC5EC13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64103898-868E-46D2-A443-12217260E99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64103898-868E-46D2-A443-12217260E99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64103898-868E-46D2-A443-12217260E99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64103898-868E-46D2-A443-12217260E99E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
