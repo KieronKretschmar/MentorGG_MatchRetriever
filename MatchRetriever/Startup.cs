@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MatchRetriever.Helpers;
+using MatchRetriever.ModelFactories;
+using MatchRetriever.ModelFactories.Grenades;
+using MatchRetriever.Models.Grenades;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +35,12 @@ namespace MatchRetriever
         {
             services.AddControllers();
 
+            services.AddLogging(services =>
+            {
+                services.AddConsole();
+                services.AddDebug();
+            });
+
             // if a connectionString is set use mysql, else use InMemory
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
@@ -47,6 +56,13 @@ namespace MatchRetriever
                     });
             }
 
+
+            //// Add ModelFactories
+            // GrenadeAndKills
+            services.AddScoped<ISampleModelFactory<FireNadeSample, FireNadeZonePerformance>, FireNadesModelFactory>();
+
+            // GrenadeAndKillOverviews
+            services.AddScoped<IOverviewModelFactory<FireNadePerformanceSummary>, FireNadesOverviewModelFactory>();
 
             // Add other services
             services.AddSingleton<ISteamUserOperator, SteamUserOperator>();
