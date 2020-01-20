@@ -77,5 +77,25 @@ namespace MatchRetriever.Helpers
         }
     }
 
+    public class MockSteamUserOperator : ISteamUserOperator
+    {
+        public async Task<SteamUserOperator.SteamUser> GetUser(long steamId)
+        {
+            return new SteamUserOperator.SteamUser
+            {
+                SteamId = steamId,
+                ImageUrl = "ImageUrl",
+                SteamName = "SteamName"
+            };
+        }
+
+        public async Task<List<SteamUserOperator.SteamUser>> GetUsers(List<long> steamIds)
+        {
+            var list = steamIds.Select(async x => await GetUser(x))
+                .Select(x => x.Result).ToList();
+            return list;
+        }
+    }
+
 
 }

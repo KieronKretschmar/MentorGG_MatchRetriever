@@ -66,8 +66,12 @@ namespace MatchRetriever
             // GrenadeAndKillOverviews
             services.AddScoped<IOverviewModelFactory<FireNadePerformanceSummary>, FireNadesOverviewModelFactory>();
 
-            // Add other services
-            services.AddSingleton<ISteamUserOperator, SteamUserOperator>();
+            // Add other services            
+            services.AddSingleton<ISteamUserOperator>(services =>
+            {
+                return new MockSteamUserOperator();
+                //return new SteamUserOperator(services.GetService<ILogger>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
+            });
 
             // Enable versioning
             // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
