@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MatchRetriever.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,6 +46,10 @@ namespace MatchRetriever
                         options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase").UseInternalServiceProvider(sp);
                     });
             }
+
+
+            // Add other services
+            services.AddSingleton<ISteamUserOperator, SteamUserOperator>();
 
             // Enable versioning
             // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
