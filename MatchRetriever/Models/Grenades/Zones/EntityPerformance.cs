@@ -2,6 +2,11 @@
 
 namespace MatchRetriever.Models.Grenades
 {
+    /// <summary>
+    /// Holds data about a player's performances (regarding a particular aspect of the game) in multiple Zones.
+    /// 
+    /// </summary>
+    /// <typeparam name="TZonePerformance"></typeparam>
     public class EntityPerformance<TZonePerformance> where TZonePerformance : IZonePerformance<TZonePerformance>
     {
         public long CtRounds { get; set; } = 0;

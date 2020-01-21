@@ -15,9 +15,9 @@ namespace MatchRetriever.Controllers.v1
     {
         private readonly ILogger<FlashesController> _logger;
         private readonly ISampleModelFactory<FlashSample, FlashZonePerformance> _modelFactory;
-        private readonly IOverviewModelFactory<FlashPerformanceSummary> _overviewModelFactory;
+        private readonly IOverviewModelFactory<FlashOverviewMapSummary> _overviewModelFactory;
 
-        public FlashesController(ILogger<FlashesController> logger, ISampleModelFactory<FlashSample, FlashZonePerformance> modelFactory, IOverviewModelFactory<FlashPerformanceSummary> overviewModelFactory)
+        public FlashesController(ILogger<FlashesController> logger, ISampleModelFactory<FlashSample, FlashZonePerformance> modelFactory, IOverviewModelFactory<FlashOverviewMapSummary> overviewModelFactory)
         {
             this._logger = logger;
             this._modelFactory = modelFactory;
@@ -34,7 +34,7 @@ namespace MatchRetriever.Controllers.v1
 
         [Route("single/flashesoverview")]
         // GET v1/public/single/flashesoverview?steamId=76561198033880857&matchIds=1,2,3
-        public async Task<OverviewModel<FlashPerformanceSummary>> GetFlashesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
+        public async Task<OverviewModel<FlashOverviewMapSummary>> GetFlashesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);
             return model;

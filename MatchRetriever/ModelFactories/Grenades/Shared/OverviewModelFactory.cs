@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace MatchRetriever.ModelFactories.Grenades
 {
     public interface IOverviewModelFactory<TMapSummary>
-        where TMapSummary : IPerformanceSummary
+        where TMapSummary : IOverviewSummary
     {
         Task<OverviewModel<TMapSummary>> GetModel(long playerId, List<long> matchIds);
     }
 
     public abstract class OverviewModelFactory<TMapSummary> : ModelFactoryBase, IOverviewModelFactory<TMapSummary>
-        where TMapSummary : IPerformanceSummary
+        where TMapSummary : IOverviewSummary
     {
         public OverviewModelFactory(IServiceProvider sp) : base(sp)
         {

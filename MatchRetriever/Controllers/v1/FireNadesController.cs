@@ -20,9 +20,9 @@ namespace MatchRetriever.Controllers.v1
     {
         private readonly ILogger<FireNadesController> _logger;
         private readonly ISampleModelFactory<FireNadeSample, FireNadeZonePerformance> _sampleModelFactory;
-        private readonly IOverviewModelFactory<FireNadePerformanceSummary> _overviewModelFactory;
+        private readonly IOverviewModelFactory<FireNadeOverviewMapSummary> _overviewModelFactory;
 
-        public FireNadesController(ILogger<FireNadesController> logger, ISampleModelFactory<FireNadeSample, FireNadeZonePerformance> sampleModelFactory, IOverviewModelFactory<FireNadePerformanceSummary> overviewModelFactory)
+        public FireNadesController(ILogger<FireNadesController> logger, ISampleModelFactory<FireNadeSample, FireNadeZonePerformance> sampleModelFactory, IOverviewModelFactory<FireNadeOverviewMapSummary> overviewModelFactory)
         {
             this._logger = logger;
             this._sampleModelFactory = sampleModelFactory;
@@ -39,7 +39,7 @@ namespace MatchRetriever.Controllers.v1
 
         [Route("single/firenadesoverview")]
         // GET v1/public/single/firenadesoverview?steamId=76561198033880857&matchIds=1,2,3
-        public async Task<OverviewModel<FireNadePerformanceSummary>> GetFireNadesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
+        public async Task<OverviewModel<FireNadeOverviewMapSummary>> GetFireNadesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);
             return model;

@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.Grenades
 {
-    public class FlashesOverviewModelFactory : OverviewModelFactory<FlashPerformanceSummary>
+    public class FlashesOverviewModelFactory : OverviewModelFactory<FlashOverviewMapSummary>
     {
         public FlashesOverviewModelFactory(IServiceProvider sp) : base(sp)
         {
 
         }
 
-        protected override async Task<FlashPerformanceSummary> GetSummary(long steamId, List<long> matchIds)
+        protected override async Task<FlashOverviewMapSummary> GetSummary(long steamId, List<long> matchIds)
         {
-            var summary = new FlashPerformanceSummary();
+            var summary = new FlashOverviewMapSummary();
 
             // Buys
             var buyList = _context.ItemPickedUp

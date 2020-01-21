@@ -8,7 +8,7 @@ using MatchRetriever.Helpers;
 
 namespace MatchRetriever.Models.Grenades
 {
-    public class FlashPerformanceSummary : IPerformanceSummary
+    public class FlashOverviewMapSummary : IOverviewSummary
     {
         public string Map { get; set; }
 

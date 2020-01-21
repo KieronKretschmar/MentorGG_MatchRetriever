@@ -17,6 +17,9 @@ namespace MatchRetriever.Models.Grenades
         bool UserIsCt { get; set; }
     }
 
+    /// <summary>
+    /// Stores info the webapp requires about a grenade
+    /// </summary>
     public class GrenadeSample : IGrenadeSample
     {
         public long MatchId { get; set; }

@@ -5,7 +5,10 @@ using System.Web;
 
 namespace MatchRetriever.Models.Grenades
 {
-    public class SampleZone
+    /// <summary>
+    /// A 2D area on a map, which may be a typical position people play on, or have a special role for certain grenades.
+    /// </summary>
+    public class Zone
     {
         public int ZoneId { get; set; }
         public string Name { get; set; }

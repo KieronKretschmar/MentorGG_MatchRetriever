@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MatchRetriever.Models.Grenades
 {
-    public class FireNadePerformanceSummary : IPerformanceSummary
+    public class FireNadeOverviewMapSummary : IOverviewSummary
     {
         public string Map { get; set; }
 

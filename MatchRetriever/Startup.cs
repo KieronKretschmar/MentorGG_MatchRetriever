@@ -65,8 +65,8 @@ namespace MatchRetriever
             services.AddScoped<ISampleModelFactory<FlashSample, FlashZonePerformance>, FlashesModelFactory>();
 
             // GrenadeAndKillOverviews
-            services.AddScoped<IOverviewModelFactory<FireNadePerformanceSummary>, FireNadesOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<FlashPerformanceSummary>, FlashesOverviewModelFactory>();
+            services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadesOverviewModelFactory>();
+            services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>

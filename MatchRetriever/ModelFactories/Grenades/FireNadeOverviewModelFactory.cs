@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.Grenades
 {
-    public class FireNadesOverviewModelFactory : OverviewModelFactory<FireNadePerformanceSummary>
+    public class FireNadesOverviewModelFactory : OverviewModelFactory<FireNadeOverviewMapSummary>
     {
         public FireNadesOverviewModelFactory(IServiceProvider sp) : base(sp)
         {
 
         }
 
-        protected async override Task<FireNadePerformanceSummary> GetSummary(long steamId, List<long> matchIds)
+        protected async override Task<FireNadeOverviewMapSummary> GetSummary(long steamId, List<long> matchIds)
         {
-            var summary = new FireNadePerformanceSummary();
+            var summary = new FireNadeOverviewMapSummary();
 
             // Buys
             var buyList = _context.ItemPickedUp.Where(x =>

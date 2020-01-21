@@ -14,7 +14,7 @@ namespace MatchRetriever.Models.Grenades
         public List<TSample> Samples { get; set; }
         public EntityPerformance<TZonePerformance> UserData { get; set; }
         public Dictionary<int, List<int>> ZoneDescendants { get; set; }
-        public List<SampleZone> Zones { get; set; }
+        public List<Zone> Zones { get; set; }
         public int RecentMatchesAnalyzedCount { get; set; }
     }
 }
