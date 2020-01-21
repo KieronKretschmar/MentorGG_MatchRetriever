@@ -62,9 +62,11 @@ namespace MatchRetriever
             //// Add ModelFactories
             // GrenadeAndKills
             services.AddScoped<ISampleModelFactory<FireNadeSample, FireNadeZonePerformance>, FireNadesModelFactory>();
+            services.AddScoped<ISampleModelFactory<FlashSample, FlashZonePerformance>, FlashesModelFactory>();
 
             // GrenadeAndKillOverviews
             services.AddScoped<IOverviewModelFactory<FireNadePerformanceSummary>, FireNadesOverviewModelFactory>();
+            services.AddScoped<IOverviewModelFactory<FlashPerformanceSummary>, FlashesOverviewModelFactory>();
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>

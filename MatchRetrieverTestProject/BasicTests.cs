@@ -17,6 +17,8 @@ namespace MatchRetrieverTestProject
         }
 
         [DataTestMethod]
+        [DataRow("/v1/public/single/flashes?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3")]
+        [DataRow("/v1/public/single/flashesoverview?steamId=76561198033880857&matchIds=1,2,3")]
         [DataRow("/v1/public/single/firenades?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3")]
         [DataRow("/v1/public/single/firenadesoverview?steamId=76561198033880857&matchIds=1,2,3")]
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
