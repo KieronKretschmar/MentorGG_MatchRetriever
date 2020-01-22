@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.Grenades
 {
-    public class FireNadesModelFactory : SampleModelFactory<FireNadeSample, FireNadeZonePerformance>
+    public class FireNadesModelFactory : ZoneModelFactory<FireNadeSample, FireNadeZonePerformance>
     {
         public FireNadesModelFactory(IServiceProvider sp) : base(sp)
         {
 
         }
 
-        protected override async Task<EntityPerformance<FireNadeZonePerformance>> PlayerPerformance(long steamId, List<FireNadeSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<FireNadeZonePerformance>> PlayerPerformance(long steamId, List<FireNadeSample> samples, string map, List<long> matchIds)
         {
-            var performance = new EntityPerformance<FireNadeZonePerformance>();
+            var performance = new ZonePerformanceSummary<FireNadeZonePerformance>();
 
             // Load round data
             var rounds = _context.PlayerRoundStats

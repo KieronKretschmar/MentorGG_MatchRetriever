@@ -61,8 +61,8 @@ namespace MatchRetriever
 
             //// Add ModelFactories
             // GrenadeAndKills
-            services.AddScoped<ISampleModelFactory<FireNadeSample, FireNadeZonePerformance>, FireNadesModelFactory>();
-            services.AddScoped<ISampleModelFactory<FlashSample, FlashZonePerformance>, FlashesModelFactory>();
+            services.AddScoped<IZoneModelFactory<FireNadeSample, FireNadeZonePerformance>, FireNadesModelFactory>();
+            services.AddScoped<IZoneModelFactory<FlashSample, FlashZonePerformance>, FlashesModelFactory>();
 
             // GrenadeAndKillOverviews
             services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadesOverviewModelFactory>();

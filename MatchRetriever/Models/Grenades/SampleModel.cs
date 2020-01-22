@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Models.Grenades
 {
-    public class SampleModel<TSample, TZonePerformance>
-        where TSample : IGrenadeSample 
-        where TZonePerformance : IZonePerformance<TZonePerformance>
+    public interface ISampleModel<TSample> where TSample : IGrenadeSample
+    {
+        string Map { get; set; }
+        int RecentMatchesAnalyzedCount { get; set; }
+        List<TSample> Samples { get; set; }
+        long SteamId { get; set; }
+    }
+
+    public class SampleModel<TSample> : ISampleModel<TSample> where TSample : IGrenadeSample
     {
         public long SteamId { get; set; }
         public string Map { get; set; }
         public List<TSample> Samples { get; set; }
-        public EntityPerformance<TZonePerformance> UserData { get; set; }
-        public Dictionary<int, List<int>> ZoneDescendants { get; set; }
-        public List<Zone> Zones { get; set; }
         public int RecentMatchesAnalyzedCount { get; set; }
     }
 }

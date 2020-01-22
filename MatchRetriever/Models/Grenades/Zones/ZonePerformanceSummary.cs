@@ -7,10 +7,10 @@ namespace MatchRetriever.Models.Grenades
     /// 
     /// </summary>
     /// <typeparam name="TZonePerformance"></typeparam>
-    public class EntityPerformance<TZonePerformance> where TZonePerformance : IZonePerformance<TZonePerformance>
+    public class ZonePerformanceSummary<TZonePerformance> where TZonePerformance : IZonePerformance<TZonePerformance>
     {
-        public long CtRounds { get; set; } = 0;
-        public long TerroristRounds { get; set; } = 0;
+        public long CtRounds { get; set; }
+        public long TerroristRounds { get; set; }
         public Dictionary<int, TZonePerformance> ZonePerformances { get; set; } = new Dictionary<int, TZonePerformance>();
     }
 }

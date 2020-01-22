@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.Grenades
 {
-    public class FlashesModelFactory : SampleModelFactory<FlashSample, FlashZonePerformance>
+    public class FlashesModelFactory : ZoneModelFactory<FlashSample, FlashZonePerformance>
     {
         public FlashesModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
-        protected override async Task<EntityPerformance<FlashZonePerformance>> PlayerPerformance(long playerId, List<FlashSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<FlashZonePerformance>> PlayerPerformance(long playerId, List<FlashSample> samples, string map, List<long> matchIds)
         {
-            var performance = new EntityPerformance<FlashZonePerformance>();
+            var performance = new ZonePerformanceSummary<FlashZonePerformance>();
 
             // Round data
             var rounds = _context.PlayerRoundStats

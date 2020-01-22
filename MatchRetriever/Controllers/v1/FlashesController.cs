@@ -14,10 +14,10 @@ namespace MatchRetriever.Controllers.v1
     public class FlashesController : BaseApiController
     {
         private readonly ILogger<FlashesController> _logger;
-        private readonly ISampleModelFactory<FlashSample, FlashZonePerformance> _modelFactory;
+        private readonly IZoneModelFactory<FlashSample, FlashZonePerformance> _modelFactory;
         private readonly IOverviewModelFactory<FlashOverviewMapSummary> _overviewModelFactory;
 
-        public FlashesController(ILogger<FlashesController> logger, ISampleModelFactory<FlashSample, FlashZonePerformance> modelFactory, IOverviewModelFactory<FlashOverviewMapSummary> overviewModelFactory)
+        public FlashesController(ILogger<FlashesController> logger, IZoneModelFactory<FlashSample, FlashZonePerformance> modelFactory, IOverviewModelFactory<FlashOverviewMapSummary> overviewModelFactory)
         {
             this._logger = logger;
             this._modelFactory = modelFactory;
@@ -26,7 +26,7 @@ namespace MatchRetriever.Controllers.v1
 
         [Route("single/flashes")]
         // GET v1/public/single/flashes?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3
-        public async Task<SampleModel<FlashSample, FlashZonePerformance>> GetFlashes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
+        public async Task<ZoneModel<FlashSample, FlashZonePerformance>> GetFlashes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _modelFactory.GetModel(steamId, map, matchIds);
             return model;
