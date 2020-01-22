@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using MatchRetriever.Helpers;
 using MatchRetriever.ModelFactories;
-using MatchRetriever.ModelFactories.Grenades;
-using MatchRetriever.Models.Grenades;
+using MatchRetriever.ModelFactories.GrenadesAndKills;
+using MatchRetriever.ModelFactories.GrenadesAndKillsOverviews;
+using MatchRetriever.Models.GrenadesAndKills;
+using MatchRetriever.Models.GrenadesAndKillsOverviews;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -59,15 +61,27 @@ namespace MatchRetriever
             }
 
 
-            //// Add ModelFactories
-            // GrenadeAndKills
-            services.AddScoped<IZoneModelFactory<FireNadeSample, FireNadeZonePerformance>, FireNadesModelFactory>();
-            services.AddScoped<IZoneModelFactory<FlashSample, FlashZonePerformance>, FlashesModelFactory>();
-            services.AddScoped<IZoneModelFactory<HeSample, HeZonePerformance>, HeModelFactory>();
-            services.AddScoped<ILineupModelFactory<SmokeSample, SmokeLineupPerformance>, SmokeModelFactory>();
+            //// Add ModelFactories for GrenadeAndKills
+            // ModelFactories with dependencies ...
+            services.AddScoped<IFireNadeModelFactory, FireNadeModelFactory>();
+            services.AddScoped<IFlashModelFactory, FlashModelFactory>();
+            services.AddScoped<IHeModelFactory, HeModelFactory>();
+            services.AddScoped<ISmokeModelFactory, SmokeModelFactory>();
+            // ... SampleFactories
+            services.AddScoped<ISampleFactory<FireNadeSample>, FireNadeSampleFactory>();
+            services.AddScoped<ISampleFactory<FlashSample>, FlashSampleFactory>();
+            services.AddScoped<ISampleFactory<HeSample>, HeSampleFactory>();
+            services.AddScoped<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
+            // ... LineupFactories
+            services.AddScoped<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupFactory>();
+            // ... ZoneFactories
+            services.AddScoped<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneFactory>();
+            services.AddScoped<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneFactory>();
+            services.AddScoped<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneFactory>();
 
-            // GrenadeAndKillOverviews
-            services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadesOverviewModelFactory>();
+
+            //// Add OverviewModelFactories for GrenadeAndKills
+            services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
