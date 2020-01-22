@@ -63,11 +63,13 @@ namespace MatchRetriever
             // GrenadeAndKills
             services.AddScoped<IZoneModelFactory<FireNadeSample, FireNadeZonePerformance>, FireNadesModelFactory>();
             services.AddScoped<IZoneModelFactory<FlashSample, FlashZonePerformance>, FlashesModelFactory>();
+            services.AddScoped<IZoneModelFactory<HeSample, HeZonePerformance>, HeModelFactory>();
             services.AddScoped<ILineupModelFactory<SmokeSample, SmokeLineupPerformance>, SmokeModelFactory>();
 
             // GrenadeAndKillOverviews
             services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadesOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
+            services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
 
             // Add other services            
