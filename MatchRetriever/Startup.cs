@@ -67,17 +67,22 @@ namespace MatchRetriever
             services.AddScoped<IFlashModelFactory, FlashModelFactory>();
             services.AddScoped<IHeModelFactory, HeModelFactory>();
             services.AddScoped<ISmokeModelFactory, SmokeModelFactory>();
+            services.AddScoped<IKillModelFactory, KillModelFactory>();
             // ... SampleFactories
             services.AddScoped<ISampleFactory<FireNadeSample>, FireNadeSampleFactory>();
             services.AddScoped<ISampleFactory<FlashSample>, FlashSampleFactory>();
             services.AddScoped<ISampleFactory<HeSample>, HeSampleFactory>();
             services.AddScoped<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
+            services.AddScoped<ISampleFactory<KillSample>, KillSampleFactory>();
             // ... LineupFactories
             services.AddScoped<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupFactory>();
             // ... ZoneFactories
             services.AddScoped<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneFactory>();
             services.AddScoped<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneFactory>();
             services.AddScoped<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneFactory>();
+            services.AddScoped<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneFactory>();
+            // ... FilterableZoneFactories
+            services.AddScoped<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
 
 
             //// Add OverviewModelFactories for GrenadeAndKills
@@ -85,6 +90,7 @@ namespace MatchRetriever
             services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
+            services.AddScoped<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>

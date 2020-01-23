@@ -16,6 +16,8 @@ namespace MatchRetrieverTestProject
         }
 
         [DataTestMethod]
+        [DataRow("filterablekills")]
+        [DataRow("killsoverview")]
         [DataRow("hes")]
         [DataRow("hesoverview")]
         [DataRow("smokes")]
