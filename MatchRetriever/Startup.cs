@@ -75,12 +75,12 @@ namespace MatchRetriever
             services.AddScoped<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
             services.AddScoped<ISampleFactory<KillSample>, KillSampleFactory>();
             // ... LineupFactories
-            services.AddScoped<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupFactory>();
+            services.AddScoped<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupModelFactory>();
             // ... ZoneFactories
-            services.AddScoped<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneFactory>();
-            services.AddScoped<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneFactory>();
-            services.AddScoped<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneFactory>();
-            services.AddScoped<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneFactory>();
+            services.AddScoped<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneModelFactory>();
+            services.AddScoped<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneModelFactory>();
+            services.AddScoped<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneModelFactory>();
+            services.AddScoped<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneModelFactory>();
             // ... FilterableZoneFactories
             services.AddScoped<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
 

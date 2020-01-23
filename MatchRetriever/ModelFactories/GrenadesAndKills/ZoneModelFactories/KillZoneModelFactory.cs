@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
-    public class KillZoneFactory : ModelFactoryBase, IZonePerformanceFactory<KillSample, KillZonePerformance>
+    public class KillZoneModelFactory : ModelFactoryBase, IZonePerformanceFactory<KillSample, KillZonePerformance>
     {
-        public KillZoneFactory(IServiceProvider sp) : base(sp)
+        public KillZoneModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 

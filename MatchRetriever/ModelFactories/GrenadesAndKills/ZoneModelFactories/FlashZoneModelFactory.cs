@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
-    public class FlashZoneFactory : ModelFactoryBase, IZonePerformanceFactory<FlashSample, FlashZonePerformance>
+    public class FlashZoneModelFactory : ModelFactoryBase, IZonePerformanceFactory<FlashSample, FlashZonePerformance>
     {
-        public FlashZoneFactory(IServiceProvider sp) : base(sp)
+        public FlashZoneModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
