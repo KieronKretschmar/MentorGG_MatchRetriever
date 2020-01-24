@@ -26,11 +26,18 @@ namespace MatchRetrieverTestProject
         [DataRow("flashesoverview")]
         [DataRow("firenades")]
         [DataRow("firenadesoverview")]
-        public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string grenadeString)
+        public async Task Get_GrenadeEndpointsReturnSuccessAndCorrectContentType(string action)
         {
             // Arrange
             var client = _factory.CreateClient();
-            var url = GetParametrizedGrenadeUrl(grenadeString);
+
+            var url = $"/v1/public/single/{action}";
+            url += "?steamId=76561198033880857";
+            url += "&matchIds=1,2,3";
+            if (!action.Contains("overview"))
+            {
+                url += "&map=de_mirage";
+            }
 
             // Act
             var response = await client.GetAsync(url);
@@ -41,20 +48,20 @@ namespace MatchRetrieverTestProject
                 response.Content.Headers.ContentType.ToString());
         }
 
-        public string GetParametrizedGrenadeUrl(string action)
+        [DataTestMethod]
+        [DataRow("v1/public/single/metamatchhistory?steamId=76561198033880857&dailyLimit=3")]
+        public async Task Get_OtherEndpointsReturnSuccessAndCorrectContentType(string url)
         {
-            var url = $"/v1/public/single/{action}";
+            // Arrange
+            var client = _factory.CreateClient();
 
-            url += "?steamId=76561198033880857";
+            // Act
+            var response = await client.GetAsync(url);
 
-            url += "&matchIds=1,2,3";
-
-            if (!action.Contains("overview"))
-            {
-                url += "&map=de_mirage";
-            }
-
-            return url;
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+            Assert.AreEqual("application/json; charset=utf-8",
+                response.Content.Headers.ContentType.ToString());
         }
     }
 }

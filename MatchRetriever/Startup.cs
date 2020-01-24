@@ -60,8 +60,7 @@ namespace MatchRetriever
                     });
             }
 
-
-            //// Add ModelFactories for GrenadeAndKills
+            #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
             services.AddScoped<IFireNadeModelFactory, FireNadeModelFactory>();
             services.AddScoped<IFlashModelFactory, FlashModelFactory>();
@@ -91,6 +90,11 @@ namespace MatchRetriever
             services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
+            #endregion
+
+            #region Add other ModelFactories
+            services.AddScoped<IMetaMatchHistoryModelFactory, MetaMatchHistoryModelFactory>();
+            #endregion
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>
