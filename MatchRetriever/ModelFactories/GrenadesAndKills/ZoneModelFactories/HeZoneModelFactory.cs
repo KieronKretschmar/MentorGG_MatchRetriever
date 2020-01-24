@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
-    public class HeZoneModelFactory : ModelFactoryBase, IZonePerformanceFactory<HeSample, HeZonePerformance>
+    public class HeZoneModelFactory : ZonePerformanceFactory<HeSample, HeZonePerformance>
     {
         public HeZoneModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
-        public async Task<ZonePerformanceSummary<HeZonePerformance>> ZonePerformanceSummary(long steamId, List<HeSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<HeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<HeSample> samples, string map, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<HeZonePerformance>();
 

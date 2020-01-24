@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
-    public class FlashZoneModelFactory : ModelFactoryBase, IZonePerformanceFactory<FlashSample, FlashZonePerformance>
+    public class FlashZoneModelFactory : ZonePerformanceFactory<FlashSample, FlashZonePerformance>
     {
         public FlashZoneModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
-        public async Task<ZonePerformanceSummary<FlashZonePerformance>> ZonePerformanceSummary(long steamId, List<FlashSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<FlashZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FlashSample> samples, string map, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<FlashZonePerformance>();
 
@@ -82,10 +82,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             //        zonePerformancesPreAggregate[zoneId] = new FlashDetonationZoneEntityPerformance { ZoneId = zoneId };
             //    }
             //}
-
-            ////Add zone performmances into their parent zone
-            //performance.ZonePerformances = AddZonePerformanceIntoParentZone(zonePerformancesPreAggregate, map);
-
             return performance;
         }
     }

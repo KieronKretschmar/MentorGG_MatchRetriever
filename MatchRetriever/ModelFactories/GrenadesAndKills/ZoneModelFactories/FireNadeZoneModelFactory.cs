@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
-    public class FireNadeZoneModelFactory : ModelFactoryBase, IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>
+    public class FireNadeZoneModelFactory : ZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>
     {
         public FireNadeZoneModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
-        public async Task<ZonePerformanceSummary<FireNadeZonePerformance>> ZonePerformanceSummary(long steamId, List<FireNadeSample> samples, string map, List<long> matchIds)
+        protected async override Task<ZonePerformanceSummary<FireNadeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FireNadeSample> samples, string map, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<FireNadeZonePerformance>();
 
@@ -117,27 +117,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             //        zonePerformancesPreAggregate[zoneId] = new FireNadeDetonationZoneEntityPerformance { ZoneId = zoneId };
             //    }
             //}
-
-            //performance.ZonePerformances = AddZonePerformanceIntoParentZone(zonePerformancesPreAggregate, map);
-
             return performance;
         }
-
-        
-
-        //private Dictionary<int, FireNadeDetonationZoneEntityPerformance> AddZonePerformanceIntoParentZone(Dictionary<int, FireNadeDetonationZoneEntityPerformance> preAgg, string map)
-        //{
-        //    var aggregatedPerformance = new Dictionary<int, FireNadeDetonationZoneEntityPerformance>(preAgg);
-
-        //    foreach (var item in StaticHelpers.FireNadeDetonationZones(map).OrderByDescending(x => x.Depth))
-        //    {
-        //        //Only the main_zone should have ParentZoneId == -1, might mask an error
-        //        if (item.ParentZoneId == -1) break;
-        //        var performance = aggregatedPerformance[item.ZoneId];
-        //        aggregatedPerformance[item.ParentZoneId] = aggregatedPerformance[item.ParentZoneId].Absorb(performance);
-        //    }
-
-        //    return aggregatedPerformance;
-        //}
     }
 }

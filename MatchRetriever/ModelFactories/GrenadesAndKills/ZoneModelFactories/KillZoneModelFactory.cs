@@ -65,21 +65,5 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
 
             return performance;
         }
-
-        //TODO: Integrate this for all zone nades
-        //private Dictionary<int, FireNadeDetonationZoneEntityPerformance> AddZonePerformanceIntoParentZone(Dictionary<int, FireNadeDetonationZoneEntityPerformance> preAgg, string map)
-        //{
-        //    var aggregatedPerformance = new Dictionary<int, FireNadeDetonationZoneEntityPerformance>(preAgg);
-
-        //    foreach (var item in StaticHelpers.FireNadeDetonationZones(map).OrderByDescending(x => x.Depth))
-        //    {
-        //        //Only the main_zone should have ParentZoneId == -1, might mask an error
-        //        if (item.ParentZoneId == -1) break;
-        //        var performance = aggregatedPerformance[item.ZoneId];
-        //        aggregatedPerformance[item.ParentZoneId] = aggregatedPerformance[item.ParentZoneId].Absorb(performance);
-        //    }
-
-        //    return aggregatedPerformance;
-        //}
     }
 }
