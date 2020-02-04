@@ -18,7 +18,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         public async Task<List<FireNadeSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
         {
             var recentAttempts = new List<FireNadeSample>();
-            //var playerName = StaticHelpers.GetFixedNameProfile(playerId).SteamName;
             var playerName = (await _steamUserOperator.GetUser(steamId)).SteamName;
 
             var debug = _context.FireNade

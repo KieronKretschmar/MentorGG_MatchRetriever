@@ -17,7 +17,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         public async Task<List<FlashSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
         {
             var recentAttempts = new List<FlashSample>();
-            //var playerName = StaticHelpers.GetFixedNameProfile(playerId).SteamName;
             var playerName = (await _steamUserOperator.GetUser(steamId)).SteamName;
 
             var samples = _context.Flash.Where(x => x.PlayerId == steamId && matchIds.Contains(x.MatchId))
