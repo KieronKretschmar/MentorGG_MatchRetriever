@@ -37,7 +37,7 @@ namespace MatchRetriever
         {
             services.AddControllers()
                 // Set serializer to newtonsoft json
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(x => x.UseMemberCasing());
 
             services.AddLogging(services =>
             {
