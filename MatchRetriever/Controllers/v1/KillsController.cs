@@ -31,16 +31,16 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/filterablekills")]
-        // GET v1/public/single/filterablekills?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3
+        [Route("single/{steamId}/filterablekills")]
+        // GET v1/public/single/76561198033880857/filterablekills?map=de_mirage&matchIds=1,2,3
         public async Task<KillModel> GetFilterableKills(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _killModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
-        [Route("single/killsoverview")]
-        // GET v1/public/single/killsoverview?steamId=76561198033880857&matchIds=1,2,3
+        [Route("single/{steamId}/killsoverview")]
+        // GET v1/public/single/76561198033880857/killsoverview?matchIds=1,2,3
         public async Task<OverviewModel<FireNadeOverviewMapSummary>> GetKillsOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

@@ -29,8 +29,8 @@ namespace MatchRetriever.Controllers.v1
             this._modelFactory = modelFactory;
         }
 
-        [Route("single/metamatchhistory")]
-        // GET v1/public/single/metamatchhistory?steamId=76561198033880857&dailyLimit=3
+        [Route("single/{steamId}/metamatchhistory")]
+        // GET v1/public/single/76561198033880857/metamatchhistory?dailyLimit=3
         public async Task<MetaMatchHistoryModel> GetMetaMatchHistory(long steamId, int dailyLimit)
         {
             var model = await _modelFactory.GetModel(steamId, dailyLimit);

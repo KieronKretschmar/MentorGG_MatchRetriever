@@ -26,16 +26,16 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/flashes")]
-        // GET v1/public/single/flashes?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3
+        [Route("single/{steamId}/flashes")]
+        // GET v1/public/single/76561198033880857/flashes?map=de_mirage&matchIds=1,2,3
         public async Task<FlashModel> GetFlashes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _flashModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
-        [Route("single/flashesoverview")]
-        // GET v1/public/single/flashesoverview?steamId=76561198033880857&matchIds=1,2,3
+        [Route("single/{steamId}/flashesoverview")]
+        // GET v1/public/single/76561198033880857/flashesoverview?matchIds=1,2,3
         public async Task<OverviewModel<FlashOverviewMapSummary>> GetFlashesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

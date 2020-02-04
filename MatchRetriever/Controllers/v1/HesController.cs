@@ -31,16 +31,16 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/hes")]
-        // GET v1/public/single/hes?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3
+        [Route("single/{steamId}/hes")]
+        // GET v1/public/single/76561198033880857/hes?map=de_mirage&matchIds=1,2,3
         public async Task<HeModel> GetHes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _heModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
-        [Route("single/hesoverview")]
-        // GET v1/public/single/hesoverview?steamId=76561198033880857&matchIds=1,2,3
+        [Route("single/{steamId}/hesoverview")]
+        // GET v1/public/single/76561198033880857/hesoverview?matchIds=1,2,3
         public async Task<OverviewModel<HeOverviewMapSummary>> GetHesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

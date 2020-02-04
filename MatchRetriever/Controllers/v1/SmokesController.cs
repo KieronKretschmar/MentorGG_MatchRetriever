@@ -31,16 +31,16 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/smokes")]
-        // GET v1/public/single/smokes?steamId=76561198033880857&map=de_mirage&matchIds=1,2,3
+        [Route("single/{steamId}/smokes")]
+        // GET v1/public/single/76561198033880857/smokes?map=de_mirage&matchIds=1,2,3
         public async Task<SmokeModel> GetSmokes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _smokeModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
-        [Route("single/smokesoverview")]
-        // GET v1/public/single/smokesoverview?steamId=76561198033880857&matchIds=1,2,3
+        [Route("single/{steamId}/smokesoverview")]
+        // GET v1/public/single/76561198033880857/smokesoverview?matchIds=1,2,3
         public async Task<OverviewModel<SmokeOverviewMapSummary>> GetSmokesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);
