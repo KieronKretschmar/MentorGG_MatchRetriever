@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MatchRetriever.Helpers;
 using MatchRetriever.ModelFactories;
+using MatchRetriever.ModelFactories.DemoViewer;
 using MatchRetriever.ModelFactories.GrenadesAndKills;
 using MatchRetriever.ModelFactories.GrenadesAndKillsOverviews;
 using MatchRetriever.Models.GrenadesAndKills;
@@ -96,6 +97,8 @@ namespace MatchRetriever
             services.AddScoped<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
             services.AddScoped<IMatchesModelFactory, MatchesModelFactory>();
             services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
+            services.AddScoped<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
+            services.AddScoped<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
             #endregion
 
             // Add other services            
