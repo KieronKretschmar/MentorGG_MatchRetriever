@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Models.GrenadesAndKills
 {
-    public class HeZonePerformance : IZonePerformance<HeZonePerformance>
+    public class HeZonePerformance : ZonePerformance<HeZonePerformance>
     {
-        public int? ZoneId { get; set; }
-        public bool IsCtZone { get; set; }
-        public int SampleCount { get; set; } = 0;
         public int DamagingNadesCount { get; set; } = 0;
         public int VictimCount { get; set; } = 0;
         public int AmountHealth { get; set; } = 0;
@@ -18,22 +15,20 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public int Kills { get; set; } = 0;
         public int MaxDamage { get; set; } = 0;
 
-        public HeZonePerformance Absorb(HeZonePerformance h2)
+        public override HeZonePerformance Absorb(HeZonePerformance h2)
         {
-            var res = new HeZonePerformance();
-
-            res.ZoneId = ZoneId;
-            res.IsCtZone = IsCtZone;
-
-            res.SampleCount = SampleCount + h2.SampleCount;
-            res.DamagingNadesCount = DamagingNadesCount + h2.DamagingNadesCount;
-            res.VictimCount = VictimCount + h2.VictimCount;
-            res.AmountHealth = AmountHealth + h2.AmountHealth;
-            res.AmountDamagePotential = AmountDamagePotential + h2.AmountDamagePotential;
-            res.AmountArmor = AmountArmor + h2.AmountArmor;
-
-
-            res.MaxDamage = Math.Max(MaxDamage, h2.MaxDamage);
+            var res = new HeZonePerformance
+            {
+                ZoneId = ZoneId,
+                IsCtZone = IsCtZone,
+                SampleCount = SampleCount + h2.SampleCount,
+                DamagingNadesCount = DamagingNadesCount + h2.DamagingNadesCount,
+                VictimCount = VictimCount + h2.VictimCount,
+                AmountHealth = AmountHealth + h2.AmountHealth,
+                AmountDamagePotential = AmountDamagePotential + h2.AmountDamagePotential,
+                AmountArmor = AmountArmor + h2.AmountArmor,
+                MaxDamage = Math.Max(MaxDamage, h2.MaxDamage)
+            };
 
             return res;
         }

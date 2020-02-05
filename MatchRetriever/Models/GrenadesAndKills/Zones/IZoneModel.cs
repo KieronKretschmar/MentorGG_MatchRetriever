@@ -10,7 +10,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
     /// </summary>
     /// <typeparam name="TZonePerformance"></typeparam>
     public interface IZoneModel<TZonePerformance>
-        where TZonePerformance : IZonePerformance<TZonePerformance>
+        where TZonePerformance : ZonePerformance<TZonePerformance>
     {
         public ZonePerformanceSummary<TZonePerformance> ZoneData { get; set; }
     }

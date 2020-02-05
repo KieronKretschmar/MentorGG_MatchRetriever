@@ -37,7 +37,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             var samples = await _sampleFactory.LoadPlayerSamples(steamId, map, matchIds);
             return new SmokeModel
             {
-                SteamId = steamId,
+                PlayerId = steamId,
                 Map = map,
                 Samples = samples,
                 // TODO: Lineup stuff

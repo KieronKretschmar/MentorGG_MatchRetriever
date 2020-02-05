@@ -8,7 +8,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public class KillSample : ISample
     {
-        public string Id => "Kill" + "-" + MatchId + "-" + KillId;
+        public string Id => $"Kill-{MatchId}-{KillId}";
         public long MatchId { get; set; }
         public long KillId { get; set; }
         public short Round { get; set; }

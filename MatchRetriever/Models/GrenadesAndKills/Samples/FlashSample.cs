@@ -10,7 +10,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public class FlashSample : GrenadeSample
     {
-        public string Id => "Flash" + "-" + MatchId + "-" + GrenadeId;
+        public string Id => $"Flash-{MatchId}-{GrenadeId}";
         public int ZoneId { get; set; }
 
         public List<Flashed> Flasheds { get; set; }

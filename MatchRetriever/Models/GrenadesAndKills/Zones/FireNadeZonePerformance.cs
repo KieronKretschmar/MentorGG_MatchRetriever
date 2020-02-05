@@ -2,13 +2,9 @@
 
 namespace MatchRetriever.Models.GrenadesAndKills
 {
-    public class FireNadeZonePerformance : IZonePerformance<FireNadeZonePerformance>
+    public class FireNadeZonePerformance : ZonePerformance<FireNadeZonePerformance>
     {
-        public int? ZoneId { get; set; }
-        public bool IsCtZone { get; set; }
-        public int SampleCount { get; set; } = 0;
         public int DamagingNadesCount { get; set; } = 0;
-
         public int AmountHealth { get; set; } = 0;
         public int Kills { get; set; } = 0;
         public int MaxDamage { get; set; } = 0;
@@ -18,20 +14,18 @@ namespace MatchRetriever.Models.GrenadesAndKills
         /// </summary>
         public int TaggedAssists { get; set; } = 0;
 
-        public FireNadeZonePerformance Absorb(FireNadeZonePerformance f2)
+        public override FireNadeZonePerformance Absorb(FireNadeZonePerformance other)
         {
-            var res = new FireNadeZonePerformance();
-
-            res.ZoneId = ZoneId;
-            res.IsCtZone = IsCtZone;
-
-            res.SampleCount = SampleCount + f2.SampleCount;
-            res.DamagingNadesCount = DamagingNadesCount + f2.DamagingNadesCount;
-            res.AmountHealth = AmountHealth + f2.AmountHealth;
-            res.TaggedAssists = TaggedAssists + f2.TaggedAssists;
-        
-
-            res.MaxDamage = Math.Max(MaxDamage, f2.MaxDamage);
+            var res = new FireNadeZonePerformance
+            {
+                ZoneId = ZoneId,
+                IsCtZone = IsCtZone,
+                SampleCount = SampleCount + other.SampleCount,
+                DamagingNadesCount = DamagingNadesCount + other.DamagingNadesCount,
+                AmountHealth = AmountHealth + other.AmountHealth,
+                TaggedAssists = TaggedAssists + other.TaggedAssists,
+                MaxDamage = Math.Max(MaxDamage, other.MaxDamage)
+            };
 
             return res;
         }

@@ -36,7 +36,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             var samples = await _sampleFactory.LoadPlayerSamples(steamId, map, matchIds);
             return new FireNadeModel
             {
-                SteamId = steamId,
+                PlayerId = steamId,
                 Map = map,
                 Samples = samples,
                 // TODO: Zone stuff

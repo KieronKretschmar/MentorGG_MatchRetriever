@@ -37,8 +37,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                         VictimIsAttacker = damage.PlayerId == damage.VictimId,
                         Kill = damage.Fatal,
                     }).ToList(),
-                    Release = he.PlayerPos,
-                    Detonation = he.DetonationPos,
+                    ReleasePos = he.PlayerPos,
+                    DetonationPos = he.DetonationPos,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(he.Trajectory),
                 }).ToList();
             return samples;

@@ -37,8 +37,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                         VictimIsAttacker = flash.PlayerId == flashed.VictimId,
                         FlashAssist = flashed.AssistedKillId != null
                     }).ToList(),
-                    Release = flash.PlayerPos,
-                    Detonation = flash.DetonationPos,
+                    ReleasePos = flash.PlayerPos,
+                    DetonationPos = flash.DetonationPos,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(flash.Trajectory),
                 }).ToList();
             return samples;
