@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MatchEntities.Enums;
 
 namespace MatchRetriever.Models
 {
@@ -11,7 +12,7 @@ namespace MatchRetriever.Models
         public struct Match
         {
             public long MatchId { get; set; }
-            //public Source Source { get; set; } //TODO: Source enum
+            public Source Source { get; set; } 
             public string Map { get; set; }
             public DateTime MatchDate { get; set; }
         }
