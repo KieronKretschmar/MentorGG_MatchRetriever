@@ -48,13 +48,13 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
 
 
             // Kills and Deaths
-            var kills = _context.Kills.Where(x =>
+            var kills = _context.Kill.Where(x =>
                      x.PlayerId == steamId &&
                      matchIds.Contains(x.MatchId)
                      && !x.TeamKill)
                 .Select(x => x.IsCt)
                 .ToList();
-            var deaths = _context.Kills.Where(x =>
+            var deaths = _context.Kill.Where(x =>
                     matchIds.Contains(x.MatchId)
                     && x.VictimId == steamId)
                 .Select(x => x.IsCt == x.TeamKill)

@@ -12,7 +12,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
         //public bool UserWonRound { get; set; }
         //public byte PlantSite { get; set; }
 
-        public int Result { get; set; }
+        public MatchEntities.Enums.TargetResult Result { get; set; }
         public int TargetId { get; set; }
         public int LineupId { get; set; }
 

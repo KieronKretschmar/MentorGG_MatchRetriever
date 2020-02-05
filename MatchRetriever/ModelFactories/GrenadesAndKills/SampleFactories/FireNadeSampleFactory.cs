@@ -50,7 +50,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                         }).ToList()
                     }).ToList(),
                     Release = grenade.PlayerPos,
-                    Detonation = grenade.GrenadePos,
+                    Detonation = grenade.DetonationPos,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(grenade.Trajectory),
                 }).ToList();
             return recentAttempts;

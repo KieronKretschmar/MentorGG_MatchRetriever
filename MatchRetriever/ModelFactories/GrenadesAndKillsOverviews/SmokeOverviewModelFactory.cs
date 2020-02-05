@@ -26,7 +26,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                 .Where(x =>
                     x.PlayerId == steamId
                     && matchIds.Contains(x.MatchId)
-                    //&& x.Equipment == (int)Enumerals.EquipmentElement.flashbang //TODO: Enums here and other grenades!
+                    && x.Equipment == MatchEntities.Enums.EquipmentElement.Smoke
                     && x.Buy)
                 .GroupBy(x => x.IsCt)
                 .Select(x => new
@@ -42,7 +42,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                 .Select(x => new
                 {
                     x.IsCt,
-                    x.Category,
+                    x.LineUp,
                     x.Result,
                 })
                 .ToList();
@@ -51,28 +51,15 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
             {
                 BuysAsCt = buyList.Count(x => x.IsCt),
                 BuysAsTerrorist = buyList.Count(x => !x.IsCt),
-                SuccessfulLineupAttempts = samples.Where(x=>x.Category > 0).Count(),
-                FailedLineupAttempts = samples.Where(x=>x.Category > 0 && x.Result == 999999).Count(), // TODO: Enum for Result=Failed
+                SuccessfulLineupAttempts = samples.Where(x=>x.LineUp > 0).Count(),
+                FailedLineupAttempts = samples.Where(x=>x.LineUp > 0 && x.Result == MatchEntities.Enums.TargetResult.Miss).Count(),
                 UsagesAsCt = samples.Count(x=>x.IsCt),
                 UsagesAsTerrorist = samples.Count(x=>!x.IsCt),
                 CompletedCategories = samples
-                    //.Where(x=>x.Result == success) // TODO check for success by enum
-                    .Select(x=>x.Category).Distinct().Count(),
-                TotalCategories = samples.Select(x => x.Category).Distinct().Count()
+                    .Where(x => x.Result == MatchEntities.Enums.TargetResult.Inside)
+                    .Select(x=>x.LineUp).Distinct().Count(),
+                TotalCategories = samples.Select(x => x.LineUp).Distinct().Count()
             };
-
-            //var mapSummary = new MapSmokeSummary
-            //{
-            //    Map = map,
-            //    CompletedCategories = categoryStats.Count(),
-            //    CategorizedSmokesAccuracy = (double)attemptsCount / (attemptsCount + missesCount),
-            //    TotalCategories = StaticHelpers.CategoryIds(map).Count(),
-
-            //    BuysAsCt = buyList.SingleOrDefault(x => x.Key)?.Count() ?? 0,
-            //    BuysAsTerrorist = buyList.SingleOrDefault(x => !x.Key)?.Count() ?? 0,
-            //    UsagesAsTerrorist = smokesUsagesList.SingleOrDefault(x => !x.Key)?.Count() ?? 0,
-            //    UsagesAsCt = smokesUsagesList.SingleOrDefault(x => x.Key)?.Count() ?? 0,
-            //};
 
             return summary;
         }

@@ -27,8 +27,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToDictionary(x => x.Key, x => new SmokeLineupPerformance
                 {
                     CategoryId = x.Key,
-                    Insides = x.Count(),// TODO: Filter by Result when enum is in matchentities
-                    Misses = x.Count(),// TODO: Filter by Result when enum is in matchentities
+                    Insides = x.Count(x=>x.Result == MatchEntities.Enums.TargetResult.Inside),
+                    Misses = x.Count(x=>x.Result == MatchEntities.Enums.TargetResult.Miss),
                 });
             return performance;
         }

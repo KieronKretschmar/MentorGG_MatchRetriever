@@ -27,7 +27,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
             // Buys
             var buyList = _context.ItemPickedUp.Where(x =>
                     x.PlayerId == steamId
-                    //&& x.Equipment == (int)Enumerals.EquipmentElement.hegrenade // TODO: Enum
+                    && x.Equipment == MatchEntities.Enums.EquipmentElement.HE
                     && matchIds.Contains(x.MatchId)
                     && x.Buy)
                 .Select(x => x.IsCt)

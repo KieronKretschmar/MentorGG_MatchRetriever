@@ -28,10 +28,10 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     UserIsCt = smoke.IsCt,
                     TargetId = smoke.Target,
                     Result = smoke.Result,
-                    Detonation = smoke.GrenadePos,
+                    Detonation = smoke.DetonationPos,
                     Release = smoke.PlayerPos,
-                    LineupId = smoke.Category,
-                    PlayerViewX = smoke.PlayerViewX,
+                    LineupId = smoke.LineUp,
+                    PlayerViewX = smoke.PlayerView.X,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(smoke.Trajectory),
                 })
                 .ToList();

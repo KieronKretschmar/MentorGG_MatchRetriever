@@ -38,7 +38,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                         Kill = damage.Fatal,
                     }).ToList(),
                     Release = he.PlayerPos,
-                    Detonation = he.GrenadePos,
+                    Detonation = he.DetonationPos,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(he.Trajectory),
                 }).ToList();
             return samples;

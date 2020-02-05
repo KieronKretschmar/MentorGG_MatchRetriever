@@ -17,7 +17,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
 
         public async Task<List<KillSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
         {
-            var samples = _context.Kills
+            var samples = _context.Kill
                 .Where(x => (x.PlayerId == steamId || x.VictimId == steamId) && matchIds.Contains(x.MatchId))
                 .Select(x => new KillSample
                 {

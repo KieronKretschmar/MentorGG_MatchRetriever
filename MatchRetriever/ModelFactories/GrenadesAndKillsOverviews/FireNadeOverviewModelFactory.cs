@@ -28,8 +28,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
             var buyList = _context.ItemPickedUp.Where(x =>
                     x.PlayerId == steamId
                     && matchIds.Contains(x.MatchId)
-                    //&& (x.Equipment == (int)Enumerals.EquipmentElement.incgrenade
-                    //    || x.Equipment == (int)Enumerals.EquipmentElement.molotov)
+                    && (x.Equipment == MatchEntities.Enums.EquipmentElement.Incendiary
+                        || x.Equipment == MatchEntities.Enums.EquipmentElement.Molotov)
                     && x.Buy)
                 .Select(x => x.IsCt)
                 .ToList()

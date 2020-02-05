@@ -28,7 +28,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                 .Where(x =>
                     x.PlayerId == steamId
                     && matchIds.Contains(x.MatchId)
-                    //&& x.Equipment == (int)Enumerals.EquipmentElement.flashbang
+                    && x.Equipment == MatchEntities.Enums.EquipmentElement.Flash
                     && x.Buy)
                 .GroupBy(x => x.IsCt)
                 .Select(x => new
