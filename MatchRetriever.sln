@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "matchdb\Databas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "matchdb\matchentities\MatchEntities\MatchEntities.csproj", "{64103898-868E-46D2-A443-12217260E99E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchRetrieverTestProject", "MatchRetrieverTestProject\MatchRetrieverTestProject.csproj", "{484E971B-6382-418E-9AB8-31BEA234006C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetrieverTestProject", "MatchRetrieverTestProject\MatchRetrieverTestProject.csproj", "{484E971B-6382-418E-9AB8-31BEA234006C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
