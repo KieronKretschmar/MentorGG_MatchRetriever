@@ -25,6 +25,7 @@ namespace MatchRetriever.ModelFactories
                     MatchId = x.MatchId,
                     Map = x.MatchStats.Map,
                     MatchDate = x.MatchStats.MatchDate,
+                    Source = x.MatchStats.Source,
                 })
                 .ToList();
 
