@@ -6,7 +6,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public class FireNadeSample : GrenadeSample
     {
-        public string Id => "FireNade" + "-" + MatchId + "-" + GrenadeId;
+        public string Id => $"FireNade-{MatchId}-{GrenadeId}";
         public int ZoneId { get; set; }
         public List<FireNadeVictim> Victims { get; set; }
 

@@ -13,14 +13,14 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     /// <typeparam name="TZonePerformance"></typeparam>
     public interface IZonePerformanceFactory<TSample, TZonePerformance>
         where TSample : ISample
-        where TZonePerformance : IZonePerformance<TZonePerformance>
+        where TZonePerformance : ZonePerformance<TZonePerformance>
     {
         Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string map, List<long> matchIds);
     }
 
     public abstract class ZonePerformanceFactory<TSample, TZonePerformance> : ModelFactoryBase, IZonePerformanceFactory<TSample, TZonePerformance>
         where TSample : ISample
-        where TZonePerformance : IZonePerformance<TZonePerformance>
+        where TZonePerformance : ZonePerformance<TZonePerformance>
     {
         public ZonePerformanceFactory(IServiceProvider sp) : base(sp)
         {

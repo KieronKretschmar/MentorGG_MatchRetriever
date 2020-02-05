@@ -11,7 +11,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
     /// <typeparam name="TZonePerformance"></typeparam>
     /// <typeparam name="TFilterSetting"></typeparam>
     public class FilterableZonePerformance<TZonePerformance, TFilterSetting>
-        where TZonePerformance : IZonePerformance<TZonePerformance>
+        where TZonePerformance : ZonePerformance<TZonePerformance>
         where TFilterSetting : IFilterSetting<TFilterSetting>
     {
         public TFilterSetting FilterSettings { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace MatchRetriever.Models.GrenadesAndKills
 {
     public interface IFilterableZoneModel<TZonePerformance, TFilterSetting>
-        where TZonePerformance : IZonePerformance<TZonePerformance>
+        where TZonePerformance : ZonePerformance<TZonePerformance>
         where TFilterSetting : IFilterSetting<TFilterSetting>
     {
         public List<FilterableZonePerformance<TZonePerformance, TFilterSetting>> FilterableZonePerformanceData { get; set; }

@@ -9,7 +9,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
     /// </summary>
     public interface ISample
     {
-        long PlayerId { get; set; }
+        long SteamId { get; set; }
         string PlayerName { get; set; }
         long MatchId { get; set; }
         short Round { get; set; }

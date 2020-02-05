@@ -2,11 +2,8 @@
 
 namespace MatchRetriever.Models.GrenadesAndKills
 {
-    public class FlashZonePerformance : IZonePerformance<FlashZonePerformance>
+    public class FlashZonePerformance : ZonePerformance<FlashZonePerformance>
     {
-        public int? ZoneId { get; set; }
-        public bool IsCtZone { get; set; }
-        public int SampleCount { get; set; } = 0;
 
         public int NadesBlindingEnemiesCount { get; set; } = 0;
         public int NadesBlindingTeamCount { get; set; } = 0;
@@ -20,24 +17,22 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public int EnemyFlashAssists { get; set; } = 0;
         public int TeamFlashAssists { get; set; } = 0;
 
-        public FlashZonePerformance Absorb (FlashZonePerformance other)
+        public override FlashZonePerformance Absorb (FlashZonePerformance other)
         {
-            var res = new FlashZonePerformance();
-
-            res.ZoneId = ZoneId;
-            res.IsCtZone = IsCtZone;
-
-            res.SampleCount = SampleCount + other.SampleCount;
-            res.NadesBlindingEnemiesCount = NadesBlindingEnemiesCount + other.NadesBlindingEnemiesCount;
-            res.NadesBlindingTeamCount =NadesBlindingTeamCount + other.NadesBlindingTeamCount;
-            res.TotalEnemyTimeFlashed = TotalEnemyTimeFlashed + other.TotalEnemyTimeFlashed;
-            res.TotalTeamTimeFlashed = TotalTeamTimeFlashed + other.TotalTeamTimeFlashed;
-
-            res.MaxEnemyTimeFlashed = Math.Max(MaxEnemyTimeFlashed, other.MaxEnemyTimeFlashed);
-            res.MaxTeamTimeFlashed = Math.Max(MaxTeamTimeFlashed, MaxTeamTimeFlashed);
-
-            res.EnemyFlashAssists = EnemyFlashAssists + other.EnemyFlashAssists;
-            res.TeamFlashAssists = TeamFlashAssists + other.TeamFlashAssists;
+            var res = new FlashZonePerformance
+            {
+                ZoneId = ZoneId,
+                IsCtZone = IsCtZone,
+                SampleCount = SampleCount + other.SampleCount,
+                NadesBlindingEnemiesCount = NadesBlindingEnemiesCount + other.NadesBlindingEnemiesCount,
+                NadesBlindingTeamCount = NadesBlindingTeamCount + other.NadesBlindingTeamCount,
+                TotalEnemyTimeFlashed = TotalEnemyTimeFlashed + other.TotalEnemyTimeFlashed,
+                TotalTeamTimeFlashed = TotalTeamTimeFlashed + other.TotalTeamTimeFlashed,
+                MaxEnemyTimeFlashed = Math.Max(MaxEnemyTimeFlashed, other.MaxEnemyTimeFlashed),
+                MaxTeamTimeFlashed = Math.Max(MaxTeamTimeFlashed, MaxTeamTimeFlashed),
+                EnemyFlashAssists = EnemyFlashAssists + other.EnemyFlashAssists,
+                TeamFlashAssists = TeamFlashAssists + other.TeamFlashAssists
+            };
 
             return res;
         }

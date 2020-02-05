@@ -8,7 +8,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 
     public class SmokeSample : GrenadeSample
     {
-        public string Id => "Smoke" + "-" + MatchId + "-" + GrenadeId;
+        public string Id => $"Smoke-{MatchId}-{GrenadeId}";
         //public bool UserWonRound { get; set; }
         //public byte PlantSite { get; set; }
 

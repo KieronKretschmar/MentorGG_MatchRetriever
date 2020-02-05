@@ -24,7 +24,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     MatchId = x.MatchId,
                     KillId = x.KillId,
                     Round = x.Round,
-                    PlayerId = steamId,
+                    SteamId = steamId,
                     VictimId = x.VictimId,
                     PlayerZoneId = x.PlayerZoneByTeam ?? 0,
                     VictimZoneId = x.VictimZoneByTeam ?? 0,
@@ -38,12 +38,12 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToList();
 
             // Add PlayerNames and VictimNames with only one call of GetUsers
-            var distinctSteamIds = samples.SelectMany(x => new List<long> { x.PlayerId, x.VictimId })
+            var distinctSteamIds = samples.SelectMany(x => new List<long> { x.SteamId, x.VictimId })
                 .ToList();
             var steamUserInfos = await _steamUserOperator.GetUsers(distinctSteamIds);
             var steamNameDict = distinctSteamIds.ToDictionary(x => x, x => steamUserInfos.SingleOrDefault(userinfo => userinfo.SteamId == x).SteamName);
             samples.ForEach(x => x.VictimName = steamNameDict[x.VictimId]);
-            samples.ForEach(x => x.PlayerName = steamNameDict[x.PlayerId]);
+            samples.ForEach(x => x.PlayerName = steamNameDict[x.SteamId]);
 
 
             return samples;
