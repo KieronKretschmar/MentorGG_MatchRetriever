@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories
 {
-    public interface IMetaMatchHistoryModelFactory
+    public interface IMatchSelectionModelFactory
     {
-        Task<MetaMatchHistoryModel> GetModel(long steamId, int dailyLimit);
+        Task<MatchSelectionModel> GetModel(long steamId, int dailyLimit);
     }
 
-    public class MetaMatchHistoryModelFactory : ModelFactoryBase, IMetaMatchHistoryModelFactory
+    public class MatchSelectionModelFactory : ModelFactoryBase, IMatchSelectionModelFactory
     {
-        public MetaMatchHistoryModelFactory(IServiceProvider sp) : base(sp)
+        public MatchSelectionModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
-        public async Task<MetaMatchHistoryModel> GetModel(long steamId, int dailyLimit)
+        public async Task<MatchSelectionModel> GetModel(long steamId, int dailyLimit)
         {
             var allMatches = _context.PlayerMatchStats.Where(x => x.SteamId == steamId)
-                .Select(x => new MetaMatchHistoryModel.Match
+                .Select(x => new MatchSelectionModel.Match
                 {
                     MatchId = x.MatchId,
                     Map = x.MatchStats.Map,
@@ -35,7 +35,7 @@ namespace MatchRetriever.ModelFactories
                 .SelectMany(x => x.OrderByDescending(y => y.MatchDate).Take(dailyLimit))
                 .ToList();
 
-            return new MetaMatchHistoryModel
+            return new MatchSelectionModel
             {
                 Matches = filteredMatches
             };

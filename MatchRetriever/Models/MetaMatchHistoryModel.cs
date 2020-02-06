@@ -6,7 +6,7 @@ using MatchEntities.Enums;
 
 namespace MatchRetriever.Models
 {
-    public class MetaMatchHistoryModel
+    public class MatchSelectionModel
     {
         public List<Match> Matches{ get; set; }
         public struct Match
