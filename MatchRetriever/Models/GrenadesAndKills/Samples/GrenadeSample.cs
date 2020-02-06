@@ -11,7 +11,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
     public abstract class GrenadeSample : ISample
     {
         public long MatchId { get; set; }
-        public long PlayerId { get; set; }
+        public long SteamId { get; set; }
         public string PlayerName { get; set; }
         public long GrenadeId { get; set; }
         public short Round { get; set; }

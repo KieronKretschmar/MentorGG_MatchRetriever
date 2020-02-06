@@ -30,7 +30,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .Select(grenade => new FireNadeSample
                 {
                     MatchId = grenade.MatchId,
-                    PlayerId = steamId,
+                    SteamId = steamId,
                     PlayerName = playerName,
                     GrenadeId = grenade.GrenadeId,
                     Round = grenade.Round,

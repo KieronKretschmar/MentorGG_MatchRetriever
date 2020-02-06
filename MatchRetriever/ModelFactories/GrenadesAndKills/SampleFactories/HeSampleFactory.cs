@@ -24,7 +24,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     MatchId = he.MatchId,
                     GrenadeId = he.GrenadeId,
                     Round = he.Round,
-                    PlayerId = he.PlayerId,
+                    SteamId = he.PlayerId,
                     PlayerName = playerName,
                     UserIsCt = he.IsCt,
                     ZoneId = he.DetonationZoneByTeam,

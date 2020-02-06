@@ -24,7 +24,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 {
                     MatchId = flash.MatchId,
                     GrenadeId = flash.GrenadeId,
-                    PlayerId = flash.PlayerId,
+                    SteamId = flash.PlayerId,
                     PlayerName = playerName,
                     Round = flash.Round,
                     UserIsCt = flash.IsCt,

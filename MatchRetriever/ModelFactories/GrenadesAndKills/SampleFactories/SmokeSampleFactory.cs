@@ -22,7 +22,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 {
                     MatchId = smoke.MatchId,
                     GrenadeId = smoke.GrenadeId,
-                    PlayerId = smoke.PlayerId,
+                    SteamId = smoke.PlayerId,
                     PlayerName = playerName,
                     Round = smoke.Round,
                     UserIsCt = smoke.IsCt,
