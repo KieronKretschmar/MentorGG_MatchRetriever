@@ -93,7 +93,7 @@ namespace MatchRetriever
             #endregion
 
             #region Add other ModelFactories
-            services.AddScoped<IMetaMatchHistoryModelFactory, MetaMatchHistoryModelFactory>();
+            services.AddScoped<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
             #endregion
 
             // Add other services            

@@ -18,20 +18,20 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class MetaMatchHistoryController : BaseApiController
+    public class MatchSelectionController : BaseApiController
     {
-        private readonly ILogger<MetaMatchHistoryController> _logger;
-        private readonly IMetaMatchHistoryModelFactory _modelFactory;
+        private readonly ILogger<MatchSelectionController> _logger;
+        private readonly IMatchSelectionModelFactory _modelFactory;
 
-        public MetaMatchHistoryController(ILogger<MetaMatchHistoryController> logger, IMetaMatchHistoryModelFactory modelFactory)
+        public MatchSelectionController(ILogger<MatchSelectionController> logger, IMatchSelectionModelFactory modelFactory)
         {
             this._logger = logger;
             this._modelFactory = modelFactory;
         }
 
-        [Route("single/{steamId}/metamatchhistory")]
-        // GET v1/public/single/76561198033880857/metamatchhistory?dailyLimit=3
-        public async Task<MetaMatchHistoryModel> GetMetaMatchHistory(long steamId, int dailyLimit)
+        [Route("single/{steamId}/matchselection")]
+        // GET v1/public/single/76561198033880857/matchselection?dailyLimit=3
+        public async Task<MatchSelectionModel> GetMetaMatchHistory(long steamId, int dailyLimit)
         {
             var model = await _modelFactory.GetModel(steamId, dailyLimit);
             return model;
