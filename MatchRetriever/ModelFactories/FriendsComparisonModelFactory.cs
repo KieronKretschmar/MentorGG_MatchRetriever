@@ -6,6 +6,8 @@ using MatchEntities.Enums;
 using MatchRetriever.Controllers.v1;
 using MatchRetriever.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Database;
+using static MatchRetriever.Helpers.SteamUserOperator;
 
 namespace MatchRetriever.ModelFactories
 {
@@ -16,11 +18,8 @@ namespace MatchRetriever.ModelFactories
 
     public class FriendsComparisonModelFactory : ModelFactoryBase, IFriendsComparisonModelFactory
     {
-        private readonly IPlayerModelFactory _playerModelFactory;
-
         public FriendsComparisonModelFactory(IServiceProvider sp) : base(sp)
         {
-            _playerModelFactory = sp.GetRequiredService<IPlayerModelFactory>();
         }
 
         public async Task<FriendsComparisonModel> GetModel(long steamId, int maxFriends, List<long> matchIds, int offset)
@@ -42,7 +41,7 @@ namespace MatchRetriever.ModelFactories
             var rowData = new ComparisonRowData
             {
                 MatchesPlayed = matchIds.Count,
-                OtherPlayerInfo = await _playerModelFactory.GetModel(steamId),
+                OtherPlayerInfo = await GetPlayerInfoModel(steamId),
                 UserData = getBriefComparisonPlayerData(steamId, matchIds),
                 OtherData = getBriefComparisonPlayerData(otherId, matchIds),
             };
@@ -221,6 +220,16 @@ namespace MatchRetriever.ModelFactories
             res.HEsThrown = pms.Sum(x => x.HesUsed);
             res.SmokesThrown = pms.Sum(x => x.SmokesUsed);
 
+            return res;
+        }
+
+        private async Task<PlayerInfoModel> GetPlayerInfoModel(long steamId)
+        {
+            var res = new PlayerInfoModel();
+            var profile = await _steamUserOperator.GetUser(steamId);
+
+            res.steamUser = profile;
+            res.Rank = _context.CurrentRank(steamId);
             return res;
         }
     }
