@@ -32,7 +32,8 @@ namespace MatchRetriever.ModelFactories
             // apply the daily limit
             var filteredMatches = allMatches.GroupBy(x => x.MatchDate.DayOfYear)
                 .OrderByDescending(x => x.Key)
-                .SelectMany(x => x.OrderByDescending(y => y.MatchDate).Take(dailyLimit))
+                .SelectMany(x => x.OrderBy(y => y.MatchDate).Take(dailyLimit))
+                .OrderBy(x=>x.MatchDate)
                 .ToList();
 
             return new MatchSelectionModel
