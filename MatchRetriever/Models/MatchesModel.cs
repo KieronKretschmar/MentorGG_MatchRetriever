@@ -9,12 +9,13 @@ namespace MatchRetriever.Models
     public class MatchesModel
     {
         public List<MatchInfo> MatchInfos = new List<MatchInfo>();
+        public List<MatchInfo> HiddenMatchInfos = new List<MatchInfo>();
     }
 }
 
 namespace MatchRetriever
 {
-    public struct MatchInfo
+    public class MatchInfo
     {
         public long MatchId { get; set; }
         public DateTime MatchDate { get; set; }
@@ -41,6 +42,7 @@ namespace MatchRetriever
 
     public struct PlayerScoreboardEntry
     {
+        public long SteamId { get; set; }
         public Helpers.SteamUserOperator.SteamUser Profile { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }
@@ -52,5 +54,4 @@ namespace MatchRetriever
         public MatchMakingRank RankBeforeMatch { get; set; }
         public MatchMakingRank RankAfterMatch { get; set; }
     }
-}
 }

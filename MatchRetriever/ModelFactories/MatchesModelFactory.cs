@@ -9,7 +9,7 @@ namespace MatchRetriever.ModelFactories
 {
     public interface IMatchesModelFactory
     {
-        Task<MatchesModel> GetModel(List<long> matchIds);
+        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, int offset);
     }
 
     public class MatchesModelFactory : ModelFactoryBase, IMatchesModelFactory
@@ -18,11 +18,29 @@ namespace MatchRetriever.ModelFactories
         {
         }
 
-        public async Task<MatchesModel> GetModel(List<long> matchIds)
+        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, int offset)
         {
             var res = new MatchesModel();
-            var matchInfos = new List<MatchInfo>();
 
+            res.MatchInfos = await CreateMatchInfos(allowedMatchIds);
+
+            // Compute and censor the forbidden MatchInfos for all his matches that are not included in the allowedMatchIds he supplied
+            var allMatchIds = _context.PlayerMatchStats
+                .Where(x => x.SteamId == steamId)
+                .Select(x => x.MatchId)
+                .ToList();
+            var forbiddenMatchIds = allMatchIds.Except(allowedMatchIds).ToList();
+            var forbiddenMatchInfos = await CreateMatchInfos(forbiddenMatchIds);
+            forbiddenMatchInfos.ForEach(x => CensorHiddenMatch(x));
+
+            res.HiddenMatchInfos = forbiddenMatchInfos;
+
+            return res;
+        }
+
+        private async Task<List<MatchInfo>> CreateMatchInfos(List<long> matchIds)
+        {
+            var matchInfos = new List<MatchInfo>();
             foreach (var matchId in matchIds)
             {
                 var match = _context.MatchStats.Single(x => x.MatchId == matchId);
@@ -46,7 +64,6 @@ namespace MatchRetriever.ModelFactories
                         WonRounds = match.RoundStats.Count(x => x.WinnerTeam == startingFaction),
                         Players = playerEntries[startingFaction],
                     };
-
                 };
 
                 var matchInfo = new MatchInfo
@@ -59,15 +76,40 @@ namespace MatchRetriever.ModelFactories
                     WinningStartingTeam = match.WinnerTeam,
                     Scoreboard = scoreboard,
                 };
+
+                matchInfos.Add(matchInfo);
             }
 
-            return res;
+            // Assign user Profiles in one large query instead of multiple small ones for efficiency reasons
+            var allSteamIds = matchInfos.SelectMany(x => x.Scoreboard.TeamInfo.SelectMany(y => y.Value.Players.Select(z => z.SteamId)))
+                .ToList();
+            var allPlayerProfiles = await _steamUserOperator.GetUsers(allSteamIds);
+
+            // Iterate through all matches, teams and players
+            for (int matchIndex = 0; matchIndex < matchInfos.Count; matchIndex++)
+            {
+                var scoreboard = matchInfos[matchIndex].Scoreboard;
+                foreach (var team in scoreboard.TeamInfo.Keys)
+                {
+                    var teamInfo = scoreboard.TeamInfo[team];
+                    for (int playerIndex = 0; playerIndex < teamInfo.Players.Count; playerIndex++)
+                    {
+                        var entry = teamInfo.Players[playerIndex];
+
+                        // Assign profile
+                        entry.Profile = allPlayerProfiles.Single(x => x.SteamId == entry.SteamId);
+                    }
+                }
+            }
+
+            return matchInfos;
         }
 
         private async Task<PlayerScoreboardEntry> CreatePlayerScoreboardEntry(MatchEntities.PlayerMatchStats playerStats)
         {
             var res = new PlayerScoreboardEntry
             {
+                SteamId = playerStats.SteamId,
                 Assists = playerStats.AssistCount,
                 DamageDealt = playerStats.Damage,
                 Deaths = playerStats.DeathCount,
@@ -77,10 +119,16 @@ namespace MatchRetriever.ModelFactories
                 RankAfterMatch = playerStats.RankAfterMatch,
                 RankBeforeMatch = playerStats.RankBeforeMatch,
                 Score = playerStats.Score,
-                Profile = await _steamUserOperator.GetUser(playerStats.SteamId),
+                //Profile = await _steamUserOperator.GetUser(playerStats.SteamId),
             };
 
             return res;
+        }
+
+        private void CensorHiddenMatch(MatchInfo matchInfo)
+        {
+            matchInfo.MatchId = -1;
+            return;
         }
     }
 }

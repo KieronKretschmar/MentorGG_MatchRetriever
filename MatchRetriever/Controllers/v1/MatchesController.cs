@@ -21,17 +21,10 @@ namespace MatchRetriever.Controllers.v1
             _matchesModelFactory = matchesModelFactory;
         }
 
-        public MatchesModel GetMatches(List<long> matchIds, int offset = 0)
+        public async Task<MatchesModel> GetMatches(long steamId, List<long> matchIds, int offset = 0)
         {
-            var steamId = long.Parse(User.Identity.Name);
-            return GetMatches(steamId,matchIds,offset);
-        }
-
-        public MatchesModel GetMatches(long steamId, List<long> matchIds, int offset = 0)
-        {
-            var model = _matchesModelFactory.GetModel(steamId, matchIds, offset);
+            var model = await _matchesModelFactory.GetModel(steamId, matchIds, offset);
             return model;
         }
-
     }
 }
