@@ -38,6 +38,8 @@ namespace MatchRetriever.Helpers
         /// <returns></returns>
         public async Task<List<SteamUser>> GetUsers(List<long> steamIds)
         {
+            steamIds = steamIds.Distinct().ToList();
+
             var queryString = endpointUri + "?steamIds=" + String.Join(steamIds.ToString(), ',');
             var response = await Client.GetAsync(queryString);
 
