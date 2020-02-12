@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "matchdb\ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetrieverTestProject", "MatchRetrieverTestProject\MatchRetrieverTestProject.csproj", "{484E971B-6382-418E-9AB8-31BEA234006C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentLib", "EquipmentLib\EquipmentLib\EquipmentLib.csproj", "{B0A76AD2-FA5B-4590-9A80-F12765A7BFED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{484E971B-6382-418E-9AB8-31BEA234006C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{484E971B-6382-418E-9AB8-31BEA234006C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484E971B-6382-418E-9AB8-31BEA234006C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A76AD2-FA5B-4590-9A80-F12765A7BFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A76AD2-FA5B-4590-9A80-F12765A7BFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A76AD2-FA5B-4590-9A80-F12765A7BFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A76AD2-FA5B-4590-9A80-F12765A7BFED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
