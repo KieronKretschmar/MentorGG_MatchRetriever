@@ -31,7 +31,7 @@ namespace MatchRetriever.Controllers.v1
 
         [HttpGet("single/{steamId}/matchselection")]
         // GET v1/public/single/76561198033880857/matchselection?dailyLimit=3
-        public async Task<MatchSelectionModel> GetMetaMatchHistory(long steamId, int dailyLimit)
+        public async Task<MatchSelectionModel> GetMatchSelection(long steamId, int dailyLimit)
         {
             var model = await _modelFactory.GetModel(steamId, dailyLimit);
             return model;
