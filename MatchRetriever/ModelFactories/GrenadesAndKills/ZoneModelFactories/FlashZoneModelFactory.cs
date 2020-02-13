@@ -25,20 +25,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             performance.CtRounds = rounds.Count(x => x);
             performance.TerroristRounds = rounds.Count(x => !x);
 
-
-            // TODO: Zones
-            //// load Flash and Flashed data
-            //var samples = _context.Flash
-            //    .Where(x => x.PlayerId == playerId && matchIds.Contains(x.MatchId))
-            //    .Select(x => new
-            //    {
-            //        ZoneId = x.DetonationZoneByTeam,
-            //        // disregard teamattacks
-            //        Flasheds = x.Flashed.Select(y => new { y.TimeFlashed, y.TeamAttack, FlashAssist = y.AssistedKillId != null }).ToList()
-            //    })
-            //    .ToList();
-
-
             // summarize Flash and Flashed data for each DetonationZone
             var zonePerformancesPreAggregate = samples
                 .GroupBy(x => x.ZoneId)
