@@ -27,7 +27,7 @@ namespace MatchRetriever.Controllers.v1
             this._roundFactory = roundFactory;
         }
 
-        [Route("match/{matchId}")]
+        [HttpGet("match/{matchId}")]
         // GET /v1/public/match/<matchId>
         public async Task<DemoViewerMatchModel> GetMatch(long matchId)
         {
@@ -36,7 +36,7 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [Route("match/{matchId}/round/{round}")]
+        [HttpGet("match/{matchId}/round/{round}")]
         // GET /v1/public/match/<matchId>/round/<round>
         public async Task<DemoViewerRoundModel> GetRound(long matchId, short round, byte quality = (byte)DemoViewerQuality.Low)
         {

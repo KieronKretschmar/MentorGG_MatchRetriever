@@ -31,7 +31,7 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/{steamId}/hes")]
+        [HttpGet("single/{steamId}/hes")]
         // GET v1/public/single/76561198033880857/hes?map=de_mirage&matchIds=1,2,3
         public async Task<HeModel> GetHes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
@@ -39,7 +39,7 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [Route("single/{steamId}/hesoverview")]
+        [HttpGet("single/{steamId}/hesoverview")]
         // GET v1/public/single/76561198033880857/hesoverview?matchIds=1,2,3
         public async Task<OverviewModel<HeOverviewMapSummary>> GetHesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
