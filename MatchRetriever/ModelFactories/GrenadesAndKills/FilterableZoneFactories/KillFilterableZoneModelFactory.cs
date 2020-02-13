@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static MatchRetriever.Models.GrenadesAndKills.KillFilterSetting;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -36,7 +37,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 var filterablePerformance = new FilterableZonePerformance<KillZonePerformance, KillFilterSetting>
                 {
                     FilterSettings = filter,
-                    ZonePerformances = await _zoneFactory.ZonePerformanceSummary(steamId, validSamples, map, matchIds)
+                    ZonePerformances = await _zoneFactory.ZonePerformanceSummary(steamId, validSamples, map, matchIds,MapZoneType.Position)
                 };
                 filterablePerformancesList.Add(filterablePerformance);
             }

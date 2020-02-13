@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -39,8 +40,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                // TODO: Zone stuff
-                ZoneData = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds),
+                ZoneData = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds, MapZoneType.Flash),
                 RecentMatchesAnalyzedCount = matchIds.Count,
             };
         }
