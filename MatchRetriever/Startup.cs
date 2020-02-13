@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ZoneReader;
 
 namespace MatchRetriever
 {
@@ -99,7 +100,12 @@ namespace MatchRetriever
             services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
             services.AddScoped<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
             services.AddScoped<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
-            #endregion
+			services.AddSingleton<IZoneReader, FileReader>(services =>
+             {
+                 //TODO MANDATORY switch to env var
+                 return new FileReader(@"C:\Users\Lasse\source\repos\MatchRetriever\ZoneReader\ZoneReader\resources\");
+             });            
+			#endregion
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>
