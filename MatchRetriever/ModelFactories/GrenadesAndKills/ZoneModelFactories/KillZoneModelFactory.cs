@@ -20,13 +20,20 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             var performance = new ZonePerformanceSummary<KillZonePerformance>();
 
 
-            //TODO: Initialize performance.ZonePerformances with all possible positionIds
+            //Initialize all occuring zones with zoneperformances
+            //Dont care about multiple assignments to same key as they are empty performances
+            foreach (var sample in samples)
+            {
+                performance.ZonePerformances[sample.PlayerZoneId] = new KillZonePerformance();
+                performance.ZonePerformances[sample.VictimZoneId] = new KillZonePerformance();
+            }
 
             // Load round data
             var rounds = _context.PlayerRoundStats
                 .Where(x => x.PlayerId == steamId && matchIds.Contains(x.MatchId))
                 .Select(x => x.IsCt)
                 .ToList();
+
             performance.CtRounds = rounds.Count(x => x);
             performance.TerroristRounds = rounds.Count(x => !x);
 
@@ -48,21 +55,15 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 catch (KeyNotFoundException e)
                 {
                     // In the rare case that this sample was in no zone at all, ignore the error and sample
-                    var zeroZoneNotFound = (sample.UserWinner && sample.PlayerZoneId == 0) ||
-                        (!sample.UserWinner && sample.VictimZoneId == 0);
-                    if (zeroZoneNotFound)
-                    {
-                        _logger.LogWarning($"Sample [ {sample} ] does not belong into any zone. Sample will be disregarded for this Performance.", e);
-                    }
-                    else
-                    {
+                    var zeroZoneNotFound = (sample.UserWinner && sample.PlayerZoneId < 0) ||
+                        (!sample.UserWinner && sample.VictimZoneId < 0);
+
+                    if (!zeroZoneNotFound)
                         throw;
-                    }
+
+                    _logger.LogWarning($"Sample [ {sample} ] does not belong into any zone. Sample will be disregarded for this Performance.", e);
                 }
             }
-
-            ////Add zone performmances into their parent zone
-            //performance.ZonePerformances = AddZonePerformanceIntoParentZone(zonePerformancesPreAggregate, map);
 
             return performance;
         }
