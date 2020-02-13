@@ -24,7 +24,7 @@ namespace MatchRetriever.Controllers.v1
             _friendsComparisonModelFactory = friendsComparisonModelFactory;
         }
         [HttpGet("single/{steamId}/friends")]
-        public async Task<FriendsComparisonModel> GetFriendsComparison(long steamId, [CsvModelBinder] List<long> matchIds, int maxFriends = 3, int offset = 0)
+        public async Task<FriendsComparisonModel> GetFriendsComparison(long steamId, [CsvModelBinder] List<long> matchIds, int maxFriends, int offset)
         {
             var model = await _friendsComparisonModelFactory.GetModel(steamId, maxFriends, matchIds, offset);
             return model;

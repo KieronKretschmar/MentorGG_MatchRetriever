@@ -38,7 +38,7 @@ namespace MatchRetriever.Controllers.v1
 
         [HttpGet("match/{matchId}/round/{round}")]
         // GET /v1/public/match/<matchId>/round/<round>
-        public async Task<DemoViewerRoundModel> GetRound(long matchId, short round, byte quality = (byte)DemoViewerQuality.Low)
+        public async Task<DemoViewerRoundModel> GetRound(long matchId, short round, DemoViewerQuality quality)
         {
             // Try to parse quality and default to Low quality if value is invalid 
             var demoViewerQuality = Enum.IsDefined(typeof(DemoViewerQuality), quality) ? (DemoViewerQuality)quality : DemoViewerQuality.Low;
