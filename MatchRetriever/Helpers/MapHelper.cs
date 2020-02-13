@@ -48,5 +48,17 @@ namespace MatchRetriever.Helpers
                 this.Prefix = prefix;
             }
         }
+
+        /// <summary>
+        /// CARE THIS ONLY WORKS FOR MAPS WITH ID LOWER THAN 1.000.000
+        /// </summary>
+        /// <param name="zoneId"></param>
+        /// <returns></returns>
+        public static bool IsCtZone(int zoneId)
+        {
+            int prefix = zoneId / 10000;
+            int teamNumber = prefix % 10;
+            return teamNumber == 3;
+        }
     }
 }

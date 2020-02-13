@@ -1,4 +1,5 @@
-﻿using MatchRetriever.Models.GrenadesAndKills;
+﻿using MatchRetriever.Helpers;
+using MatchRetriever.Models.GrenadesAndKills;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToDictionary(x => x.ZoneId, x => new FlashZonePerformance
                 {
                     ZoneId = x.ZoneId,
-                    //IsCtZone = StaticHelpers.IdToTeam(x.ZoneId) == Enumerals.Team.CounterTerrorist,
+                    IsCtZone = MapHelper.IsCtZone(x.ZoneId),
                     SampleCount = x.SampleCount,
                     NadesBlindingEnemiesCount = x.NadesBlindingEnemiesCount,
                     TotalEnemyTimeFlashed = x.EnemyFlasheds.Select(z => z.TimeFlashed).DefaultIfEmpty().Sum(),

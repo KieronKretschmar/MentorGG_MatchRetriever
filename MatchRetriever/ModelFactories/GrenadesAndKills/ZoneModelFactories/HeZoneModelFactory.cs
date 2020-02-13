@@ -1,4 +1,5 @@
-﻿using MatchRetriever.Helpers.Trajectories;
+﻿using MatchRetriever.Helpers;
+using MatchRetriever.Helpers.Trajectories;
 using MatchRetriever.Models.GrenadesAndKills;
 using Newtonsoft.Json;
 using System;
@@ -50,7 +51,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToDictionary(x => x.ZoneId, x => new HeZonePerformance
                 {
                     ZoneId = x.ZoneId,
-                    //IsCtZone = StaticHelpers.IdToTeam(x.ZoneId) == Enumerals.Team.CounterTerrorist, // TODO: Here and for other nades
+                    IsCtZone = MapHelper.IsCtZone(x.ZoneId),
                     SampleCount = x.SampleCount,
                     DamagingNadesCount = x.DamagingNadesCount,
                     VictimCount = x.VictimCount,
