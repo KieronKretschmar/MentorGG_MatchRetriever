@@ -1,4 +1,5 @@
 ﻿using System;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.Models.GrenadesAndKills
 {

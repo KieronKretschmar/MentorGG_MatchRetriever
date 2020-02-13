@@ -12,7 +12,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        protected async override Task<ZonePerformanceSummary<FireNadeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FireNadeSample> samples, string map, List<long> matchIds)
+        protected async override Task<ZonePerformanceSummary<FireNadeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FireNadeSample> samples, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<FireNadeZonePerformance>();
 
@@ -109,14 +109,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     MaxDamage = x.MaxDamage,
                 });
 
-            //// Fill values for zones the user did not throw any grenades at
-            //foreach (var zoneId in StaticHelpers.FireNadeDetonationZones(map).Select(x => x.ZoneId))
-            //{
-            //    if (!zonePerformancesPreAggregate.ContainsKey(zoneId))
-            //    {
-            //        zonePerformancesPreAggregate[zoneId] = new FireNadeDetonationZoneEntityPerformance { ZoneId = zoneId };
-            //    }
-            //}
             return performance;
         }
     }

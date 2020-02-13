@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -14,7 +16,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        protected override async Task<ZonePerformanceSummary<HeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<HeSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<HeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<HeSample> samples, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<HeZonePerformance>();
 
@@ -39,9 +41,10 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 {
                     x.ZoneId,
                     x.SampleCount,
+
                     DamagingNadesCount = x.DamagesByHE.Count(y => y.Any()),
                     VictimCount = x.DamagesByHE.Sum(y => y.Count()),
-                    MaxDamage = x.DamagesByHE.Select(y => y.Select(z => (int?)z.AmountHealth).Sum()).Max() ?? 0,
+                    MaxDamage = x.DamagesByHE.Select(y => y.Select(z => (int?) z.AmountHealth).Sum()).Max() ?? 0,
                     Damages = x.DamagesByHE.SelectMany(y => y),
                 })
                 .ToDictionary(x => x.ZoneId, x => new HeZonePerformance
@@ -57,36 +60,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     MaxDamage = x.MaxDamage,
                 });
 
-
-            //TODO: Don't forget implementing below
-            //// Fill values for zones the user did not throw any grenades at
-            //foreach (var zoneId in StaticHelpers.HEDetonationZones(map).Select(x => x.ZoneId))
-            //{
-            //    if (!preAggregatedPerformance.ContainsKey(zoneId))
-            //    {
-            //        preAggregatedPerformance[zoneId] = new HEDetonationZoneEntityPerformance { ZoneId = zoneId };
-            //    }
-            //}
-            ////Add zone performmances into their parent zone
-            //performance.ZonePerformances = AddZonePerformanceIntoParentZone(preAggregatedPerformance, map);
-
             return performance;
         }
-
-        //TODO: Integrate this for all zone nades
-        //private Dictionary<int, FireNadeDetonationZoneEntityPerformance> AddZonePerformanceIntoParentZone(Dictionary<int, FireNadeDetonationZoneEntityPerformance> preAgg, string map)
-        //{
-        //    var aggregatedPerformance = new Dictionary<int, FireNadeDetonationZoneEntityPerformance>(preAgg);
-
-        //    foreach (var item in StaticHelpers.FireNadeDetonationZones(map).OrderByDescending(x => x.Depth))
-        //    {
-        //        //Only the main_zone should have ParentZoneId == -1, might mask an error
-        //        if (item.ParentZoneId == -1) break;
-        //        var performance = aggregatedPerformance[item.ZoneId];
-        //        aggregatedPerformance[item.ParentZoneId] = aggregatedPerformance[item.ParentZoneId].Absorb(performance);
-        //    }
-
-        //    return aggregatedPerformance;
-        //}
     }
 }

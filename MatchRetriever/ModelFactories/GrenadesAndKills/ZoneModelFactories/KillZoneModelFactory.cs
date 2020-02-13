@@ -9,15 +9,16 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
-    public class KillZoneModelFactory : ModelFactoryBase, IZonePerformanceFactory<KillSample, KillZonePerformance>
+    public class KillZoneModelFactory : ZonePerformanceFactory<KillSample, KillZonePerformance>
     {
         public KillZoneModelFactory(IServiceProvider sp) : base(sp)
         {
         }
 
-        public async Task<ZonePerformanceSummary<KillZonePerformance>> ZonePerformanceSummary(long steamId, List<KillSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<KillZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<KillSample> samples, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<KillZonePerformance>();
+
 
             //TODO: Initialize performance.ZonePerformances with all possible positionIds
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -12,7 +13,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        protected override async Task<ZonePerformanceSummary<FlashZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FlashSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<FlashZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FlashSample> samples, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<FlashZonePerformance>();
 
@@ -73,15 +74,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     TeamFlashAssists = x.TeamFlasheds.Count(y => y.FlashAssist),
                 });
 
-
-            //// Fill values for zones the user did not throw any grenades at
-            //foreach (var zoneId in StaticHelpers.FlashDetonationZones(map).Select(x => x.ZoneId))
-            //{
-            //    if (!zonePerformancesPreAggregate.ContainsKey(zoneId))
-            //    {
-            //        zonePerformancesPreAggregate[zoneId] = new FlashDetonationZoneEntityPerformance { ZoneId = zoneId };
-            //    }
-            //}
             return performance;
         }
     }

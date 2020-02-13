@@ -1,4 +1,5 @@
 ﻿using System;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.Models.GrenadesAndKills
 {
@@ -16,7 +17,6 @@ namespace MatchRetriever.Models.GrenadesAndKills
 
         public int EnemyFlashAssists { get; set; } = 0;
         public int TeamFlashAssists { get; set; } = 0;
-
         public override FlashZonePerformance Absorb (FlashZonePerformance other)
         {
             var res = new FlashZonePerformance
