@@ -48,14 +48,6 @@ namespace MatchRetriever.Helpers
                 return Task.CompletedTask;
             }
 
-            //Since we only need this for type 'long' right now and I'm no good with dynamic types,
-            //I've replaced the (non-working) lines below and hardcoded this to return List<long>
-
-            //var stringReader = new StringReader(value);
-            //var reader = new CsvReader(stringReader, CultureInfo.InvariantCulture);
-            //var modelElementType = bindingContext.ModelMetadata.ElementType;
-            //var model = reader.GetRecords(modelElementType).ToList();
-
             var model = value.Split(',').Select(long.Parse).ToList();
 
             bindingContext.Result = ModelBindingResult.Success(model);
