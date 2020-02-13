@@ -1,4 +1,5 @@
-﻿using MatchRetriever.Helpers.Trajectories;
+﻿using MatchRetriever.Helpers;
+using MatchRetriever.Helpers.Trajectories;
 using MatchRetriever.Models.GrenadesAndKills;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -22,10 +23,20 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
 
             //Initialize all occuring zones with zoneperformances
             //Dont care about multiple assignments to same key as they are empty performances
-            foreach (var sample in samples)
+            var killZoneIds = samples.Select(x => x.PlayerZoneId).Distinct();
+            var victimZoneIds = samples.Select(x => x.VictimZoneId).Distinct();
+
+            var zoneIds = killZoneIds.Union(victimZoneIds).ToList();
+
+
+            foreach (int zoneId in zoneIds)
             {
-                performance.ZonePerformances[sample.PlayerZoneId] = new KillZonePerformance();
-                performance.ZonePerformances[sample.VictimZoneId] = new KillZonePerformance();
+                performance.ZonePerformances[zoneId] = new KillZonePerformance
+                {
+                    ZoneId = zoneId,
+                    IsCtZone = MapHelper.IsCtZone(zoneId),
+                    SampleCount = 0
+                };
             }
 
             // Load round data
