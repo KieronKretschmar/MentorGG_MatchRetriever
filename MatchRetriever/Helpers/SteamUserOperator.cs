@@ -93,11 +93,10 @@ namespace MatchRetriever.Helpers
 
         public async Task<List<SteamUserOperator.SteamUser>> GetUsers(List<long> steamIds)
         {
-            var list = steamIds.Select(async x => await GetUser(x))
+            var list = steamIds.Distinct()
+                .Select(async x => await GetUser(x))
                 .Select(x => x.Result).ToList();
             return list;
         }
     }
-
-
 }
