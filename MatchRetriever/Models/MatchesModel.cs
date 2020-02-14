@@ -29,7 +29,7 @@ namespace MatchRetriever
 
     public struct Scoreboard
     {
-        public Dictionary<StartingFaction, TeamInfo> TeamInfo { get; set; }
+        public Dictionary<StartingFaction, TeamInfo> TeamInfos { get; set; }
     }
 
     public class TeamInfo

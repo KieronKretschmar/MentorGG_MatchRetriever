@@ -60,7 +60,7 @@ namespace MatchRetrieverTestProject
 
             // Assert that all matches have exactly one scoreboard entry
             // Note that we can't check for correct steamId as long as
-            Assert.IsTrue(model.HiddenMatchInfos.All(x => x.Scoreboard.TeamInfo[team].Players.Single().SteamId == steamId));
+            Assert.IsTrue(model.HiddenMatchInfos.All(x => x.Scoreboard.TeamInfos[team].Players.Single().SteamId == steamId));
         }
     }
 }
