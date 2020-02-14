@@ -5,7 +5,7 @@ namespace MatchRetriever.Models
 {
     public struct PlayerInfoModel
     {
-        public SteamUser steamUser { get; set; }
+        public SteamUser SteamUser { get; set; }
         public MatchMakingRank Rank { get; set; }
     }
 }

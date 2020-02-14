@@ -23,7 +23,7 @@ namespace MatchRetriever.ModelFactories
             var res = new PlayerInfoModel();
             var profile = await _steamUserOperator.GetUser(steamId);
 
-            res.steamUser = profile;
+            res.SteamUser = profile;
             res.Rank = _context.CurrentRank(steamId);
             return res;
         }
