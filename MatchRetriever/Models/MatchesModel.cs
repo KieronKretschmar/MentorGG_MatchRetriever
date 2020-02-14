@@ -27,7 +27,7 @@ namespace MatchRetriever
         public Scoreboard Scoreboard;
     }
 
-    public struct Scoreboard
+    public class Scoreboard
     {
         public Dictionary<StartingFaction, TeamInfo> TeamInfos { get; set; }
     }
@@ -40,7 +40,7 @@ namespace MatchRetriever
         public List<PlayerScoreboardEntry> Players { get; set; }
     }
 
-    public struct PlayerScoreboardEntry
+    public class PlayerScoreboardEntry
     {
         public long SteamId { get; set; }
         public Helpers.SteamUserOperator.SteamUser Profile { get; set; }
