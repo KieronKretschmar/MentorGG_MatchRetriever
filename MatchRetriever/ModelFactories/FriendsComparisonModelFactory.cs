@@ -18,8 +18,11 @@ namespace MatchRetriever.ModelFactories
 
     public class FriendsComparisonModelFactory : ModelFactoryBase, IFriendsComparisonModelFactory
     {
+        private readonly IPlayerInfoModelFactory _playerInfoModelFactory;
+
         public FriendsComparisonModelFactory(IServiceProvider sp) : base(sp)
         {
+            _playerInfoModelFactory = sp.GetRequiredService<IPlayerInfoModelFactory>();
         }
 
         public async Task<FriendsComparisonModel> GetModel(long steamId, int maxFriends, List<long> matchIds, int offset)
@@ -41,7 +44,7 @@ namespace MatchRetriever.ModelFactories
             var rowData = new ComparisonRowData
             {
                 MatchesPlayed = matchIds.Count,
-                OtherPlayerInfo = await GetPlayerInfoModel(steamId),
+                OtherPlayerInfo = await _playerInfoModelFactory.GetModel(steamId),
                 UserData = getBriefComparisonPlayerData(steamId, matchIds),
                 OtherData = getBriefComparisonPlayerData(otherId, matchIds),
             };
@@ -220,16 +223,6 @@ namespace MatchRetriever.ModelFactories
             res.HEsThrown = pms.Sum(x => x.HesUsed);
             res.SmokesThrown = pms.Sum(x => x.SmokesUsed);
 
-            return res;
-        }
-
-        private async Task<PlayerInfoModel> GetPlayerInfoModel(long steamId)
-        {
-            var res = new PlayerInfoModel();
-            var profile = await _steamUserOperator.GetUser(steamId);
-
-            res.steamUser = profile;
-            res.Rank = _context.CurrentRank(steamId);
             return res;
         }
     }

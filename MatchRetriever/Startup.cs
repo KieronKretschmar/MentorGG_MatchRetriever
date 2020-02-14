@@ -96,6 +96,7 @@ namespace MatchRetriever
             #endregion
 
             #region Add other ModelFactories
+            services.AddScoped<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
             services.AddScoped<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
             services.AddScoped<IMatchesModelFactory, MatchesModelFactory>();
             services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
