@@ -162,6 +162,7 @@ namespace MatchRetriever
             {
                 return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
             });
+            services.AddSingleton<IDemoViewerConfigProvider, DemoViewerConfigProvider>();
             #endregion
 
             // Enable versioning

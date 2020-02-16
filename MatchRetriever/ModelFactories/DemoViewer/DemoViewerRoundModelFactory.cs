@@ -1,8 +1,11 @@
 ﻿using MatchRetriever.Enumerals;
+using MatchRetriever.Helpers;
 using MatchRetriever.Helpers.Trajectories;
 using MatchRetriever.Models;
 using MatchRetriever.Models.DemoViewer;
 using MatchRetriever.Models.DemoViewer.Objects;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,18 +16,33 @@ namespace MatchRetriever.ModelFactories.DemoViewer
 {
     public interface IDemoViewerRoundModelFactory
     {
-        Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality quality);
+        Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality);
     }
 
     public class DemoViewerRoundModelFactory : ModelFactoryBase, IDemoViewerRoundModelFactory
     {
+        private readonly IDemoViewerConfigProvider _demoViewerConfigProvider;
+
         public DemoViewerRoundModelFactory(IServiceProvider sp) : base(sp)
         {
+            _demoViewerConfigProvider = sp.GetRequiredService<IDemoViewerConfigProvider>();
         }
 
-        public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality quality)
+        public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality)
         {
             var model = new DemoViewerRoundModel();
+
+            // Take the lower quality of [availableQuality, requestedQuality]
+            var availableFramesPerSecond = _context.MatchStats.Single(x => x.MatchId == matchId).Config.FramesPerSecond;
+            model.Config = _demoViewerConfigProvider.GetHighestAvailableConfig(requestedQuality, availableFramesPerSecond);
+
+            if(model.Config.Quality < requestedQuality)
+            {
+                _logger.LogWarning(
+                    $"Requested quality [ {requestedQuality} ] was not available for match #[ {matchId} ] and round [ {roundNumber} ], " +
+                    $"Probably because only [ {availableFramesPerSecond} ] FPS were available. Using quality [ {model.Config.Quality} ] instead.");
+            }
+
             // Match Stats
             var roundStats = _context.RoundStats.Single(x => x.MatchId == matchId && x.Round == roundNumber);
             var map = roundStats.MatchStats.Map;
@@ -144,7 +162,6 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                 }
             }
 
-            // TODO: The queries with groupBy might be improved by first specifying and loading all the required data and performing the Grouping afterwards
             model.ItemSaveds = roundStats.ItemSaved
                         // Filter out entries with Equipment=0. Does not make sense, seems to be a bug in DemoAnalyzer
                         .Where(x => x.Equipment != 0)
@@ -211,14 +228,22 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                         })
                         .ToList()
                         .GroupBy(x => x.PlayerId)
-                        .ToDictionary(x => x.Key.ToString(), g => g.Select(x => new DvPlayerPosition()
-                        {
-                            Time = x.Time,
-                            Weapon = x.Weapon,
-                            PlayerView = x.PlayerViewX,
-                            PlayerPos = x.PlayerPos,
-                        })
-                        .ToList());
+                        // Apply Filtering for quality
+                        .ToDictionary(
+                            x => x.Key.ToString(), 
+                            // Reduce frames to the first of each frame every (1/FPS) seconds
+                            g => g
+                            .GroupBy(x=>x.Time % (1000 / model.Config.FramesPerSecond))
+                            .Select(x=>x.First())
+                            .Select(x => new DvPlayerPosition()
+                            {
+                                Time = x.Time,
+                                Weapon = x.Weapon,
+                                PlayerView = x.PlayerViewX,
+                                PlayerPos = x.PlayerPos,
+                            })
+                            .ToList()
+                        );
 
             #endregion
 

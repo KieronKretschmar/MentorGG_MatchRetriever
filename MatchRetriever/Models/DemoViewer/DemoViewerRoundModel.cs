@@ -1,4 +1,6 @@
-﻿using MatchRetriever.Models.DemoViewer.Objects;
+﻿using MatchRetriever.Enumerals;
+using MatchRetriever.Helpers;
+using MatchRetriever.Models.DemoViewer.Objects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,8 @@ namespace MatchRetriever.Models.DemoViewer
     [JsonObject(MemberSerialization.OptIn)]
     public class DemoViewerRoundModel
     {
+        public DemoViewerConfig Config { get; set; }
+
         // Match Stats
         public DvRoundStats RoundStats;
 
