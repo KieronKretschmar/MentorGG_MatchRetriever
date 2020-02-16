@@ -12,7 +12,7 @@ namespace MatchRetriever.Models.DemoViewer
         //Global Stats
         public Dictionary<short, string> WeaponFileNames = new Dictionary<short, string>();
         public Dictionary<short, EquipmentInfo> EquipmentInfo;
-        public Dictionary<string, DvPlayerStats> PlayerStats;
+        public Dictionary<string, PlayerInfoModel> PlayerStats;
         public List<List<long>> FriendNets;
         public long? UserId;
 

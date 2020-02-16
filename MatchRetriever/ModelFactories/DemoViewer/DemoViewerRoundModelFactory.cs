@@ -309,7 +309,7 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             // Load scores of all Players who were active this round, including bots.
             scoreboard.PlayerScores = _context.PlayerRoundStats
                 .Where(x => x.MatchId == matchId && x.Round == cutoffRound)
-                .ToDictionary(x => x.PlayerId, x => new DvPlayerScoreboardEntry
+                .ToDictionary(x => x.PlayerId, x => new PlayerScoreboardEntry
                 {
                     Kills = x.RoundStartKills,
                     Deaths = x.RoundStartDeaths,
@@ -317,7 +317,6 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                     MVPs = x.RoundStartMvps,
                     DamageDealt = x.RoundStartDamage,
                     Score = x.RoundStartScore,
-                    Team = x.PlayerMatchStats.Team,
                     RankBeforeMatch = x.PlayerMatchStats.RankBeforeMatch,
                     RankAfterMatch = x.PlayerMatchStats.RankAfterMatch,
                 });
