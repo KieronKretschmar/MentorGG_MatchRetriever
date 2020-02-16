@@ -63,6 +63,15 @@ namespace MatchRetriever
                     });
             }
 
+
+            #region Read environment variables
+            var STEAMUSEROPERATOR_URI = Configuration.GetValue<string>("STEAMUSEROPERATOR_URI");
+            var EQUIPMENT_CSV_DIRECTORY = Configuration.GetValue<string>("EQUIPMENT_CSV_DIRECTORY");
+            if(EQUIPMENT_CSV_DIRECTORY == null)
+                throw new ArgumentNullException("The environment variable EQUIPMENT_CSV_DIRECTORY has not been set.");
+            var EQUIPMENT_ENDPOINT = Configuration.GetValue<string>("EQUIPMENT_ENDPOINT");
+            #endregion
+
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
             services.AddScoped<IFireNadeModelFactory, FireNadeModelFactory>();
@@ -141,6 +150,11 @@ namespace MatchRetriever
             {
                 return new MockSteamUserOperator();
                 //return new SteamUserOperator(services.GetService<ILogger>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
+            });
+
+            services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
+            {
+                return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
             });
 
             // Enable versioning
