@@ -31,7 +31,7 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/{steamId}/filterablekills")]
+        [HttpGet("single/{steamId}/filterablekills")]
         // GET v1/public/single/76561198033880857/filterablekills?map=de_mirage&matchIds=1,2,3
         public async Task<KillModel> GetFilterableKills(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
@@ -39,7 +39,7 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [Route("single/{steamId}/killsoverview")]
+        [HttpGet("single/{steamId}/killsoverview")]
         // GET v1/public/single/76561198033880857/killsoverview?matchIds=1,2,3
         public async Task<OverviewModel<FireNadeOverviewMapSummary>> GetKillsOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {

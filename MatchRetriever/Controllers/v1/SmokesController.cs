@@ -31,7 +31,7 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/{steamId}/smokes")]
+        [HttpGet("single/{steamId}/smokes")]
         // GET v1/public/single/76561198033880857/smokes?map=de_mirage&matchIds=1,2,3
         public async Task<SmokeModel> GetSmokes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
@@ -39,7 +39,7 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [Route("single/{steamId}/smokesoverview")]
+        [HttpGet("single/{steamId}/smokesoverview")]
         // GET v1/public/single/76561198033880857/smokesoverview?matchIds=1,2,3
         public async Task<OverviewModel<SmokeOverviewMapSummary>> GetSmokesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {

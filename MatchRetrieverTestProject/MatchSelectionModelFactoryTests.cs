@@ -16,17 +16,6 @@ namespace MatchRetrieverTestProject
     [TestClass]
     public class MatchSelectionModelFactoryTests
     {
-        private readonly ServiceProvider _sp;
-        private readonly WebApplicationFactory<Startup> _matchesfactory;
-
-        public MatchSelectionModelFactoryTests()
-        {
-            var services = new ServiceCollection();
-
-
-            _sp = services.BuildServiceProvider();
-        }
-
         [TestMethod]
         public async Task TestGetModel()
         {

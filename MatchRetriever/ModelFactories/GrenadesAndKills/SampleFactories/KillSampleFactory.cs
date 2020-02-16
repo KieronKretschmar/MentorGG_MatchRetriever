@@ -39,6 +39,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
 
             // Add PlayerNames and VictimNames with only one call of GetUsers
             var distinctSteamIds = samples.SelectMany(x => new List<long> { x.SteamId, x.VictimId })
+                .Distinct()
                 .ToList();
             var steamUserInfos = await _steamUserOperator.GetUsers(distinctSteamIds);
             var steamNameDict = distinctSteamIds.ToDictionary(x => x, x => steamUserInfos.SingleOrDefault(userinfo => userinfo.SteamId == x).SteamName);

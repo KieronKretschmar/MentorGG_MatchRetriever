@@ -26,7 +26,7 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/{steamId}/flashes")]
+        [HttpGet("single/{steamId}/flashes")]
         // GET v1/public/single/76561198033880857/flashes?map=de_mirage&matchIds=1,2,3
         public async Task<FlashModel> GetFlashes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
@@ -34,7 +34,7 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [Route("single/{steamId}/flashesoverview")]
+        [HttpGet("single/{steamId}/flashesoverview")]
         // GET v1/public/single/76561198033880857/flashesoverview?matchIds=1,2,3
         public async Task<OverviewModel<FlashOverviewMapSummary>> GetFlashesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {

@@ -31,7 +31,7 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
-        [Route("single/{steamId}/firenades")]
+        [HttpGet("single/{steamId}/firenades")]
         // GET v1/public/single/76561198033880857/firenades?map=de_mirage&matchIds=1,2,3
         public async Task<FireNadeModel> GetFireNades(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
@@ -39,7 +39,7 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [Route("single/{steamId}/firenadesoverview")]
+        [HttpGet("single/{steamId}/firenadesoverview")]
         // GET v1/public/single/76561198033880857/firenadesoverview?&matchIds=1,2,3
         public async Task<OverviewModel<FireNadeOverviewMapSummary>> GetFireNadesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {

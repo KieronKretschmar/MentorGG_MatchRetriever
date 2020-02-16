@@ -21,8 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EquipmentLib\EquipmentLib\EquipmentLib.csproj" />
     <ProjectReference Include="..\matchdb\Database\Database.csproj" />
     <ProjectReference Include="..\matchdb\matchentities\MatchEntities\MatchEntities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\DemoViewer\Objects\" />
   </ItemGroup>
 
 
