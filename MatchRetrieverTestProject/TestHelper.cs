@@ -47,7 +47,7 @@ namespace MatchRetrieverTestProject
             steamUserOperatorMock
                 .Setup(x => x.GetUsers(It.IsAny<List<long>>()))
                 .Returns((List<long> steamIds) =>
-                    Task.FromResult(steamIds.Distinct().Select(steamId => new SteamUserOperator.SteamUser
+                    Task.FromResult(steamIds.Distinct().Select(steamId => new SteamUser
                     {
                         SteamId = steamId,
                         ImageUrl = "ImageUrl",
@@ -57,7 +57,7 @@ namespace MatchRetrieverTestProject
                 );
             steamUserOperatorMock.Setup(x => x.GetUser(It.IsAny<long>()))
                 .Returns((long steamId) =>
-                    Task.FromResult(new SteamUserOperator.SteamUser
+                    Task.FromResult(new SteamUser
                     {
                         SteamId = steamId,
                         ImageUrl = "ImageUrl",

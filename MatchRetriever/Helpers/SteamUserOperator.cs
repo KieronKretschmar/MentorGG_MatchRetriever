@@ -10,8 +10,8 @@ namespace MatchRetriever.Helpers
 {
     public interface ISteamUserOperator
     {
-        Task<SteamUserOperator.SteamUser> GetUser(long steamId);
-        Task<List<SteamUserOperator.SteamUser>> GetUsers(List<long> steamIds);
+        Task<SteamUser> GetUser(long steamId);
+        Task<List<SteamUser>> GetUsers(List<long> steamIds);
     }
 
     /// <summary>
@@ -67,23 +67,24 @@ namespace MatchRetriever.Helpers
         {
             return (await GetUsers(new List<long> { steamId })).Single();
         }
-
-        /// <summary>
-        /// SteamUser, copied from SteamUserOperator repository. Please update accordingly.
-        /// </summary>
-        public class SteamUser
-        {
-            public long SteamId { get; set; }
-            public string SteamName { get; set; }
-            public string ImageUrl { get; set; }
-        }
     }
+
+    /// <summary>
+    /// SteamUser, copied from SteamUserOperator repository. Please update accordingly.
+    /// </summary>
+    public class SteamUser
+    {
+        public long SteamId { get; set; }
+        public string SteamName { get; set; }
+        public string ImageUrl { get; set; }
+    }
+    
 
     public class MockSteamUserOperator : ISteamUserOperator
     {
-        public async Task<SteamUserOperator.SteamUser> GetUser(long steamId)
+        public async Task<SteamUser> GetUser(long steamId)
         {
-            return new SteamUserOperator.SteamUser
+            return new SteamUser
             {
                 SteamId = steamId,
                 ImageUrl = "ImageUrl",
@@ -91,7 +92,7 @@ namespace MatchRetriever.Helpers
             };
         }
 
-        public async Task<List<SteamUserOperator.SteamUser>> GetUsers(List<long> steamIds)
+        public async Task<List<SteamUser>> GetUsers(List<long> steamIds)
         {
             var list = steamIds.Distinct()
                 .Select(async x => await GetUser(x))

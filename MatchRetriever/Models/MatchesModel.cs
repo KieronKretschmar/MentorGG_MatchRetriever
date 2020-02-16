@@ -43,7 +43,7 @@ namespace MatchRetriever
     public class PlayerScoreboardEntry
     {
         public long SteamId { get; set; }
-        public Helpers.SteamUserOperator.SteamUser Profile { get; set; }
+        public Helpers.SteamUser Profile { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }
         public int Assists { get; set; }

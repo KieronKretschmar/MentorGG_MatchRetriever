@@ -1,5 +1,5 @@
 ﻿using MatchEntities.Enums;
-using static MatchRetriever.Helpers.SteamUserOperator;
+using MatchRetriever.Helpers;
 
 namespace MatchRetriever.Models
 {

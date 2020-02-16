@@ -7,7 +7,6 @@ using MatchRetriever.Controllers.v1;
 using MatchRetriever.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Database;
-using static MatchRetriever.Helpers.SteamUserOperator;
 
 namespace MatchRetriever.ModelFactories
 {
