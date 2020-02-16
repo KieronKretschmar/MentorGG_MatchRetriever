@@ -25,7 +25,8 @@ using ZoneReader;
 namespace MatchRetriever
 {
     /// <summary>
-    /// Requires env variables ["MYSQL_CONNECTION_STRING"]
+    /// Requires env variables ["MYSQL_CONNECTION_STRING", "EQUIPMENT_CSV_DIRECTORY", "STEAMUSEROPERATOR_URI"]
+    /// Optional env variables ["EQUIPMENT_ENDPOINT"]
     /// </summary>
     public class Startup
     {
