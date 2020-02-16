@@ -1,4 +1,5 @@
 ﻿using EquipmentLib;
+using MatchEntities.Enums;
 using MatchRetriever.Models.DemoViewer.Objects;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace MatchRetriever.Models.DemoViewer
     public class DemoViewerMatchModel
     {
         //Global Stats
-        public Dictionary<short, string> WeaponFileNames = new Dictionary<short, string>();
         public Dictionary<short, EquipmentInfo> EquipmentInfo;
         public Dictionary<string, Helpers.SteamUser> PlayerStats;
         public List<List<long>> FriendNets;
@@ -26,7 +26,7 @@ namespace MatchRetriever.Models.DemoViewer
         public struct RoundSummary
         {
             public short Round { get; set; }
-            public byte WinnerTeam { get; set; }
+            public StartingFaction WinnerTeam { get; set; }
             public byte WinType { get; set; }
             public bool WinnerIsCT { get; set; }
         }

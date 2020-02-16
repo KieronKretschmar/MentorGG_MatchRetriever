@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MatchEntities.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,25 +17,13 @@ namespace MatchRetriever.Models.DemoViewer.Objects
         public string Map;
 
         [JsonProperty]
-        public byte WinnerTeam { get; set; }
+        public StartingFaction WinnerTeam { get; set; }
 
         [JsonProperty]
-        public short Score1 { get; set; }
+        public DvTeamMatchStats CtStarterTeamStats { get; set; }
 
         [JsonProperty]
-        public short Score2 { get; set; }
-
-        [JsonProperty]
-        public short NumRoundsT1 { get; set; }
-
-        [JsonProperty]
-        public short NumRoundsCT1 { get; set; }
-
-        [JsonProperty]
-        public short NumRoundsT2 { get; set; }
-
-        [JsonProperty]
-        public short NumRoundsCT2 { get; set; }
+        public DvTeamMatchStats TerroristStarterTeamStats { get; set; }
 
         [JsonProperty]
         public int RoundTimer { get; set; }
@@ -43,9 +32,9 @@ namespace MatchRetriever.Models.DemoViewer.Objects
         public int BombTimer { get; set; }
 
         [JsonProperty]
-        public string Source;
+        public string Source { get; set; }
 
         [JsonProperty]
-        public double AVGRank;
+        public double AVGRank { get; set; }
     }
 }

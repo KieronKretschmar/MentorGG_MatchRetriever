@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MatchEntities.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace MatchRetriever.Models.DemoViewer.Objects
     public class DvPlayerMatchStats
     {
         [JsonProperty]
-        public byte Team { get; set; }
+        public StartingFaction Team { get; set; }
 
         [JsonProperty]
         public short Kills { get; set; }

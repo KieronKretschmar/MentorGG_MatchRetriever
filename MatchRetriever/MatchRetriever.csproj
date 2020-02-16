@@ -28,9 +28,5 @@
     <ProjectReference Include="..\ZoneReader\ZoneReader\ZoneReader.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\DemoViewer\Objects\" />
-  </ItemGroup>
-
 
 </Project>
