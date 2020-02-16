@@ -23,8 +23,6 @@ namespace MatchRetriever.Models.DemoViewer
         public List<RoundSummary> RoundSummaries;
         public string ImageUrl;
 
-        public DemoViewerRoundModel Round;
-
         public struct RoundSummary
         {
             public short Round { get; set; }
