@@ -63,7 +63,6 @@ namespace MatchRetriever
                     });
             }
 
-
             #region Read environment variables
             var STEAMUSEROPERATOR_URI = Configuration.GetValue<string>("STEAMUSEROPERATOR_URI");
             var EQUIPMENT_CSV_DIRECTORY = Configuration.GetValue<string>("EQUIPMENT_CSV_DIRECTORY");
@@ -145,17 +144,25 @@ namespace MatchRetriever
             services.AddScoped<IMisplayModelFactory, MisplayModelFactory>();
             #endregion
 
-            // Add other services            
+            #region Add Helper services          
             services.AddSingleton<ISteamUserOperator>(services =>
             {
-                return new MockSteamUserOperator();
-                //return new SteamUserOperator(services.GetService<ILogger>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
+                if (STEAMUSEROPERATOR_URI != null)
+                {
+                    return new SteamUserOperator(services.GetService<ILogger>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
+                }
+                else
+                {
+                    Console.WriteLine("STEAMUSEROPERATOR_URI not provided. Using Mock instead. This should not happen in production.");
+                    return new MockSteamUserOperator();
+                }
             });
 
             services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
             {
                 return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
             });
+            #endregion
 
             // Enable versioning
             // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
