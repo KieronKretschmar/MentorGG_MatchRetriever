@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MatchRetriever.Helpers;
+using MatchRetriever.Misplays;
 using MatchRetriever.ModelFactories;
 using MatchRetriever.ModelFactories.DemoViewer;
 using MatchRetriever.ModelFactories.GrenadesAndKills;
@@ -51,7 +52,7 @@ namespace MatchRetriever
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
             {
-                services.AddDbContext<Database.MatchContext>(o => { o.UseMySql(connString); });
+                services.AddDbContext<Database.MatchContext>(o => { o.UseMySql(connString); }, ServiceLifetime.Singleton, ServiceLifetime.Singleton);
             }
             else
             {
@@ -106,6 +107,16 @@ namespace MatchRetriever
                  return new FileReader(@"C:\Users\Lasse\source\repos\MatchRetriever\ZoneReader\ZoneReader\resources\");
              });            
 			#endregion
+
+            #region Misplay detectors
+            services.AddScoped<IBadBombDropDetector ,BadBombDropDetector>();
+            services.AddSingleton<DetectorHelpers>();
+
+
+
+
+            services.AddScoped<IMisplayDetector, MisplayDetector>();
+            #endregion
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>
