@@ -7,11 +7,11 @@ using System.Numerics;
 
 namespace MatchRetriever.Misplays
 {
-    public class DetectorHelpers
+    public class _detectorHelpers
     {
         private MatchContext _context;
 
-        public DetectorHelpers(IServiceProvider sp)
+        public _detectorHelpers(IServiceProvider sp)
         {
             _context = sp.GetRequiredService<MatchContext>();
         }
@@ -44,25 +44,44 @@ namespace MatchRetriever.Misplays
 
         internal int DeathTime(long steamId, long matchId, short round)
         {
-           
-                return _context.Kill
-                    .Where(x => x.MatchId == matchId && x.Round == round && x.VictimId == steamId)
-                    .Select(x => x.Time)
-                    .ToList()
-                    .Select(x => (int?) x)
-                    .FirstOrDefault() ?? -1; // SingleOrDefault would be better, but there's a bug with more than 2 kills in a round
-            
+
+            return _context.Kill
+                .Where(x => x.MatchId == matchId && x.Round == round && x.VictimId == steamId)
+                .Select(x => x.Time)
+                .ToList()
+                .Select(x => (int?) x)
+                .FirstOrDefault() ?? -1; // SingleOrDefault would be better, but there's a bug with more than 2 kills in a round
+
+        }
+
+        internal int NextDamageTaken(long steamId, long matchId, short round, int startTime, int endTime)
+        {
+
+            return _context.Damage
+                .Where(x => x.MatchId == matchId && x.Round == round && x.VictimId == steamId && startTime <= x.Time && x.Time <= endTime)
+                .Select(x => x.Time)
+                .ToList()
+                .OrderBy(x => x)
+                .Select(x => (int?) x)
+                .FirstOrDefault() ?? -1;
+
+        }
+
+        internal bool WasFlashed(long playerId, long matchId, short round, int time)
+        {
+            return _context.Flashed
+                .Any(x => x.MatchId == matchId && x.Round == round && x.VictimId == playerId && x.Flash.Time <= time && time <= x.Flash.Time + x.TimeFlashed);
         }
 
         internal int NextFightingAction(long steamId, long matchId, short round, int startTime, int endTime)
         {
-                return _context.Damage
-                    .Where(x => x.MatchId == matchId && x.Round == round && (x.PlayerId == steamId || x.VictimId == steamId) && startTime <= x.Time && x.Time <= endTime)
-                    .Select(x => x.Time)
-                    .ToList()
-                    .OrderBy(x => x)
-                    .Select(x => (int?) x)
-                    .FirstOrDefault() ?? -1;
+            return _context.Damage
+                .Where(x => x.MatchId == matchId && x.Round == round && (x.PlayerId == steamId || x.VictimId == steamId) && startTime <= x.Time && x.Time <= endTime)
+                .Select(x => x.Time)
+                .ToList()
+                .OrderBy(x => x)
+                .Select(x => (int?) x)
+                .FirstOrDefault() ?? -1;
         }
     }
 }
