@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Misplays
 {
-    public class UnnecessaryReloadDetector : Subdetector<UnnecessaryReload>
+    public interface IUnnecessaryReloadDetector
+    {
+        ISituationCollection ComputeMisplays(long steamId, long matchId);
+        ISituationCollection FilterOutByConfig(ISituationCollection collection);
+    }
+
+    public class UnnecessaryReloadDetector : Subdetector<UnnecessaryReload>, IUnnecessaryReloadDetector
     {
         //TODO Move into configurration database
         public static int MinAmmoBeforeLimit = 5;
@@ -36,7 +42,7 @@ namespace MatchRetriever.Misplays
                 })
                 .ToList();
 
-            reloads.ForEach(x => 
+            reloads.ForEach(x =>
             {
                 x.DeathTime = _detectorHelpers.DeathTime(steamId, matchId, x.Round);
                 x.ReloadStartTime = x.Time - 500; // estimate Time of ReloadStarted because we do not have precise data for WeaponReloadDuration
@@ -46,7 +52,7 @@ namespace MatchRetriever.Misplays
             });
 
             var collection = new SituationCollection<UnnecessaryReload>();
-            collection.Misplays =reloads.Select(x => x as Misplay).ToList();
+            collection.Misplays = reloads.Select(x => x as Misplay).ToList();
             return collection;
         }
 

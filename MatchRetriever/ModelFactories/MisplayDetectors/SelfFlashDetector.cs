@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Misplays
 {
-    public class SelfFlashDetector : Subdetector<SelfFlash>
+    public interface ISelfFlashDetector
+    {
+        ISituationCollection ComputeMisplays(long steamId, long matchId);
+        ISituationCollection FilterOutByConfig(ISituationCollection collection);
+    }
+
+    public class SelfFlashDetector : Subdetector<SelfFlash>, ISelfFlashDetector
     {
         //TODO OPTIONAL Move to configuration database
 

@@ -123,8 +123,11 @@ namespace MatchRetriever
             services.AddScoped<IBadBombDropDetector ,BadBombDropDetector>();
             services.AddScoped<ISmokeFailDetector , SmokeFailDetector>();
             services.AddScoped<IShotWhileMovingDetector ,ShotWhileMovingDetector>();
+            services.AddScoped<ISelfFlashDetector ,SelfFlashDetector>();
+            services.AddScoped<ITeamFlashDetector ,TeamFlashDetector>();
+            services.AddScoped<IUnnecessaryReloadDetector ,UnnecessaryReloadDetector>();
 
-
+           //TODO Add services to list for MisplayDetector
 
 
             services.AddScoped<IMisplayDetector, MisplayDetector>();

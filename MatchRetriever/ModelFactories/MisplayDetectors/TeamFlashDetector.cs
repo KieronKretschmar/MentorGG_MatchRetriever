@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Misplays
 {
-    public class TeamFlashDetector : Subdetector<TeamFlash>
+    public interface ITeamFlashDetector
+    {
+        ISituationCollection ComputeMisplays(long steamId, long matchId);
+        ISituationCollection FilterOutByConfig(ISituationCollection collection);
+    }
+
+    public class TeamFlashDetector : Subdetector<TeamFlash>, ITeamFlashDetector
     {
         public TeamFlashDetector(IServiceProvider sp) : base(sp)
         {
