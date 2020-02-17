@@ -9,8 +9,8 @@ namespace MatchRetriever.Misplays
     public interface ISubdetector
     {
         public Type Type { get;}
-        public ISituationCollection ComputeMisplays(long steamId, long matchIds);
-        public ISituationCollection FilterOutByConfig(ISituationCollection misplays);
+        public ISituationCollection ComputeMisplays(long steamId, long matchId);
+        public ISituationCollection FilterOutByConfig(ISituationCollection collection);
 
     }
 
@@ -27,8 +27,8 @@ namespace MatchRetriever.Misplays
 
         public Type Type => typeof(TMisplay);
 
-        public abstract ISituationCollection ComputeMisplays(long steamId, long matchIds);
+        public abstract ISituationCollection ComputeMisplays(long steamId, long matchId);
 
-        public abstract ISituationCollection FilterOutByConfig(ISituationCollection misplays);
+        public abstract ISituationCollection FilterOutByConfig(ISituationCollection collection);
     }
 }
