@@ -18,10 +18,9 @@ namespace MatchRetriever.ModelFactories
         }
 
 
-        public async Task<MisplaysModel> GetModel(long steamId, List<long> matchIds, int offset)
+        public async Task<MisplaysModel> GetModel(long steamId, long matchId)
         {
-            matchIds = matchIds.Skip(offset).ToList();
-            List<ISituationCollection> SituationCollections = _detector.DetectMisplays( steamId, matchIds);
+            List<ISituationCollection> SituationCollections = _detector.DetectMisplays( steamId, matchId);
             return new MisplaysModel { SituationCollections = SituationCollections };
         }
     }

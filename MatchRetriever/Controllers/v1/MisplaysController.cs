@@ -19,9 +19,9 @@ namespace MatchRetriever.Controllers.v1
         }
 
         [HttpGet("single/{steamId}/misplays")]
-        public async Task<MisplaysModel> GetFriendsComparison(long steamId, [CsvModelBinder] List<long> matchIds, int offset)
+        public async Task<MisplaysModel> GetMisplaysModel(long steamId, long matchId)
         {
-            var model = await _misplayModelFactory.GetModel(steamId, matchIds, offset);
+            var model = await _misplayModelFactory.GetModel(steamId, matchId);
             return model;
         }
     }
