@@ -117,7 +117,7 @@ namespace MatchRetriever
             #endregion
 
             #region Misplay detectors
-            services.AddSingleton<DetectorHelpers>();
+            services.AddSingleton<_detectorHelpers>();
             
 
             services.AddScoped<IBadBombDropDetector ,BadBombDropDetector>();

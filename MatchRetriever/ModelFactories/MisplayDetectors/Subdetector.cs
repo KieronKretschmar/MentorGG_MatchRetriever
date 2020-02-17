@@ -17,12 +17,12 @@ namespace MatchRetriever.Misplays
     public abstract class Subdetector<TMisplay> : ISubdetector where TMisplay : Misplay
     {
         protected MatchContext _context;
-        protected DetectorHelpers _detectorHelpers;
+        protected _detectorHelpers _detectorHelpers;
 
         public Subdetector(IServiceProvider sp)
         {
             _context = sp.GetRequiredService<MatchContext>();
-            _detectorHelpers = sp.GetRequiredService<DetectorHelpers>();
+            _detectorHelpers = sp.GetRequiredService<_detectorHelpers>();
         }
 
         public Type Type => typeof(TMisplay);
