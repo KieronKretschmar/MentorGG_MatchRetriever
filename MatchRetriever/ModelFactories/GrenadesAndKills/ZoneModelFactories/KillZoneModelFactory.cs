@@ -22,7 +22,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
 
 
             //Initialize all occuring zones with zoneperformances
-            //Dont care about multiple assignments to same key as they are empty performances
             var killZoneIds = samples.Select(x => x.PlayerZoneId).Distinct();
             var victimZoneIds = samples.Select(x => x.VictimZoneId).Distinct();
 
