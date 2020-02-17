@@ -41,5 +41,28 @@ namespace MatchRetriever.Misplays
                 .ToList();
 
         }
+
+        internal int DeathTime(long steamId, long matchId, short round)
+        {
+           
+                return _context.Kill
+                    .Where(x => x.MatchId == matchId && x.Round == round && x.VictimId == steamId)
+                    .Select(x => x.Time)
+                    .ToList()
+                    .Select(x => (int?) x)
+                    .FirstOrDefault() ?? -1; // SingleOrDefault would be better, but there's a bug with more than 2 kills in a round
+            
+        }
+
+        internal int NextFightingAction(long steamId, long matchId, short round, int startTime, int endTime)
+        {
+                return _context.Damage
+                    .Where(x => x.MatchId == matchId && x.Round == round && (x.PlayerId == steamId || x.VictimId == steamId) && startTime <= x.Time && x.Time <= endTime)
+                    .Select(x => x.Time)
+                    .ToList()
+                    .OrderBy(x => x)
+                    .Select(x => (int?) x)
+                    .FirstOrDefault() ?? -1;
+        }
     }
 }
