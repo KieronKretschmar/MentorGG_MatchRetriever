@@ -9,7 +9,7 @@ namespace MatchRetriever.ModelFactories
 {
     public interface IMatchesModelFactory
     {
-        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, int offset);
+        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, int count, int offset);
     }
 
     public class MatchesModelFactory : ModelFactoryBase, IMatchesModelFactory
@@ -18,27 +18,44 @@ namespace MatchRetriever.ModelFactories
         {
         }
 
-        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, int offset)
+        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, int count, int offset)
         {
             var res = new MatchesModel();
 
-            res.MatchInfos = await CreateMatchInfos(allowedMatchIds);
-
-            // Compute and censor the forbidden MatchInfos for all his matches that are not included in the allowedMatchIds he supplied
-            var allMatchIds = _context.PlayerMatchStats
+            // Create MatchInfos for the users matches regarding count and offset
+            var matchIds = _context.PlayerMatchStats
                 .Where(x => x.SteamId == steamId)
-                .Select(x => x.MatchId)
+                .OrderByDescending(x => x.MatchStats.MatchDate)
+                .Skip(offset)
+                .Take(count)
+                .Select(x=>x.MatchId)
                 .ToList();
-            var forbiddenMatchIds = allMatchIds.Except(allowedMatchIds).ToList();
-            var forbiddenMatchInfos = await CreateMatchInfos(forbiddenMatchIds);
-            forbiddenMatchInfos.ForEach(x => CensorHiddenMatch(x));
 
-            res.HiddenMatchInfos = forbiddenMatchInfos;
+            res.MatchInfos = await CreateMatchInfos(matchIds, count, offset);
+
+            // Censor the forbidden MatchInfos for all his matches that are not included in the allowedMatchIds supplied
+            var forbiddenMatchIds = matchIds.Except(allowedMatchIds).ToList();
+
+            //for (int i = 0; i < res.MatchInfos.Count; i++)
+            //{
+            //    if (forbiddenMatchIds.Contains(res.MatchInfos[i].MatchId))
+            //    {
+            //        CensorHiddenMatch(res.MatchInfos[i]);
+            //    }
+            //}
+
+            foreach (var item in res.MatchInfos)
+            {
+                if (forbiddenMatchIds.Contains(item.MatchId))
+                {
+                    CensorHiddenMatch(item);
+                }
+            }
 
             return res;
         }
 
-        private async Task<List<MatchInfo>> CreateMatchInfos(List<long> matchIds)
+        private async Task<List<MatchInfo>> CreateMatchInfos(List<long> matchIds, int count, int offset)
         {
             var matchInfos = new List<MatchInfo>();
             foreach (var matchId in matchIds)

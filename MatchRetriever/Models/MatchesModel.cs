@@ -9,7 +9,6 @@ namespace MatchRetriever.Models
     public class MatchesModel
     {
         public List<MatchInfo> MatchInfos = new List<MatchInfo>();
-        public List<MatchInfo> HiddenMatchInfos = new List<MatchInfo>();
     }
 }
 

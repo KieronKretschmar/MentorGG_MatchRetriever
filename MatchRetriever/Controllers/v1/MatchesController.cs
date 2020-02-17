@@ -23,10 +23,10 @@ namespace MatchRetriever.Controllers.v1
         }
 
         [HttpGet("single/{steamId}/matches")]
-        // GET v1/public/single/76561198033880857/matches?matchIds=1,2,3&offset=0
-        public async Task<MatchesModel> GetMatches(long steamId, [CsvModelBinder] List<long> matchIds, int offset = 0)
+        // GET v1/public/single/76561198033880857/matches?matchIds=1,2,3&count=5&offset=0
+        public async Task<MatchesModel> GetMatches(long steamId, [CsvModelBinder] List<long> matchIds, int count, int offset = 0)
         {
-            var model = await _matchesModelFactory.GetModel(steamId, matchIds, offset);
+            var model = await _matchesModelFactory.GetModel(steamId, matchIds, count, offset);
             return model;
         }
     }
