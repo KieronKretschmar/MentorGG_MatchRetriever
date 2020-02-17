@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EquipmentLib;
 using MatchRetriever.Helpers;
 using MatchRetriever.Misplays;
 using MatchRetriever.ModelFactories;
@@ -105,12 +106,23 @@ namespace MatchRetriever
              {
                  //TODO MANDATORY switch to env var
                  return new FileReader(@"C:\Users\Lasse\source\repos\MatchRetriever\ZoneReader\ZoneReader\resources\");
-             });            
-			#endregion
+             }); 
+           
+			services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
+             {
+                 //TODO MANDATORY Remove hardcoded path
+                 return new EquipmentProvider(services.GetRequiredService<ILogger<EquipmentProvider>>(),@"C:\Users\Lasse\source\repos\MatchRetriever\EquipmentLib\EquipmentLib\EquipmentData\");
+             });
+
+            #endregion
 
             #region Misplay detectors
-            services.AddScoped<IBadBombDropDetector ,BadBombDropDetector>();
             services.AddSingleton<DetectorHelpers>();
+            
+
+            services.AddScoped<IBadBombDropDetector ,BadBombDropDetector>();
+            services.AddScoped<ISmokeFailDetector , SmokeFailDetector>();
+            services.AddScoped<IShotWhileMovingDetector ,ShotWhileMovingDetector>();
 
 
 

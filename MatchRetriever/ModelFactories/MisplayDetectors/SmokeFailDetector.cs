@@ -5,7 +5,13 @@ using ZoneReader;
 
 namespace MatchRetriever.Misplays
 {
-    public class SmokeFailDetector : Subdetector<SmokeFail>
+    public interface ISmokeFailDetector
+    {
+        ISituationCollection ComputeMisplays(long steamId, long matchId);
+        ISituationCollection FilterOutByConfig(ISituationCollection misplays);
+    }
+
+    public class SmokeFailDetector : Subdetector<SmokeFail>, ISmokeFailDetector
     {
         private IZoneReader _zoneReader;
 

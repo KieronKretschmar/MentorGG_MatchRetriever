@@ -9,7 +9,13 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Misplays
 {
-    public class ShotWhileMovingDetector : Subdetector<ShotWhileMoving>
+    public interface IShotWhileMovingDetector
+    {
+        ISituationCollection ComputeMisplays(long steamId, long matchId);
+        ISituationCollection FilterOutByConfig(ISituationCollection collection);
+    }
+
+    public class ShotWhileMovingDetector : Subdetector<ShotWhileMoving>, IShotWhileMovingDetector
     {
         public ShotWhileMovingDetector(IServiceProvider sp) : base(sp)
         {
@@ -91,7 +97,7 @@ namespace MatchRetriever.Misplays
             misplays.ForEach(x =>
             {
                 x.DeathTime = _detectorHelpers.DeathTime(steamId, matchId, x.Round);
-                int nextFightingAction = _detectorHelpers.NextFightingAction(steamId,matchId,x.Round,x.Time,x.Time + MaxTimeForFightingLimit );
+                int nextFightingAction = _detectorHelpers.NextFightingAction(steamId, matchId, x.Round, x.Time, x.Time + MaxTimeForFightingLimit);
                 x.TimeToNextFightingAction = nextFightingAction != -1 ? nextFightingAction - x.Time : -1;
             });
 
