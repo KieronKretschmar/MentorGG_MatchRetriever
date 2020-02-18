@@ -10,10 +10,7 @@ namespace MatchRetriever.Models
     {
         public List<MatchInfo> MatchInfos = new List<MatchInfo>();
     }
-}
 
-namespace MatchRetriever
-{
     public class MatchInfo
     {
         public long MatchId { get; set; }
