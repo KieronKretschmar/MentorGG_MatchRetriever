@@ -39,7 +39,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                // TODO: Zone stuff
                 FilterableZonePerformanceData = await _filterableZoneFactory.GetFilterableZoneData(steamId, samples, map, matchIds),
                 RecentMatchesAnalyzedCount = matchIds.Count,
             };

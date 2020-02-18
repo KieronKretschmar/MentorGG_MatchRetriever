@@ -40,7 +40,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                // TODO: Lineup stuff
                 LineupData = await _lineupFactory.LineupPerformanceSummary(steamId, samples, map, matchIds),
                 RecentMatchesAnalyzedCount = matchIds.Count,
             };

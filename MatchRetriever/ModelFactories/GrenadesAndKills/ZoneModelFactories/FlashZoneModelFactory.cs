@@ -1,8 +1,10 @@
-﻿using MatchRetriever.Models.GrenadesAndKills;
+﻿using MatchRetriever.Helpers;
+using MatchRetriever.Models.GrenadesAndKills;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -12,7 +14,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        protected override async Task<ZonePerformanceSummary<FlashZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FlashSample> samples, string map, List<long> matchIds)
+        protected override async Task<ZonePerformanceSummary<FlashZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FlashSample> samples, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<FlashZonePerformance>();
 
@@ -23,20 +25,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToList();
             performance.CtRounds = rounds.Count(x => x);
             performance.TerroristRounds = rounds.Count(x => !x);
-
-
-            // TODO: Zones
-            //// load Flash and Flashed data
-            //var samples = _context.Flash
-            //    .Where(x => x.PlayerId == playerId && matchIds.Contains(x.MatchId))
-            //    .Select(x => new
-            //    {
-            //        ZoneId = x.DetonationZoneByTeam,
-            //        // disregard teamattacks
-            //        Flasheds = x.Flashed.Select(y => new { y.TimeFlashed, y.TeamAttack, FlashAssist = y.AssistedKillId != null }).ToList()
-            //    })
-            //    .ToList();
-
 
             // summarize Flash and Flashed data for each DetonationZone
             var zonePerformancesPreAggregate = samples
@@ -62,7 +50,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToDictionary(x => x.ZoneId, x => new FlashZonePerformance
                 {
                     ZoneId = x.ZoneId,
-                    //IsCtZone = StaticHelpers.IdToTeam(x.ZoneId) == Enumerals.Team.CounterTerrorist,
+                    IsCtZone = MapHelper.IsCtZone(x.ZoneId),
                     SampleCount = x.SampleCount,
                     NadesBlindingEnemiesCount = x.NadesBlindingEnemiesCount,
                     TotalEnemyTimeFlashed = x.EnemyFlasheds.Select(z => z.TimeFlashed).DefaultIfEmpty().Sum(),
@@ -73,15 +61,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     TeamFlashAssists = x.TeamFlasheds.Count(y => y.FlashAssist),
                 });
 
-
-            //// Fill values for zones the user did not throw any grenades at
-            //foreach (var zoneId in StaticHelpers.FlashDetonationZones(map).Select(x => x.ZoneId))
-            //{
-            //    if (!zonePerformancesPreAggregate.ContainsKey(zoneId))
-            //    {
-            //        zonePerformancesPreAggregate[zoneId] = new FlashDetonationZoneEntityPerformance { ZoneId = zoneId };
-            //    }
-            //}
             return performance;
         }
     }

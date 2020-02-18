@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -24,6 +24,7 @@
     <ProjectReference Include="..\EquipmentLib\EquipmentLib\EquipmentLib.csproj" />
     <ProjectReference Include="..\matchdb\Database\Database.csproj" />
     <ProjectReference Include="..\matchdb\matchentities\MatchEntities\MatchEntities.csproj" />
+    <ProjectReference Include="..\ZoneReader\ZoneReader\ZoneReader.csproj" />
   </ItemGroup>
 
   <ItemGroup>

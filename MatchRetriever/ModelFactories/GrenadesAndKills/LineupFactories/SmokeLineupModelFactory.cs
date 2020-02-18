@@ -30,6 +30,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     Insides = x.Count(x=>x.Result == MatchEntities.Enums.TargetResult.Inside),
                     Misses = x.Count(x=>x.Result == MatchEntities.Enums.TargetResult.Miss),
                 });
+
             return performance;
         }
     }

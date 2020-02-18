@@ -1,4 +1,5 @@
-﻿using MatchRetriever.Models.GrenadesAndKills;
+﻿using MatchRetriever.Helpers;
+using MatchRetriever.Models.GrenadesAndKills;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        protected async override Task<ZonePerformanceSummary<FireNadeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FireNadeSample> samples, string map, List<long> matchIds)
+        protected async override Task<ZonePerformanceSummary<FireNadeZonePerformance>> PreAggregationZonePerformanceSummary(long steamId, List<FireNadeSample> samples, List<long> matchIds)
         {
             var performance = new ZonePerformanceSummary<FireNadeZonePerformance>();
 
@@ -101,7 +102,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .ToDictionary(x => x.ZoneId, x => new FireNadeZonePerformance
                 {
                     ZoneId = x.ZoneId,
-                    //IsCtZone = StaticHelpers.IdToTeam(x.ZoneId) == Enumerals.Team.CounterTerrorist,
+                    IsCtZone = MapHelper.IsCtZone(x.ZoneId),
                     SampleCount = x.SampleCount,
                     DamagingNadesCount = x.DamagingNadesCount,
                     AmountHealth = x.Damages.Select(z => z.AmountHealth).DefaultIfEmpty().Sum(),
@@ -109,14 +110,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     MaxDamage = x.MaxDamage,
                 });
 
-            //// Fill values for zones the user did not throw any grenades at
-            //foreach (var zoneId in StaticHelpers.FireNadeDetonationZones(map).Select(x => x.ZoneId))
-            //{
-            //    if (!zonePerformancesPreAggregate.ContainsKey(zoneId))
-            //    {
-            //        zonePerformancesPreAggregate[zoneId] = new FireNadeDetonationZoneEntityPerformance { ZoneId = zoneId };
-            //    }
-            //}
             return performance;
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MatchEntities.Enums;
 
 namespace MatchRetriever.Helpers
 {
@@ -47,6 +48,13 @@ namespace MatchRetriever.Helpers
                 this.Selectable = selectable;
                 this.Prefix = prefix;
             }
+        }
+
+        public static bool IsCtZone(int zoneId)
+        {
+            int prefix = zoneId / 10000;
+            int teamNumber = prefix % 10;
+            return teamNumber == (int) StartingFaction.CtStarter;
         }
     }
 }
