@@ -20,13 +20,13 @@ namespace MatchRetriever.Helpers
     public class SteamUserOperator : ISteamUserOperator
     {
         private readonly HttpClient Client;
-        private readonly string endpointUri;
+        private readonly string steamUserOperatorUri;
         private readonly ILogger _logger;
 
-        public SteamUserOperator(ILogger logger, string getSteamUsersEndpoint)
+        public SteamUserOperator(ILogger logger, string steamUserOperatorUri)
         {
             Client = new HttpClient();
-            endpointUri = getSteamUsersEndpoint;
+            this.steamUserOperatorUri = steamUserOperatorUri;
             _logger = logger;
         }
 
@@ -40,7 +40,7 @@ namespace MatchRetriever.Helpers
         {
             steamIds = steamIds.Distinct().ToList();
 
-            var queryString = endpointUri + "?steamIds=" + String.Join(steamIds.ToString(), ',');
+            var queryString = steamUserOperatorUri + "/users?steamIds=" + String.Join(steamIds.ToString(), ',');
             var response = await Client.GetAsync(queryString);
 
             // throw exception if response is not succesful
