@@ -8,9 +8,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetriever", "MatchRetr
 		{43DA9AA9-3D98-4FE5-80BA-360057DE8FA5} = {43DA9AA9-3D98-4FE5-80BA-360057DE8FA5}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "matchdb\Database\Database.csproj", "{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "MatchDb\Database\Database.csproj", "{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "matchdb\matchentities\MatchEntities\MatchEntities.csproj", "{64103898-868E-46D2-A443-12217260E99E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "MatchDb\MatchEntities\MatchEntities\MatchEntities.csproj", "{64103898-868E-46D2-A443-12217260E99E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetrieverTestProject", "MatchRetrieverTestProject\MatchRetrieverTestProject.csproj", "{484E971B-6382-418E-9AB8-31BEA234006C}"
 EndProject
