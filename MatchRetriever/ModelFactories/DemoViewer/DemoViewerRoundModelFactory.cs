@@ -330,12 +330,13 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             var ctStarterRounds = roundResults.Count(x => x.WinnerTeam == MatchEntities.Enums.StartingFaction.CtStarter);
             scoreboard.TerroristRounds = scoreboard.OriginalSide ? terroristStarterRounds : ctStarterRounds;
             scoreboard.CtRounds = scoreboard.OriginalSide ? ctStarterRounds : terroristStarterRounds;
-
+            
             // Load scores of all Players who were active this round, including bots.
             scoreboard.PlayerScores = _context.PlayerRoundStats
                 .Where(x => x.MatchId == matchId && x.Round == cutoffRound)
-                .ToDictionary(x => x.PlayerId, x => new PlayerScoreboardEntry
+                .Select(x => new PlayerScoreboardEntry
                 {
+                    SteamId = x.PlayerId,
                     Kills = x.RoundStartKills,
                     Deaths = x.RoundStartDeaths,
                     Assists = x.RoundStartAssists,
@@ -344,7 +345,8 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                     Score = x.RoundStartScore,
                     RankBeforeMatch = x.PlayerMatchStats.RankBeforeMatch,
                     RankAfterMatch = x.PlayerMatchStats.RankAfterMatch,
-                });
+                })
+                .ToDictionary(x=> x.SteamId, x=>x);
 
             // Add Profiles to PlayerScores with only one call of GetUsers
             var distinctSteamIds = scoreboard.PlayerScores.Select(x=>x.Key).ToList();
