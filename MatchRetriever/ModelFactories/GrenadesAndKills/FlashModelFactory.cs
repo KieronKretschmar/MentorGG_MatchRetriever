@@ -40,7 +40,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                ZoneData = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds, MapZoneType.Flash),
+                ZoneData = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds, ZoneType.Flash),
                 RecentMatchesAnalyzedCount = matchIds.Count,
             };
         }
