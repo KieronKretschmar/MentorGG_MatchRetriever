@@ -71,6 +71,9 @@ namespace MatchRetriever
                 throw new ArgumentNullException("The environment variable EQUIPMENT_CSV_DIRECTORY has not been set.");
             var EQUIPMENT_ENDPOINT = Configuration.GetValue<string>("EQUIPMENT_ENDPOINT");
             #endregion
+            var ZONEREADER_RESOURCE_PATH = Configuration.GetValue<string>("ZONEREADER_RESOURCE_PATH");
+            if (ZONEREADER_RESOURCE_PATH == null)
+                throw new ArgumentNullException("The environment variable ZONEREADER_RESOURCE_PATH has not been set.");
 
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
@@ -111,18 +114,6 @@ namespace MatchRetriever
             services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
             services.AddScoped<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
             services.AddScoped<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
-			services.AddSingleton<IZoneReader, FileReader>(services =>
-             {
-                 //TODO MANDATORY switch to env var
-                 return new FileReader(@"C:\Users\Lasse\source\repos\MatchRetriever\ZoneReader\ZoneReader\resources\");
-             }); 
-           
-			services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
-             {
-                 //TODO MANDATORY Remove hardcoded path
-                 return new EquipmentProvider(services.GetRequiredService<ILogger<EquipmentProvider>>(), @"C:\Users\Lasse\source\repos\MatchRetriever\EquipmentLib\EquipmentLib\EquipmentData\");
-             });
-
             #endregion
 
             #region Misplay detectors
@@ -164,6 +155,10 @@ namespace MatchRetriever
                 return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
             });
             services.AddSingleton<IDemoViewerConfigProvider, DemoViewerConfigProvider>();
+            services.AddSingleton<IZoneReader, FileReader>(services =>
+            {
+                return new FileReader(services.GetService<ILogger<FileReader>>(), ZONEREADER_RESOURCE_PATH);
+            });
             #endregion
 
             // Enable versioning
