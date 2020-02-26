@@ -8,7 +8,12 @@ using MatchRetriever.Misplays;
 
 namespace MatchRetriever.ModelFactories
 {
-    public class MisplayModelFactory : ModelFactoryBase
+    public interface IMisplayModelFactory
+    {
+        Task<MisplaysModel> GetModel(long steamId, long matchId);
+    }
+
+    public class MisplayModelFactory : ModelFactoryBase, IMisplayModelFactory
     {
         private IMisplayDetector _detector;
 
@@ -20,7 +25,7 @@ namespace MatchRetriever.ModelFactories
 
         public async Task<MisplaysModel> GetModel(long steamId, long matchId)
         {
-            List<ISituationCollection> SituationCollections = _detector.DetectMisplays( steamId, matchId);
+            List<ISituationCollection> SituationCollections = _detector.DetectMisplays(steamId, matchId);
             return new MisplaysModel { SituationCollections = SituationCollections };
         }
     }

@@ -119,6 +119,7 @@ namespace MatchRetriever
             services.AddScoped<_detectorHelpers>();
 
 
+            //Add new misplays here
             services.AddScoped<ISubdetector, BadBombDropDetector>();
             services.AddScoped<ISubdetector, SmokeFailDetector>();
             services.AddScoped<ISubdetector, ShotWhileMovingDetector>();
