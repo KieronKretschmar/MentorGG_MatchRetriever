@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Controllers.v1
 {
+    [ApiVersion("1")]
+    [Route("v{version:apiVersion}/public")]
+    [ApiController]
     public class MisplaysController : BaseApiController
     {
-        private readonly MisplayModelFactory _misplayModelFactory;
+        private readonly IMisplayModelFactory _misplayModelFactory;
 
-        public MisplaysController(MisplayModelFactory factory)
+        public MisplaysController(IMisplayModelFactory factory)
         {
             _misplayModelFactory = factory;
         }
