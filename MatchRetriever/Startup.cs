@@ -41,8 +41,12 @@ namespace MatchRetriever
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                // Set serializer to newtonsoft json
-                .AddNewtonsoftJson(x => x.UseMemberCasing());
+                .AddNewtonsoftJson(x => 
+                {
+                    x.UseMemberCasing();
+                    // Serialize longs (steamIds) as strings
+                    x.SerializerSettings.Converters.Add(new LongToStringConverter());
+                });
 
             services.AddLogging(services =>
             {
