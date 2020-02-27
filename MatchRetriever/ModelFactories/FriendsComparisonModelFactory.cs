@@ -12,7 +12,7 @@ namespace MatchRetriever.ModelFactories
 {
     public interface IFriendsComparisonModelFactory
     {
-        Task<FriendsComparisonModel> GetModel(long steamId, int maxFriends, List<long> matchIds, int offset);
+        Task<FriendsComparisonModel> GetModel(long steamId, List<long> matchIds, int count, int offset);
     }
 
     public class FriendsComparisonModelFactory : ModelFactoryBase, IFriendsComparisonModelFactory
@@ -24,7 +24,7 @@ namespace MatchRetriever.ModelFactories
             _playerInfoModelFactory = sp.GetRequiredService<IPlayerInfoModelFactory>();
         }
 
-        public async Task<FriendsComparisonModel> GetModel(long steamId, int maxFriends, List<long> matchIds, int offset)
+        public async Task<FriendsComparisonModel> GetModel(long steamId, List<long> matchIds, int maxFriends, int offset)
         {
             var friendsHistories = ClosestFriendsHistories(steamId, matchIds, maxFriends: maxFriends, minMatches: 1, offset: offset);
 
