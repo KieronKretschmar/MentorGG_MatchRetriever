@@ -39,15 +39,13 @@ namespace MatchRetriever.ModelFactories
 
         private async Task<ComparisonRowData> GetComparisonRowData(long steamId, long otherId, List<long> matchIds)
         {
-
             var rowData = new ComparisonRowData
             {
                 MatchesPlayed = matchIds.Count,
-                OtherPlayerInfo = await _playerInfoModelFactory.GetModel(steamId),
+                OtherPlayerInfo = await _playerInfoModelFactory.GetModel(otherId),
                 UserData = getBriefComparisonPlayerData(steamId, matchIds),
                 OtherData = getBriefComparisonPlayerData(otherId, matchIds),
             };
-
 
             // Compute match data equal for both players
             var matchResults = _context.MatchStats
@@ -126,9 +124,8 @@ namespace MatchRetriever.ModelFactories
         /// <param name="maxFriends">Maximum number of friends returned</param>
         /// <returns></returns>
         /// 
-        private List<FriendsHistory> ClosestFriendsHistories(long playerId, List<long> matchIds, int minMatches = 0, int maxFriends = 0, int offset = 0)
+        private List<FriendsHistory> ClosestFriendsHistories(long playerId, List<long> matchIds, int minMatches, int maxFriends, int offset = 0)
         {
-
             List<FriendsHistory> friendsHistory = new List<FriendsHistory>();
 
             var playersInRecentMatches = _context.PlayerMatchStats
@@ -141,6 +138,7 @@ namespace MatchRetriever.ModelFactories
                 .ToDictionary(x => x.MatchId, x => x.Team);
 
             var friendsInRecentMatchesOnTheSameTeam = playersInRecentMatches
+                .Where(x => x.SteamId != playerId)
                 .Where(x => x.Team == playerTeamInMatch[x.MatchId]);
 
 
@@ -149,10 +147,9 @@ namespace MatchRetriever.ModelFactories
                 friendsHistory.Add(new FriendsHistory(playerId, friendId.Key, friendId.Select(x => x.MatchId).ToList()));
             }
 
-            // Show only friends with more then minMatches played together
+            // Show only friends with at least minMatches played together
             friendsHistory = friendsHistory
-                .Where(x => minMatches < x.MatchIds.Count).ToList();
-
+                .Where(x => minMatches <= x.MatchIds.Count).ToList();
 
             friendsHistory = friendsHistory.OrderByDescending(x => x.MatchIds.Count).ToList();
 
