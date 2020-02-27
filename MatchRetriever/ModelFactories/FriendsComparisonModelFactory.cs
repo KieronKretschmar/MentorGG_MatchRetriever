@@ -78,10 +78,16 @@ namespace MatchRetriever.ModelFactories
             rowData.TerroristRounds = roundData.Count(x => !x.IsCt);
             rowData.TerroristRoundsWon = roundData.Count(x => !x.IsCt && x.RoundWon);
 
-
             // Compute most played map data equal for both players
             var mostPlayedMapData = _context.MatchStats
                 .Where(x => matchIds.Contains(x.MatchId))
+                .ToList()
+                .Select(x=> new
+                {
+                    x.Map,
+                    x.WinnerTeam,
+                    UserTeam = x.PlayerMatchStats.Single(pms => pms.SteamId == steamId).Team,
+                })
                 .GroupBy(x => x.Map)
                 .Select(x => new
                 {
@@ -95,8 +101,8 @@ namespace MatchRetriever.ModelFactories
                     MatchesPlayed = x.MatchesPlayed,
                     MatchResults = x.x.Select(y => new
                     {
-                        y.WinnerTeam,
-                        UserTeam = y.PlayerMatchStats.Single(pms => pms.SteamId == steamId).Team,
+                        y.WinnerTeam,                        
+                        UserTeam = y.UserTeam,
                     }).ToList(),
                 })
                 .First();
