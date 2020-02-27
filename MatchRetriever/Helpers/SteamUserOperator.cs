@@ -40,19 +40,29 @@ namespace MatchRetriever.Helpers
         {
             steamIds = steamIds.Distinct().ToList();
 
-            var queryString = steamUserOperatorUri + "/users?steamIds=" + String.Join(steamIds.ToString(), ',');
-            var response = await Client.GetAsync(queryString);
-
-            // throw exception if response is not succesful
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                var msg = $"Getting users from SteamUserOperator failed for query [ {queryString} ]. Response: {response}";
-                throw new HttpRequestException(msg);
-            }
-            response.EnsureSuccessStatusCode();
+                var queryString = steamUserOperatorUri + "/users?steamIds=" + String.Join(steamIds.ToString(), ',');
+                var response = await Client.GetAsync(queryString);
 
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<SteamUser>>(json);
+                // throw exception if response is not succesful
+                if (!response.IsSuccessStatusCode)
+                {
+                    var msg = $"Getting users from SteamUserOperator failed for query [ {queryString} ]. Response: {response}";
+                    throw new HttpRequestException(msg);
+                }
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<SteamUser>>(json);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Communication with SteamUserOperator failed. Returning dummy data instead.", e);
+
+                // return dummy data
+                return steamIds.Select(x => new SteamUser(x)).ToList();
+            }
         }
 
 
@@ -77,6 +87,25 @@ namespace MatchRetriever.Helpers
         public long SteamId { get; set; }
         public string SteamName { get; set; }
         public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// Constructor with dummy data when no data except steamId is available.
+        /// </summary>
+        /// <param name="steamId"></param>
+        public SteamUser(long steamId)
+        {
+            SteamId = steamId;
+            ImageUrl = null;
+
+            if(steamId > 0)
+            {
+                SteamName = steamId.ToString();
+            }
+            else
+            {
+                SteamName = "Bot";
+            }
+        }
     }
     
 
@@ -84,12 +113,7 @@ namespace MatchRetriever.Helpers
     {
         public async Task<SteamUser> GetUser(long steamId)
         {
-            return new SteamUser
-            {
-                SteamId = steamId,
-                ImageUrl = "ImageUrl",
-                SteamName = "SteamName"
-            };
+            return new SteamUser(steamId);
         }
 
         public async Task<List<SteamUser>> GetUsers(List<long> steamIds)

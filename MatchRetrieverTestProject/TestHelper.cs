@@ -47,22 +47,12 @@ namespace MatchRetrieverTestProject
             steamUserOperatorMock
                 .Setup(x => x.GetUsers(It.IsAny<List<long>>()))
                 .Returns((List<long> steamIds) =>
-                    Task.FromResult(steamIds.Distinct().Select(steamId => new SteamUser
-                    {
-                        SteamId = steamId,
-                        ImageUrl = "ImageUrl",
-                        SteamName = "SteamName",
-                    })
+                    Task.FromResult(steamIds.Distinct().Select(steamId => new SteamUser(steamId))
                     .ToList())
                 );
             steamUserOperatorMock.Setup(x => x.GetUser(It.IsAny<long>()))
                 .Returns((long steamId) =>
-                    Task.FromResult(new SteamUser
-                    {
-                        SteamId = steamId,
-                        ImageUrl = "ImageUrl",
-                        SteamName = "SteamName",
-                    })
+                    Task.FromResult(new SteamUser(steamId))
                 );
             services.AddSingleton(steamUserOperatorMock.Object);
 
