@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EquipmentLib;
 using MatchRetriever.Helpers;
+using MatchRetriever.Misplays;
 using MatchRetriever.ModelFactories;
 using MatchRetriever.ModelFactories.DemoViewer;
 using MatchRetriever.ModelFactories.GrenadesAndKills;
@@ -51,14 +53,13 @@ namespace MatchRetriever
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
             {
-                services.AddDbContext<Database.MatchContext>(o => { o.UseMySql(connString); });
+                services.AddDbContext<Database.MatchContext>(o =>  o.UseMySql(connString));
             }
             else
             {
-                services.AddEntityFrameworkInMemoryDatabase()
-                    .AddDbContext<Database.MatchContext>((sp, options) =>
+                    services.AddDbContext<Database.MatchContext>((sp, options) =>
                     {
-                        options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase").UseInternalServiceProvider(sp);
+                        options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase");
                     });
             }
 
@@ -104,8 +105,35 @@ namespace MatchRetriever
              {
                  //TODO MANDATORY switch to env var
                  return new FileReader(@"C:\Users\Lasse\source\repos\MatchRetriever\ZoneReader\ZoneReader\resources\");
-             });            
-			#endregion
+             }); 
+           
+			services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
+             {
+                 //TODO MANDATORY Remove hardcoded path
+                 return new EquipmentProvider(services.GetRequiredService<ILogger<EquipmentProvider>>(), @"C:\Users\Lasse\source\repos\MatchRetriever\EquipmentLib\EquipmentLib\EquipmentData\");
+             });
+
+            #endregion
+
+            #region Misplay detectors
+            services.AddScoped<_detectorHelpers>();
+
+
+            //Add new misplays here
+            services.AddScoped<ISubdetector, BadBombDropDetector>();
+            services.AddScoped<ISubdetector, SmokeFailDetector>();
+            services.AddScoped<ISubdetector, ShotWhileMovingDetector>();
+            services.AddScoped<ISubdetector, SelfFlashDetector>();
+            services.AddScoped<ISubdetector, TeamFlashDetector>();
+            services.AddScoped<ISubdetector, UnnecessaryReloadDetector>();
+
+            services.AddScoped<IMisplayDetector, MisplayDetector>(services =>
+            {
+                return new MisplayDetector(services.GetServices<ISubdetector>().ToList());
+            });
+
+            services.AddScoped<IMisplayModelFactory, MisplayModelFactory>();
+            #endregion
 
             // Add other services            
             services.AddSingleton<ISteamUserOperator>(services =>
@@ -117,7 +145,8 @@ namespace MatchRetriever
             // Enable versioning
             // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
             services.AddMvc();
-            services.AddApiVersioning(o => {
+            services.AddApiVersioning(o =>
+            {
                 o.ReportApiVersions = true;
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(1, 0);
