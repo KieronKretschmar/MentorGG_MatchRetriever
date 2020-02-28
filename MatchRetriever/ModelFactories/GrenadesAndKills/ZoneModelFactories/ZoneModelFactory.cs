@@ -19,6 +19,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         where TZonePerformance : ZonePerformance<TZonePerformance>
     {
         Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string map, List<long> matchIds, ZoneType zoneType);
+        Task<ZonePerformanceSummary<TZonePerformance>> AllMapsZonePerformanceSummaryAsync(long steamId, List<TSample> samples, List<long> matchIds, ZoneType zoneType);
     }
 
     public abstract class ZonePerformanceFactory<TSample, TZonePerformance> : ModelFactoryBase, IZonePerformanceFactory<TSample, TZonePerformance>
@@ -71,6 +72,21 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             return summary;
         }
 
+        public async Task<ZonePerformanceSummary<TZonePerformance>> AllMapsZonePerformanceSummaryAsync(long steamId, List<TSample> samples, List<long> matchIds, ZoneType zoneType)
+        {
+            // Start with PreAggregation summary
+            var summary = await PreAggregationZonePerformanceSummary(steamId, samples, matchIds);
+            var zones = _zoneReader.GetZones(zoneType).Values();
+
+            //Fill in zones without a performance
+            FillInEmptyPerformances(zones, summary);
+
+            // Iterate through all zones that have parent zones, i.e. all except the main zone (which includes all other zones and has depth=0)
+            // Starting from the deepest subzones and going up the zone-hierachy each zone's performance is added to its parent zone's performance.
+            AbsorbPerformancesIntoParentZones(zones, summary);
+
+            return summary;
+        }
 
         private void AbsorbPerformancesIntoParentZones(List<Zone> zones, ZonePerformanceSummary<TZonePerformance> summary)
         {

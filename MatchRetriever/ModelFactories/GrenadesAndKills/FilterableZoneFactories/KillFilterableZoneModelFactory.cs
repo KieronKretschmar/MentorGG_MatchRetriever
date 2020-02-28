@@ -42,8 +42,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 filterablePerformancesList.Add(filterablePerformance);
             }
 
-
-
             return filterablePerformancesList;
         }
     }
