@@ -33,7 +33,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         /// <returns></returns>
         public async Task<KillModel> GetModel(long steamId, string map, List<long> matchIds)
         {
-            var samples = await _sampleFactory.LoadPlayerSamples(steamId, map, matchIds);
+            var samples = await _sampleFactory.LoadPlayerSamples(steamId, matchIds);
             return new KillModel
             {
                 PlayerId = steamId,

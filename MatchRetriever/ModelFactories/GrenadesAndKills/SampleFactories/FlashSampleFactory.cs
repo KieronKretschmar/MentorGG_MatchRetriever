@@ -14,7 +14,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        public async Task<List<FlashSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
+        public async Task<List<FlashSample>> LoadPlayerSamples(long steamId, List<long> matchIds)
         {
             var recentAttempts = new List<FlashSample>();
             var playerName = (await _steamUserOperator.GetUser(steamId)).SteamName;

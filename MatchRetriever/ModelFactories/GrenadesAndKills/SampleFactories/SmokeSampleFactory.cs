@@ -14,7 +14,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        public async Task<List<SmokeSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
+        public async Task<List<SmokeSample>> LoadPlayerSamples(long steamId, List<long> matchIds)
         {
             var playerName = (await _steamUserOperator.GetUser(steamId)).SteamName;
             var recentAttempts = _context.Smoke.Where(x => x.PlayerId == steamId && matchIds.Contains(x.MatchId))

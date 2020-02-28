@@ -13,6 +13,6 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     public interface ISampleFactory<TSample>
         where TSample : ISample
     {
-        Task<List<TSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds);
+        Task<List<TSample>> LoadPlayerSamples(long steamId, List<long> matchIds);
     }
 }

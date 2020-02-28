@@ -34,7 +34,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         /// <returns></returns>
         public async Task<FlashModel> GetModel(long steamId, string map, List<long> matchIds)
         {
-            var samples = await _sampleFactory.LoadPlayerSamples(steamId, map, matchIds);
+            var samples = await _sampleFactory.LoadPlayerSamples(steamId, matchIds);
             return new FlashModel
             {
                 PlayerId = steamId,
