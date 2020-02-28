@@ -102,13 +102,18 @@ namespace MatchRetriever
             // ... FilterableZoneFactories
             services.AddScoped<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
 
+            // Add ImportantPositions
+            services.AddScoped<IImportantPositionsModelFactory, ImportantPositionsModelFactory>();
 
-            //// Add OverviewModelFactories for GrenadeAndKills
+
+            // Add OverviewModelFactories for GrenadeAndKills
             services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
             services.AddScoped<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
+
+
             #endregion
 
             #region Add other ModelFactories

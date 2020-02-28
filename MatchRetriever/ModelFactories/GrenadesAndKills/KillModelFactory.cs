@@ -43,6 +43,5 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 RecentMatchesAnalyzedCount = matchIds.Count,
             };
         }
-
     }
 }
