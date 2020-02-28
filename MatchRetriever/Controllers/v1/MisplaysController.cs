@@ -21,7 +21,7 @@ namespace MatchRetriever.Controllers.v1
             _misplayModelFactory = factory;
         }
 
-        [HttpGet("single/{steamId}/misplays")]
+        [HttpGet("single/{steamId}/misplays/match/{matchId}")]
         public async Task<MisplaysModel> GetMisplaysModel(long steamId, long matchId)
         {
             var model = await _misplayModelFactory.GetModel(steamId, matchId);
