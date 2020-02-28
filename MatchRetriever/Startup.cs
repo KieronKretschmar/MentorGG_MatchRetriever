@@ -118,6 +118,7 @@ namespace MatchRetriever
             services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
             services.AddScoped<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
             services.AddScoped<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
+            services.AddScoped<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
             #endregion
 
             #region Misplay detectors
