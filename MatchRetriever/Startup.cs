@@ -46,6 +46,7 @@ namespace MatchRetriever
                     x.UseMemberCasing();
                     // Serialize longs (steamIds) as strings
                     x.SerializerSettings.Converters.Add(new LongToStringConverter());
+                    x.SerializerSettings.Converters.Add(new PolygonConverter());
                 });
 
             services.AddLogging(services =>
