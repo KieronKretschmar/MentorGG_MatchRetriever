@@ -12,6 +12,6 @@ namespace MatchRetriever.Models.GrenadesAndKills
     public interface IZoneModel<TZonePerformance>
         where TZonePerformance : ZonePerformance<TZonePerformance>
     {
-        public ZonePerformanceSummary<TZonePerformance> ZoneData { get; set; }
+        public ZonePerformanceSummary<TZonePerformance> ZonePerformanceSummary { get; set; }
     }
 }

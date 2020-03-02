@@ -7,7 +7,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public class HeModel : BaseSampleModel<HeSample>, IZoneModel<HeZonePerformance>
     {
-        public ZonePerformanceSummary<HeZonePerformance> ZoneData { get; set; }
+        public ZonePerformanceSummary<HeZonePerformance> ZonePerformanceSummary { get; set; }
 
     }
 }

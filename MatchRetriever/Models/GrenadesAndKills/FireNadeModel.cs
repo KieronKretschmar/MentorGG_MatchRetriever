@@ -7,7 +7,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public class FireNadeModel : BaseSampleModel<FireNadeSample>, IZoneModel<FireNadeZonePerformance>
     {
-        public ZonePerformanceSummary<FireNadeZonePerformance> ZoneData { get; set; }
+        public ZonePerformanceSummary<FireNadeZonePerformance> ZonePerformanceSummary { get; set; }
 
     }
 }

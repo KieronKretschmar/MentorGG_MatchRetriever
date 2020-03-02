@@ -7,7 +7,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public class FlashModel : BaseSampleModel<FlashSample>, IZoneModel<FlashZonePerformance>
     {
-        public ZonePerformanceSummary<FlashZonePerformance> ZoneData { get; set; }
+        public ZonePerformanceSummary<FlashZonePerformance> ZonePerformanceSummary { get; set; }
 
     }
 }
