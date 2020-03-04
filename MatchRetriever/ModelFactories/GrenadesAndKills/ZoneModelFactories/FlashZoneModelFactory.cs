@@ -27,7 +27,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             performance.TerroristRounds = rounds.Count(x => !x);
 
             // summarize Flash and Flashed data for each DetonationZone
-            var zonePerformancesPreAggregate = samples
+            performance.ZonePerformances = samples
                 .GroupBy(x => x.ZoneId)
                 .Select(x => new
                 {
