@@ -48,15 +48,15 @@ namespace MatchRetriever.ModelFactories
             // take the best / worst performances
             var signum = showBest ? 1 : -1;
             var importantPerformances = performances
-                .Where(x=> allZones.Single(y=>y.Id == x.ZoneId).ZoneDepth > 0)
+                .Where(x=> allZones.Single(y=>y.ZoneId == x.ZoneId).ZoneDepth > 0)
                 .OrderBy(x => signum * EstimatedKd(x, priorAlpha, priorBeta))
                 .Take(count)
                 .ToList();
 
             var importantZoneIds = importantPerformances.Select(x => x.ZoneId);
             var zoneInfos = allZones
-                .Where(x => importantZoneIds.Contains(x.Id))
-                .ToDictionary(x => x.Id, x => x);
+                .Where(x => importantZoneIds.Contains(x.ZoneId))
+                .ToDictionary(x => x.ZoneId, x => x);
 
             var model = new ImportantPositionsModel
             {

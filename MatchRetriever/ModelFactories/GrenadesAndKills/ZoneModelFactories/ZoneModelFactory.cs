@@ -92,7 +92,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             foreach (var item in zones.OrderByDescending(x => x.ZoneDepth).Where(x => x.ZoneDepth > 0))
             {
                 // Add this zones performance towards the performance of its parent zone
-                var thisZonePerformance = summary.ZonePerformances[item.Id];
+                var thisZonePerformance = summary.ZonePerformances[item.ZoneId];
                 var parentZonePerformance = summary.ZonePerformances[item.ParentZoneId];
                 parentZonePerformance.Absorb(thisZonePerformance);
             }
@@ -102,9 +102,9 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
             foreach (var zone in zones)
             {
-                if (!summary.ZonePerformances.ContainsKey(zone.Id))
+                if (!summary.ZonePerformances.ContainsKey(zone.ZoneId))
                 {
-                    summary.ZonePerformances[zone.Id] = new TZonePerformance { ZoneId = zone.Id, IsCtZone = zone.IsCt, SampleCount = 0 };
+                    summary.ZonePerformances[zone.ZoneId] = new TZonePerformance { ZoneId = zone.ZoneId, IsCtZone = zone.IsCt, SampleCount = 0 };
                 }
             }
         }
