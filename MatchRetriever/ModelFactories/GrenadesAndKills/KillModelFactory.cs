@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -18,11 +19,13 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     {
         private readonly ISampleFactory<KillSample> _sampleFactory;
         private readonly IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting> _filterableZoneFactory;
+        private readonly IZoneReader _zoneReader;
 
         public KillModelFactory(IServiceProvider sp) : base(sp)
         {
             _sampleFactory = sp.GetRequiredService<ISampleFactory<KillSample>>();
             _filterableZoneFactory = sp.GetRequiredService<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>>();
+            _zoneReader = sp.GetRequiredService<IZoneReader>();
         }
 
         /// <summary>
@@ -34,14 +37,17 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         public async Task<KillModel> GetModel(long steamId, string map, List<long> matchIds)
         {
             var samples = await _sampleFactory.LoadPlayerSamples(steamId, matchIds);
-            return new KillModel
+
+            var model = new KillModel
             {
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
                 FilterableZonePerformanceData = await _filterableZoneFactory.GetFilterableZoneData(steamId, samples, map, matchIds),
-                RecentMatchesAnalyzedCount = matchIds.Count,
+                ZoneInfos = _zoneReader.GetZones(ZoneReader.Enums.ZoneType.Position, map).Values(),
             };
+            
+            return model;
         }
     }
 }

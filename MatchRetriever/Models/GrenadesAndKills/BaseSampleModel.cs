@@ -10,6 +10,5 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public long PlayerId { get; set; }
         public string Map { get; set; }
         public List<TSample> Samples { get; set; }
-        public int RecentMatchesAnalyzedCount { get; set; }
     }
 }

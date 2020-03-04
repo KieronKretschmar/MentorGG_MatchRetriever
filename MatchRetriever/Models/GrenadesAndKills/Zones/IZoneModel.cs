@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 
 namespace MatchRetriever.Models.GrenadesAndKills
 {
@@ -13,5 +14,6 @@ namespace MatchRetriever.Models.GrenadesAndKills
         where TZonePerformance : ZonePerformance<TZonePerformance>
     {
         public ZonePerformanceSummary<TZonePerformance> ZonePerformanceSummary { get; set; }
+        public List<Zone> ZoneInfos { get; set; }
     }
 }

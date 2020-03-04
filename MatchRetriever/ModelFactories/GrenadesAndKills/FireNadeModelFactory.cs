@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
@@ -19,11 +20,13 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     {
         private readonly ISampleFactory<FireNadeSample> _sampleFactory;
         private readonly IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance> _zoneFactory;
+        private readonly IZoneReader _zoneReader;
 
         public FireNadeModelFactory(IServiceProvider sp) : base(sp)
         {
             _sampleFactory = sp.GetRequiredService<ISampleFactory<FireNadeSample>>();
             _zoneFactory = sp.GetRequiredService<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>>();
+            _zoneReader = sp.GetRequiredService<IZoneReader>();
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 Map = map,
                 Samples = samples,
                 ZonePerformanceSummary = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds,ZoneType.FireNade),
-                RecentMatchesAnalyzedCount = matchIds.Count,
+                ZoneInfos = _zoneReader.GetZones(ZoneType.FireNade, map).Values(),
             };
         }
     }

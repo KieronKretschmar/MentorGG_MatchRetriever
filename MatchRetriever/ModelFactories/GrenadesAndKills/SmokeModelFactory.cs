@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
 {
@@ -18,11 +19,13 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     {
         private readonly ISampleFactory<SmokeSample> _sampleFactory;
         private readonly ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance> _lineupFactory;
+        private readonly IZoneReader _zoneReader;
 
         public SmokeModelFactory(IServiceProvider sp) : base(sp)
         {
             _sampleFactory = sp.GetRequiredService<ISampleFactory<SmokeSample>>();
             _lineupFactory = sp.GetRequiredService<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>>();
+            _zoneReader = sp.GetRequiredService<IZoneReader>();
         }
 
 
@@ -41,7 +44,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 Map = map,
                 Samples = samples,
                 LineupData = await _lineupFactory.LineupPerformanceSummary(steamId, samples, map, matchIds),
-                RecentMatchesAnalyzedCount = matchIds.Count,
+                LineupCollection = _zoneReader.GetLineups(ZoneReader.Enums.LineupType.Smoke, map),
             };
         }
     }

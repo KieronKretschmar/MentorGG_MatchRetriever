@@ -54,9 +54,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         /// <param name="map"></param>
         /// <param name="matchIds"></param>
         /// <returns></returns>
-        public async Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string mapString, List<long> matchIds, ZoneType zoneType)
+        public async Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string map, List<long> matchIds, ZoneType zoneType)
         {
-            var map = Enum.Parse<Map>(mapString);
             var zones = _zoneReader.GetZones(zoneType, map).Values();
 
             // Start with PreAggregation summary
