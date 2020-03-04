@@ -8,7 +8,7 @@ namespace MatchRetriever.Helpers
 {
     public interface IDemoViewerConfigProvider
     {
-        DemoViewerConfig GetHighestAvailableConfig(DemoViewerQuality maxQuality, int maxFramesPerSecond);
+        DemoViewerConfig GetHighestAvailableConfig(DemoViewerQuality maxQuality, double maxFramesPerSecond);
     }
 
     public class DemoViewerConfigProvider : IDemoViewerConfigProvider
@@ -37,7 +37,7 @@ namespace MatchRetriever.Helpers
         /// </summary>
         /// <param name="maxFramesPerSecond"></param>
         /// <returns></returns>
-        public DemoViewerConfig GetHighestAvailableConfig(DemoViewerQuality maxQuality, int maxFramesPerSecond)
+        public DemoViewerConfig GetHighestAvailableConfig(DemoViewerQuality maxQuality, double maxFramesPerSecond)
         {
             return Configs.OrderByDescending(x => x.Quality).First(x => x.Quality <= maxQuality && x.FramesPerSecond <= maxFramesPerSecond);
         }
@@ -46,6 +46,6 @@ namespace MatchRetriever.Helpers
     public struct DemoViewerConfig
     {
         public DemoViewerQuality Quality { get; set; }
-        public int FramesPerSecond { get; set; }
+        public double FramesPerSecond { get; set; }
     }
 }
