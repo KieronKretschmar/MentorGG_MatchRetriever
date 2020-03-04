@@ -94,7 +94,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 // Add this zones performance towards the performance of its parent zone
                 var thisZonePerformance = summary.ZonePerformances[item.Id];
                 var parentZonePerformance = summary.ZonePerformances[item.ParentZoneId];
-                parentZonePerformance = parentZonePerformance.Absorb(thisZonePerformance);
+                parentZonePerformance.Absorb(thisZonePerformance);
             }
         }
 
