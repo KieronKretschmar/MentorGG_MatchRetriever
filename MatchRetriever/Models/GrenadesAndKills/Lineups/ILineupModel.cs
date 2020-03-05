@@ -13,7 +13,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
     public interface ILineupModel<TLineupPerformance>
         where TLineupPerformance : ILineupPerformance
     {
-        public LineupPerformanceSummary<TLineupPerformance> LineupData { get; set; }
+        public LineupPerformanceSummary<TLineupPerformance> LineupPerformanceSummary { get; set; }
         public LineupCollection LineupCollection { get; set; }
     }
 }

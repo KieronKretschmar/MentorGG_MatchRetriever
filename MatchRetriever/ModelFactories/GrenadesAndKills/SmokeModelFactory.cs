@@ -43,7 +43,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                LineupData = await _lineupFactory.LineupPerformanceSummary(steamId, samples, map, matchIds),
+                LineupPerformanceSummary = await _lineupFactory.LineupPerformanceSummary(steamId, samples, map, matchIds),
                 LineupCollection = _zoneReader.GetLineups(ZoneReader.Enums.LineupType.Smoke, map),
             };
         }
