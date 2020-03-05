@@ -29,7 +29,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 .GroupBy(x => x.LineupId)
                 .ToDictionary(x => x.Key, x => new SmokeLineupPerformance
                 {
-                    CategoryId = x.Key,
+                    LineupId = x.Key,
                     Insides = x.Count(x=>x.Result == MatchEntities.Enums.TargetResult.Inside),
                     Misses = x.Count(x=>x.Result == MatchEntities.Enums.TargetResult.Miss),
                 });
