@@ -23,7 +23,10 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             performance.CtRounds = rounds.Count(x => x);
             performance.TerroristRounds = rounds.Count(x => !x);
 
-            performance.LineupPerformances = samples.GroupBy(x => x.LineupId)
+            performance.LineupPerformances = samples
+                // ignore samples without lineup
+                .Where(x => x.LineupId > 0)
+                .GroupBy(x => x.LineupId)
                 .ToDictionary(x => x.Key, x => new SmokeLineupPerformance
                 {
                     CategoryId = x.Key,
