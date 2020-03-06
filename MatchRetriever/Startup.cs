@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using EquipmentLib;
 using MatchRetriever.Helpers;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using ZoneReader;
 
 namespace MatchRetriever
@@ -78,10 +81,27 @@ namespace MatchRetriever
             if(EQUIPMENT_CSV_DIRECTORY == null)
                 throw new ArgumentNullException("The environment variable EQUIPMENT_CSV_DIRECTORY has not been set.");
             var EQUIPMENT_ENDPOINT = Configuration.GetValue<string>("EQUIPMENT_ENDPOINT");
-            #endregion
             var ZONEREADER_RESOURCE_PATH = Configuration.GetValue<string>("ZONEREADER_RESOURCE_PATH");
             if (ZONEREADER_RESOURCE_PATH == null)
                 throw new ArgumentNullException("The environment variable ZONEREADER_RESOURCE_PATH has not been set.");
+            #endregion
+
+            #region Swagger
+            services.AddSwaggerGen(options =>
+            {
+                OpenApiInfo interface_info = new OpenApiInfo { Title = "MatchRetriever", Version = "v1", };
+                options.SwaggerDoc("v1", interface_info);
+
+                // Generate documentation based on the XML Comments provided.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+
+                // Optionally, if installed, enable annotations
+                options.EnableAnnotations();
+            });
+            #endregion
+
 
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
@@ -204,6 +224,15 @@ namespace MatchRetriever
             {
                 endpoints.MapControllers();
             });
+
+            #region Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.RoutePrefix = "swagger";
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MatchRetriever");
+            });
+            #endregion
         }
     }
 }
