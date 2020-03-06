@@ -51,7 +51,10 @@ namespace MatchRetriever
 
             services.AddLogging(services =>
             {
-                services.AddConsole();
+                services.AddConsole(o =>
+                {
+                    o.TimestampFormat = "[yyyy-MM-dd HH:mm:ss zzz] ";
+                });
                 services.AddDebug();
             });
 
