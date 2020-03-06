@@ -13,7 +13,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class FriendsComparisonController : BaseApiController
+    public class FriendsComparisonController : ControllerBase
     {
         private readonly ILogger<FriendsComparisonController> _logger;
         private readonly IFriendsComparisonModelFactory _friendsComparisonModelFactory;

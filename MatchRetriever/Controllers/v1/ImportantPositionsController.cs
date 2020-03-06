@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class ImportantPositionsController : BaseApiController
+    public class ImportantPositionsController : ControllerBase
     {
         private readonly ILogger<ImportantPositionsController> _logger;
         private readonly IImportantPositionsModelFactory _importantPositionsModelFactory;

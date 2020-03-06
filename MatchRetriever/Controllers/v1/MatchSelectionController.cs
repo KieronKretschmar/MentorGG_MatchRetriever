@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class MatchSelectionController : BaseApiController
+    public class MatchSelectionController : ControllerBase
     {
         private readonly ILogger<MatchSelectionController> _logger;
         private readonly IMatchSelectionModelFactory _modelFactory;

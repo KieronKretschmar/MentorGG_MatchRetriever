@@ -13,7 +13,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class FlashesController : BaseApiController
+    public class FlashesController : ControllerBase
     {
         private readonly ILogger<FlashesController> _logger;
         private readonly IFlashModelFactory _flashModelFactory;

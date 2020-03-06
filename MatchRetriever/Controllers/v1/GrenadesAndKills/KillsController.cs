@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class KillsController : BaseApiController
+    public class KillsController : ControllerBase
     {
         private readonly ILogger<KillsController> _logger;
         private readonly IKillModelFactory _killModelFactory;

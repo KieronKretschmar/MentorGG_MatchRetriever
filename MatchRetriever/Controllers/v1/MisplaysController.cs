@@ -12,7 +12,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class MisplaysController : BaseApiController
+    public class MisplaysController : ControllerBase
     {
         private readonly IMisplayModelFactory _misplayModelFactory;
 

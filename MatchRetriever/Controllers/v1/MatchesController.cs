@@ -13,7 +13,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class MatchesController : BaseApiController
+    public class MatchesController : ControllerBase
     {
         private readonly IMatchesModelFactory _matchesModelFactory;
 

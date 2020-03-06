@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class PlayerSummaryController : BaseApiController
+    public class PlayerSummaryController : ControllerBase
     {
         private readonly ILogger<PlayerSummaryController> _logger;
         private readonly IPlayerSummaryModelFactory _playerSummaryModelFactory;
