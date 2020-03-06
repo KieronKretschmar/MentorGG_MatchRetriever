@@ -9,4 +9,7 @@ Retrieve data from Match Database.
 - `EQUIPMENT_ENDPOINT` : Optional Url to an endpoint supplying data used by EquipmentLib. 
 
 [*] *Required*
-[**] *Optional, Default is configured in Dockerfile*
+[**] *Configured in Dockerfile*
+
+## Additional Information
+- Upon Startup, this project runs migrations on MatchDb.
