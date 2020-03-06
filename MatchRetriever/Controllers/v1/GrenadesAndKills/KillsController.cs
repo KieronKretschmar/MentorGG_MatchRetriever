@@ -31,16 +31,29 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
+        /// <summary>
+        /// Returns collections of kills and deaths of the player in the given matches in multiple lists,
+        /// each collection covering all kills/deaths under a certain filterable condition (e.g. after c4 plan), 
+        /// as well as additional data required for displaying them in the webapp.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="map"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/filterablekills")]
-        // GET v1/public/single/76561198033880857/filterablekills?map=de_mirage&matchIds=1,2,3
         public async Task<KillModel> GetFilterableKills(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _killModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
+        /// <summary>
+        /// Returns a summary of the players performance for each selectable map, focussing on his kills and deaths.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/killsoverview")]
-        // GET v1/public/single/76561198033880857/killsoverview?matchIds=1,2,3
         public async Task<OverviewModel<KillOverviewMapSummary>> GetKillsOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

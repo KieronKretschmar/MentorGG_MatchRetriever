@@ -29,8 +29,12 @@ namespace MatchRetriever.Controllers.v1
             this._playerSummaryModelFactory = playerSummaryModelFactory;
         }
 
+        /// <summary>
+        /// Returns a brief summary of all available data about the given player.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/playersummary")]
-        // GET v1/public/single/76561198033880857/playersummary
         public async Task<PlayerSummaryModel> GetPlayerSummary(long steamId)
         {
             var model = await _playerSummaryModelFactory.GetModel(steamId);

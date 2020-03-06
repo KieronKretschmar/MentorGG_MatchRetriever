@@ -31,16 +31,28 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
+        /// <summary>
+        /// Returns all smokes the player threw in the given matches, as well as additional data required for displaying them in the webapp.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="map"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/smokes")]
-        // GET v1/public/single/76561198033880857/smokes?map=de_mirage&matchIds=1,2,3
         public async Task<SmokeModel> GetSmokes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _smokeModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
+
+        /// <summary>
+        /// Returns a summary of the players performance for each selectable map, focussing on his smokes.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/smokesoverview")]
-        // GET v1/public/single/76561198033880857/smokesoverview?matchIds=1,2,3
         public async Task<OverviewModel<SmokeOverviewMapSummary>> GetSmokesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

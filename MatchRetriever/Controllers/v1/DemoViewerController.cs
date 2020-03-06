@@ -28,7 +28,7 @@ namespace MatchRetriever.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Get MetaData for a match required to watch rounds in DemoViewer.
         /// </summary>
         /// <param name="matchId"></param>
         /// <returns></returns>
@@ -41,7 +41,7 @@ namespace MatchRetriever.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Get required data to watch a round in DemoViewer.
         /// </summary>
         /// <param name="matchId"></param>
         /// <param name="round"></param>

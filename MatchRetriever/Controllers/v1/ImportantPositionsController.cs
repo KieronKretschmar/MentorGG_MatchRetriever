@@ -29,8 +29,15 @@ namespace MatchRetriever.Controllers.v1
             this._importantPositionsModelFactory = importantPositionsModelFactory;
         }
 
+        /// <summary>
+        /// Gets performances for the player's best and worst positions.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <param name="showBest"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/importantpositions")]
-        // GET v1/public/single/76561198033880857/importantpositions?matchIds=1,2,3&showbest=true&count=3
         public async Task<ImportantPositionsModel> GetImportantPositions(long steamId, [CsvModelBinder]List<long> matchIds, bool showBest, int count)
         {
             var model = await _importantPositionsModelFactory.GetModel(steamId, matchIds, showBest, count);

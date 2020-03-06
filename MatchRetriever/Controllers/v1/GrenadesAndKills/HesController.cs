@@ -31,16 +31,28 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
+        /// <summary>
+        /// Returns all HE grenades the player threw in the given matches, as well as additional data required for displaying them in the webapp.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="map"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/hes")]
-        // GET v1/public/single/76561198033880857/hes?map=de_mirage&matchIds=1,2,3
         public async Task<HeModel> GetHes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _heModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
+
+        /// <summary>
+        /// Returns a summary of the players performance for each selectable map, focussing on his HE grenades.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/hesoverview")]
-        // GET v1/public/single/76561198033880857/hesoverview?matchIds=1,2,3
         public async Task<OverviewModel<HeOverviewMapSummary>> GetHesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

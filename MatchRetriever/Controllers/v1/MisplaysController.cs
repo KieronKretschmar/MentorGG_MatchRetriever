@@ -21,6 +21,12 @@ namespace MatchRetriever.Controllers.v1
             _misplayModelFactory = factory;
         }
 
+        /// <summary>
+        /// Returns the user's misplays in the given match.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchId"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/misplays/match/{matchId}")]
         public async Task<MisplaysModel> GetMisplaysModel(long steamId, long matchId)
         {

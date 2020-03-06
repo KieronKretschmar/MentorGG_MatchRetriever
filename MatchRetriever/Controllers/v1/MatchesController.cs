@@ -22,6 +22,14 @@ namespace MatchRetriever.Controllers.v1
             _matchesModelFactory = matchesModelFactory;
         }
 
+        /// <summary>
+        /// Returns data regarding for each match, including scoreboards.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <param name="count"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/matches")]
         // GET v1/public/single/76561198033880857/matches?matchIds=1,2,3&count=5&offset=0
         public async Task<MatchesModel> GetMatches(long steamId, [CsvModelBinder] List<long> matchIds, int count, int offset = 0)
