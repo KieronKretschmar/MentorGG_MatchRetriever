@@ -106,69 +106,69 @@ namespace MatchRetriever
 
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
-            services.AddScoped<IFireNadeModelFactory, FireNadeModelFactory>();
-            services.AddScoped<IFlashModelFactory, FlashModelFactory>();
-            services.AddScoped<IHeModelFactory, HeModelFactory>();
-            services.AddScoped<ISmokeModelFactory, SmokeModelFactory>();
-            services.AddScoped<IKillModelFactory, KillModelFactory>();
+            services.AddTransient<IFireNadeModelFactory, FireNadeModelFactory>();
+            services.AddTransient<IFlashModelFactory, FlashModelFactory>();
+            services.AddTransient<IHeModelFactory, HeModelFactory>();
+            services.AddTransient<ISmokeModelFactory, SmokeModelFactory>();
+            services.AddTransient<IKillModelFactory, KillModelFactory>();
             // ... SampleFactories
-            services.AddScoped<ISampleFactory<FireNadeSample>, FireNadeSampleFactory>();
-            services.AddScoped<ISampleFactory<FlashSample>, FlashSampleFactory>();
-            services.AddScoped<ISampleFactory<HeSample>, HeSampleFactory>();
-            services.AddScoped<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
-            services.AddScoped<ISampleFactory<KillSample>, KillSampleFactory>();
+            services.AddTransient<ISampleFactory<FireNadeSample>, FireNadeSampleFactory>();
+            services.AddTransient<ISampleFactory<FlashSample>, FlashSampleFactory>();
+            services.AddTransient<ISampleFactory<HeSample>, HeSampleFactory>();
+            services.AddTransient<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
+            services.AddTransient<ISampleFactory<KillSample>, KillSampleFactory>();
             // ... LineupFactories
-            services.AddScoped<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupModelFactory>();
+            services.AddTransient<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupModelFactory>();
             // ... ZoneFactories
-            services.AddScoped<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneModelFactory>();
-            services.AddScoped<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneModelFactory>();
-            services.AddScoped<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneModelFactory>();
-            services.AddScoped<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneModelFactory>();
             // ... FilterableZoneFactories
-            services.AddScoped<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
+            services.AddTransient<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
 
             // Add ImportantPositions
-            services.AddScoped<IImportantPositionsModelFactory, ImportantPositionsModelFactory>();
+            services.AddTransient<IImportantPositionsModelFactory, ImportantPositionsModelFactory>();
 
 
             // Add OverviewModelFactories for GrenadeAndKills
-            services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadeOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadeOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
 
 
             #endregion
 
             #region Add other ModelFactories
-            services.AddScoped<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
-            services.AddScoped<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
-            services.AddScoped<IMatchesModelFactory, MatchesModelFactory>();
-            services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
-            services.AddScoped<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
-            services.AddScoped<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
-            services.AddScoped<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
+            services.AddTransient<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
+            services.AddTransient<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
+            services.AddTransient<IMatchesModelFactory, MatchesModelFactory>();
+            services.AddTransient<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
+            services.AddTransient<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
+            services.AddTransient<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
+            services.AddTransient<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
             #endregion
 
             #region Misplay detectors
-            services.AddScoped<_detectorHelpers>();
+            services.AddTransient<_detectorHelpers>();
 
 
             //Add new misplays here
-            services.AddScoped<ISubdetector, BadBombDropDetector>();
-            services.AddScoped<ISubdetector, SmokeFailDetector>();
-            services.AddScoped<ISubdetector, ShotWhileMovingDetector>();
-            services.AddScoped<ISubdetector, SelfFlashDetector>();
-            services.AddScoped<ISubdetector, TeamFlashDetector>();
-            services.AddScoped<ISubdetector, UnnecessaryReloadDetector>();
+            services.AddTransient<ISubdetector, BadBombDropDetector>();
+            services.AddTransient<ISubdetector, SmokeFailDetector>();
+            services.AddTransient<ISubdetector, ShotWhileMovingDetector>();
+            services.AddTransient<ISubdetector, SelfFlashDetector>();
+            services.AddTransient<ISubdetector, TeamFlashDetector>();
+            services.AddTransient<ISubdetector, UnnecessaryReloadDetector>();
 
-            services.AddScoped<IMisplayDetector, MisplayDetector>(services =>
+            services.AddTransient<IMisplayDetector, MisplayDetector>(services =>
             {
                 return new MisplayDetector(services.GetServices<ISubdetector>().ToList());
             });
 
-            services.AddScoped<IMisplayModelFactory, MisplayModelFactory>();
+            services.AddTransient<IMisplayModelFactory, MisplayModelFactory>();
             #endregion
 
             #region Add Helper services          
