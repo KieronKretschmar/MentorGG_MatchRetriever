@@ -13,6 +13,8 @@ namespace MatchRetrieverTestProject
         public BasicTests()
         {
             _factory = new WebApplicationFactory<Startup>();
+            System.Environment.SetEnvironmentVariable("EQUIPMENT_CSV_DIRECTORY", "../../../../EquipmentLib/EquipmentLib/EquipmentData");
+            System.Environment.SetEnvironmentVariable("ZONEREADER_RESOURCE_PATH", "../../../../ZoneReader/ZoneReader/resources");
         }
 
         [DataTestMethod]
@@ -31,9 +33,7 @@ namespace MatchRetrieverTestProject
             // Arrange
             var client = _factory.CreateClient();
 
-            var url = $"/v1/public/single/{action}";
-            url += "?steamId=76561198033880857";
-            url += "&matchIds=1,2,3";
+            var url = $"/v1/public/single/{76561198033880857}/{action}?matchIds=1,2,3";
             if (!action.Contains("overview"))
             {
                 url += "&map=de_mirage";
@@ -49,7 +49,7 @@ namespace MatchRetrieverTestProject
         }
 
         [DataTestMethod]
-        [DataRow("v1/public/single/metamatchhistory?steamId=76561198033880857&dailyLimit=3")]
+        [DataRow("v1/public/single/76561198033880857/matchselection?dailyLimit=3")]
         public async Task Get_OtherEndpointsReturnSuccessAndCorrectContentType(string url)
         {
             // Arrange

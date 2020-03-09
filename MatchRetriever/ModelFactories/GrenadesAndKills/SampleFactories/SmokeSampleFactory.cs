@@ -31,7 +31,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     DetonationPos = smoke.DetonationPos,
                     ReleasePos = smoke.PlayerPos,
                     LineupId = smoke.LineUp,
-                    PlayerViewX = smoke.PlayerView.X,
+                    PlayerView = smoke.PlayerView,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(smoke.Trajectory),
                 })
                 .ToList();
