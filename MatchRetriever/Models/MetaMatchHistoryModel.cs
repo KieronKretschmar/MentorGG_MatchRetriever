@@ -9,6 +9,7 @@ namespace MatchRetriever.Models
     public class MatchSelectionModel
     {
         public List<Match> Matches{ get; set; }
+        public bool DailyLimitReachedToday { get; set; }
         public struct Match
         {
             public long MatchId { get; set; }
