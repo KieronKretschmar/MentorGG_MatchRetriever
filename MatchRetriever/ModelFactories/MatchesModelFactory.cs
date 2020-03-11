@@ -35,15 +35,7 @@ namespace MatchRetriever.ModelFactories
 
             // Censor the forbidden MatchInfos for all his matches that are not included in the allowedMatchIds supplied
             var forbiddenMatchIds = matchIds.Except(allowedMatchIds).ToList();
-
-            //for (int i = 0; i < res.MatchInfos.Count; i++)
-            //{
-            //    if (forbiddenMatchIds.Contains(res.MatchInfos[i].MatchId))
-            //    {
-            //        CensorHiddenMatch(res.MatchInfos[i]);
-            //    }
-            //}
-
+            
             foreach (var item in res.MatchInfos)
             {
                 if (forbiddenMatchIds.Contains(item.MatchId))
