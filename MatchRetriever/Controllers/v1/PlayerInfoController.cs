@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class PlayerInfoController : BaseApiController
+    public class PlayerInfoController : ControllerBase
     {
         private readonly ILogger<PlayerInfoController> _logger;
         private readonly IPlayerInfoModelFactory _playerinfoModelFactory;
@@ -29,8 +29,12 @@ namespace MatchRetriever.Controllers.v1
             this._playerinfoModelFactory = playerinfoModelFactory;
         }
 
+        /// <summary>
+        /// Returns metadata about a player, e.g. his SteamName and CSGO Rank.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/playerinfo")]
-        // GET v1/public/single/76561198033880857/playerinfo
         public async Task<PlayerInfoModel> GetPlayerInfo(long steamId)
         {
             var model = await _playerinfoModelFactory.GetModel(steamId);

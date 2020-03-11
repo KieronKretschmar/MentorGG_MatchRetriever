@@ -1,9 +1,9 @@
 [submodule "matchdb"]
 	path = MatchDb
-	url = git@gitlab.com:mentorgg/csgo/matchdb.git
+	url = ../../csgo/matchdb.git
 [submodule "EquipmentLib"]
 	path = EquipmentLib
-	url = git@gitlab.com:mentorgg/csgo/EquipmentLib.git
+	url = ../../csgo/EquipmentLib.git
 [submodule "ZoneReader"]
 	path = ZoneReader
-	url = git@gitlab.com:mentorgg/csgo/zonereader.git
+	url = ../../csgo/zonereader.git

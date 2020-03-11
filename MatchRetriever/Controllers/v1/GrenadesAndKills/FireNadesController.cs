@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class FireNadesController : BaseApiController
+    public class FireNadesController : ControllerBase
     {
         private readonly ILogger<FireNadesController> _logger;
         private readonly IFireNadeModelFactory _fireNadeModelFactory;
@@ -31,16 +31,27 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
+        /// <summary>
+        /// Returns all molotovs/incgrenades the player threw in the given matches, as well as additional data required for displaying them in the webapp.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="map"></param>
+        /// <param name="matchIds">MatchIds of matches played on the given map</param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/firenades")]
-        // GET v1/public/single/76561198033880857/firenades?map=de_mirage&matchIds=1,2,3
         public async Task<FireNadeModel> GetFireNades(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _fireNadeModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
+        /// <summary>
+        /// Returns a summary of the players performance for each selectable map, focussing on his molotovs/inc grenades.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/firenadesoverview")]
-        // GET v1/public/single/76561198033880857/firenadesoverview?&matchIds=1,2,3
         public async Task<OverviewModel<FireNadeOverviewMapSummary>> GetFireNadesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

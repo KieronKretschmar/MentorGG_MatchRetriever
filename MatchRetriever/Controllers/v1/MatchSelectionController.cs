@@ -18,7 +18,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class MatchSelectionController : BaseApiController
+    public class MatchSelectionController : ControllerBase
     {
         private readonly ILogger<MatchSelectionController> _logger;
         private readonly IMatchSelectionModelFactory _modelFactory;
@@ -29,8 +29,13 @@ namespace MatchRetriever.Controllers.v1
             this._modelFactory = modelFactory;
         }
 
+        /// <summary>
+        /// Returns the user's matches in the database, censoring those above his/her daily limit.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="dailyLimit"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/matchselection")]
-        // GET v1/public/single/76561198033880857/matchselection?dailyLimit=3
         public async Task<MatchSelectionModel> GetMatchSelection(long steamId, int dailyLimit)
         {
             var model = await _modelFactory.GetModel(steamId, dailyLimit);

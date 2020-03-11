@@ -13,7 +13,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class FlashesController : BaseApiController
+    public class FlashesController : ControllerBase
     {
         private readonly ILogger<FlashesController> _logger;
         private readonly IFlashModelFactory _flashModelFactory;
@@ -26,16 +26,27 @@ namespace MatchRetriever.Controllers.v1
             this._overviewModelFactory = overviewModelFactory;
         }
 
+        /// <summary>
+        /// Returns all flashes the player threw in the given matches, as well as additional data required for displaying them in the webapp.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="map"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/flashes")]
-        // GET v1/public/single/76561198033880857/flashes?map=de_mirage&matchIds=1,2,3
         public async Task<FlashModel> GetFlashes(long steamId, string map, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _flashModelFactory.GetModel(steamId, map, matchIds);
             return model;
         }
 
+        /// <summary>
+        /// Returns a summary of the players performance for each selectable map, focussing on his flashes.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="matchIds"></param>
+        /// <returns></returns>
         [HttpGet("single/{steamId}/flashesoverview")]
-        // GET v1/public/single/76561198033880857/flashesoverview?matchIds=1,2,3
         public async Task<OverviewModel<FlashOverviewMapSummary>> GetFlashesOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);

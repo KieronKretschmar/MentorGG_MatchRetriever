@@ -14,7 +14,7 @@ namespace MatchRetriever.Controllers.v1
     [ApiVersion("1")]
     [Route("v{version:apiVersion}/public")]
     [ApiController]
-    public class DemoViewerController : BaseApiController
+    public class DemoViewerController : ControllerBase
     {
         private readonly ILogger<DemoViewerController> _logger;
         private readonly IDemoViewerMatchModelFactory _matchFactory;
@@ -27,8 +27,12 @@ namespace MatchRetriever.Controllers.v1
             this._roundFactory = roundFactory;
         }
 
+        /// <summary>
+        /// Get MetaData for a match required to watch rounds in DemoViewer.
+        /// </summary>
+        /// <param name="matchId"></param>
+        /// <returns></returns>
         [HttpGet("watch/match/{matchId}")]
-        // GET /v1/public/watch/match/1
         public async Task<DemoViewerMatchModel> GetMatch(long matchId)
         {
             // Try to parse quality and default to Low quality if value is invalid 
@@ -36,8 +40,14 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
+        /// <summary>
+        /// Get required data to watch a round in DemoViewer.
+        /// </summary>
+        /// <param name="matchId"></param>
+        /// <param name="round"></param>
+        /// <param name="quality"></param>
+        /// <returns></returns>
         [HttpGet("watch/match/{matchId}/round/{round}")]
-        // GET /v1/public/watch/match/1/round/1
         public async Task<DemoViewerRoundModel> GetRound(long matchId, short round, DemoViewerQuality quality)
         {
             // Try to parse quality and default to Low quality if value is invalid 

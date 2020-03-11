@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Database;
 using EquipmentLib;
 using MatchRetriever.Helpers;
 using MatchRetriever.Misplays;
@@ -20,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using ZoneReader;
 
 namespace MatchRetriever
@@ -51,7 +55,10 @@ namespace MatchRetriever
 
             services.AddLogging(services =>
             {
-                services.AddConsole();
+                services.AddConsole(o =>
+                {
+                    o.TimestampFormat = "[yyyy-MM-dd HH:mm:ss zzz] ";
+                });
                 services.AddDebug();
             });
 
@@ -75,76 +82,93 @@ namespace MatchRetriever
             if(EQUIPMENT_CSV_DIRECTORY == null)
                 throw new ArgumentNullException("The environment variable EQUIPMENT_CSV_DIRECTORY has not been set.");
             var EQUIPMENT_ENDPOINT = Configuration.GetValue<string>("EQUIPMENT_ENDPOINT");
-            #endregion
             var ZONEREADER_RESOURCE_PATH = Configuration.GetValue<string>("ZONEREADER_RESOURCE_PATH");
             if (ZONEREADER_RESOURCE_PATH == null)
                 throw new ArgumentNullException("The environment variable ZONEREADER_RESOURCE_PATH has not been set.");
+            #endregion
+
+            #region Swagger
+            services.AddSwaggerGen(options =>
+            {
+                OpenApiInfo interface_info = new OpenApiInfo { Title = "MatchRetriever", Version = "v1", };
+                options.SwaggerDoc("v1", interface_info);
+
+                // Generate documentation based on the XML Comments provided.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+
+                // Optionally, if installed, enable annotations
+                options.EnableAnnotations();
+            });
+            #endregion
+
 
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
-            services.AddScoped<IFireNadeModelFactory, FireNadeModelFactory>();
-            services.AddScoped<IFlashModelFactory, FlashModelFactory>();
-            services.AddScoped<IHeModelFactory, HeModelFactory>();
-            services.AddScoped<ISmokeModelFactory, SmokeModelFactory>();
-            services.AddScoped<IKillModelFactory, KillModelFactory>();
+            services.AddTransient<IFireNadeModelFactory, FireNadeModelFactory>();
+            services.AddTransient<IFlashModelFactory, FlashModelFactory>();
+            services.AddTransient<IHeModelFactory, HeModelFactory>();
+            services.AddTransient<ISmokeModelFactory, SmokeModelFactory>();
+            services.AddTransient<IKillModelFactory, KillModelFactory>();
             // ... SampleFactories
-            services.AddScoped<ISampleFactory<FireNadeSample>, FireNadeSampleFactory>();
-            services.AddScoped<ISampleFactory<FlashSample>, FlashSampleFactory>();
-            services.AddScoped<ISampleFactory<HeSample>, HeSampleFactory>();
-            services.AddScoped<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
-            services.AddScoped<ISampleFactory<KillSample>, KillSampleFactory>();
+            services.AddTransient<ISampleFactory<FireNadeSample>, FireNadeSampleFactory>();
+            services.AddTransient<ISampleFactory<FlashSample>, FlashSampleFactory>();
+            services.AddTransient<ISampleFactory<HeSample>, HeSampleFactory>();
+            services.AddTransient<ISampleFactory<SmokeSample>, SmokeSampleFactory>();
+            services.AddTransient<ISampleFactory<KillSample>, KillSampleFactory>();
             // ... LineupFactories
-            services.AddScoped<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupModelFactory>();
+            services.AddTransient<ILineupPerformanceFactory<SmokeSample, SmokeLineupPerformance>, SmokeLineupModelFactory>();
             // ... ZoneFactories
-            services.AddScoped<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneModelFactory>();
-            services.AddScoped<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneModelFactory>();
-            services.AddScoped<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneModelFactory>();
-            services.AddScoped<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>, FireNadeZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<FlashSample, FlashZonePerformance>, FlashZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<HeSample, HeZonePerformance>, HeZoneModelFactory>();
+            services.AddTransient<IZonePerformanceFactory<KillSample, KillZonePerformance>, KillZoneModelFactory>();
             // ... FilterableZoneFactories
-            services.AddScoped<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
+            services.AddTransient<IFilterableZoneModelFactory<KillSample, KillZonePerformance, KillFilterSetting>, KillFilterableZoneModelFactory>();
 
             // Add ImportantPositions
-            services.AddScoped<IImportantPositionsModelFactory, ImportantPositionsModelFactory>();
+            services.AddTransient<IImportantPositionsModelFactory, ImportantPositionsModelFactory>();
 
 
             // Add OverviewModelFactories for GrenadeAndKills
-            services.AddScoped<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadeOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
-            services.AddScoped<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<FireNadeOverviewMapSummary>, FireNadeOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<FlashOverviewMapSummary>, FlashesOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<HeOverviewMapSummary>, HeOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
+            services.AddTransient<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
 
 
             #endregion
 
             #region Add other ModelFactories
-            services.AddScoped<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
-            services.AddScoped<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
-            services.AddScoped<IMatchesModelFactory, MatchesModelFactory>();
-            services.AddScoped<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
-            services.AddScoped<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
-            services.AddScoped<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
-            services.AddScoped<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
+            services.AddTransient<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
+            services.AddTransient<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
+            services.AddTransient<IMatchesModelFactory, MatchesModelFactory>();
+            services.AddTransient<IFriendsComparisonModelFactory, FriendsComparisonModelFactory>();
+            services.AddTransient<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
+            services.AddTransient<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
+            services.AddTransient<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
             #endregion
 
             #region Misplay detectors
-            services.AddScoped<_detectorHelpers>();
+            services.AddTransient<_detectorHelpers>();
 
 
             //Add new misplays here
-            services.AddScoped<ISubdetector, BadBombDropDetector>();
-            services.AddScoped<ISubdetector, SmokeFailDetector>();
-            services.AddScoped<ISubdetector, ShotWhileMovingDetector>();
-            services.AddScoped<ISubdetector, SelfFlashDetector>();
-            services.AddScoped<ISubdetector, TeamFlashDetector>();
-            services.AddScoped<ISubdetector, UnnecessaryReloadDetector>();
+            services.AddTransient<ISubdetector, BadBombDropDetector>();
+            services.AddTransient<ISubdetector, SmokeFailDetector>();
+            services.AddTransient<ISubdetector, ShotWhileMovingDetector>();
+            services.AddTransient<ISubdetector, SelfFlashDetector>();
+            services.AddTransient<ISubdetector, TeamFlashDetector>();
+            services.AddTransient<ISubdetector, UnnecessaryReloadDetector>();
 
-            services.AddScoped<IMisplayDetector, MisplayDetector>(services =>
+            services.AddTransient<IMisplayDetector, MisplayDetector>(services =>
             {
                 return new MisplayDetector(services.GetServices<ISubdetector>().ToList());
             });
 
-            services.AddScoped<IMisplayModelFactory, MisplayModelFactory>();
+            services.AddTransient<IMisplayModelFactory, MisplayModelFactory>();
             #endregion
 
             #region Add Helper services          
@@ -184,7 +208,7 @@ namespace MatchRetriever
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -201,6 +225,21 @@ namespace MatchRetriever
             {
                 endpoints.MapControllers();
             });
+
+            #region Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.RoutePrefix = "swagger";
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MatchRetriever");
+            });
+            #endregion
+
+            // migrate if this is not an inmemory database
+            if (services.GetRequiredService<MatchContext>().Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                services.GetRequiredService<MatchContext>().Database.Migrate();
+            }
         }
     }
 }
