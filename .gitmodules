@@ -1,0 +1,9 @@
+[submodule "matchdb"]
+	path = MatchDb
+	url = ../../csgo/matchdb.git
+[submodule "EquipmentLib"]
+	path = EquipmentLib
+	url = ../../csgo/EquipmentLib.git
+[submodule "ZoneReader"]
+	path = ZoneReader
+	url = ../../csgo/zonereader.git
