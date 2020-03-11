@@ -5,6 +5,7 @@
     <UserSecretsId>41f1d03f-559e-4969-a0f4-8a32683345ec</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,8 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EquipmentLib\EquipmentLib\EquipmentLib.csproj" />
-    <ProjectReference Include="..\matchdb\Database\Database.csproj" />
-    <ProjectReference Include="..\matchdb\matchentities\MatchEntities\MatchEntities.csproj" />
+    <ProjectReference Include="..\MatchDb\Database\Database.csproj" />
+    <ProjectReference Include="..\MatchDb\MatchEntities\MatchEntities\MatchEntities.csproj" />
     <ProjectReference Include="..\ZoneReader\ZoneReader\ZoneReader.csproj" />
   </ItemGroup>
 
