@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
@@ -19,11 +20,13 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     {
         private readonly ISampleFactory<HeSample> _sampleFactory;
         private readonly IZonePerformanceFactory<HeSample, HeZonePerformance> _zoneFactory;
+        private readonly IZoneReader _zoneReader;
 
         public HeModelFactory(IServiceProvider sp) : base(sp)
         {
             _sampleFactory = sp.GetRequiredService<ISampleFactory<HeSample>>();
             _zoneFactory = sp.GetRequiredService<IZonePerformanceFactory<HeSample, HeZonePerformance>>();
+            _zoneReader = sp.GetRequiredService<IZoneReader>();
         }
 
         /// <summary>
@@ -34,14 +37,14 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         /// <returns></returns>
         public async Task<HeModel> GetModel(long steamId, string map, List<long> matchIds)
         {
-            var samples = await _sampleFactory.LoadPlayerSamples(steamId, map, matchIds);
+            var samples = await _sampleFactory.LoadPlayerSamples(steamId, matchIds);
             return new HeModel
             {
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                ZoneData = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds,MapZoneType.He),
-                RecentMatchesAnalyzedCount = matchIds.Count,
+                ZonePerformanceSummary = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds,ZoneType.He),
+                ZoneInfos = _zoneReader.GetZones(ZoneType.He, map).Values(),
             };
         }
     }

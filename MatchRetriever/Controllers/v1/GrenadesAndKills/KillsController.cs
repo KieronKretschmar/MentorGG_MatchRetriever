@@ -22,9 +22,9 @@ namespace MatchRetriever.Controllers.v1
     {
         private readonly ILogger<KillsController> _logger;
         private readonly IKillModelFactory _killModelFactory;
-        private readonly IOverviewModelFactory<FireNadeOverviewMapSummary> _overviewModelFactory;
+        private readonly IOverviewModelFactory<KillOverviewMapSummary> _overviewModelFactory;
 
-        public KillsController(ILogger<KillsController> logger, IKillModelFactory killModelFactory, IOverviewModelFactory<FireNadeOverviewMapSummary> overviewModelFactory)
+        public KillsController(ILogger<KillsController> logger, IKillModelFactory killModelFactory, IOverviewModelFactory<KillOverviewMapSummary> overviewModelFactory)
         {
             this._logger = logger;
             this._killModelFactory = killModelFactory;
@@ -41,7 +41,7 @@ namespace MatchRetriever.Controllers.v1
 
         [HttpGet("single/{steamId}/killsoverview")]
         // GET v1/public/single/76561198033880857/killsoverview?matchIds=1,2,3
-        public async Task<OverviewModel<FireNadeOverviewMapSummary>> GetKillsOverview(long steamId, [CsvModelBinder]List<long> matchIds)
+        public async Task<OverviewModel<KillOverviewMapSummary>> GetKillsOverview(long steamId, [CsvModelBinder]List<long> matchIds)
         {
             var model = await _overviewModelFactory.GetModel(steamId, matchIds);
             return model;

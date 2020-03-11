@@ -7,22 +7,24 @@ using MatchRetriever.Controllers.v1;
 using MatchRetriever.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Database;
-using static MatchRetriever.Helpers.SteamUserOperator;
 
 namespace MatchRetriever.ModelFactories
 {
     public interface IFriendsComparisonModelFactory
     {
-        Task<FriendsComparisonModel> GetModel(long steamId, int maxFriends, List<long> matchIds, int offset);
+        Task<FriendsComparisonModel> GetModel(long steamId, List<long> matchIds, int count, int offset);
     }
 
     public class FriendsComparisonModelFactory : ModelFactoryBase, IFriendsComparisonModelFactory
     {
+        private readonly IPlayerInfoModelFactory _playerInfoModelFactory;
+
         public FriendsComparisonModelFactory(IServiceProvider sp) : base(sp)
         {
+            _playerInfoModelFactory = sp.GetRequiredService<IPlayerInfoModelFactory>();
         }
 
-        public async Task<FriendsComparisonModel> GetModel(long steamId, int maxFriends, List<long> matchIds, int offset)
+        public async Task<FriendsComparisonModel> GetModel(long steamId, List<long> matchIds, int maxFriends, int offset)
         {
             var friendsHistories = ClosestFriendsHistories(steamId, matchIds, maxFriends: maxFriends, minMatches: 1, offset: offset);
 
@@ -37,15 +39,13 @@ namespace MatchRetriever.ModelFactories
 
         private async Task<ComparisonRowData> GetComparisonRowData(long steamId, long otherId, List<long> matchIds)
         {
-
             var rowData = new ComparisonRowData
             {
                 MatchesPlayed = matchIds.Count,
-                OtherPlayerInfo = await GetPlayerInfoModel(steamId),
+                OtherPlayerInfo = await _playerInfoModelFactory.GetModel(otherId),
                 UserData = getBriefComparisonPlayerData(steamId, matchIds),
                 OtherData = getBriefComparisonPlayerData(otherId, matchIds),
             };
-
 
             // Compute match data equal for both players
             var matchResults = _context.MatchStats
@@ -76,10 +76,16 @@ namespace MatchRetriever.ModelFactories
             rowData.TerroristRounds = roundData.Count(x => !x.IsCt);
             rowData.TerroristRoundsWon = roundData.Count(x => !x.IsCt && x.RoundWon);
 
-
             // Compute most played map data equal for both players
             var mostPlayedMapData = _context.MatchStats
                 .Where(x => matchIds.Contains(x.MatchId))
+                .ToList()
+                .Select(x=> new
+                {
+                    x.Map,
+                    x.WinnerTeam,
+                    UserTeam = x.PlayerMatchStats.Single(pms => pms.SteamId == steamId).Team,
+                })
                 .GroupBy(x => x.Map)
                 .Select(x => new
                 {
@@ -93,8 +99,8 @@ namespace MatchRetriever.ModelFactories
                     MatchesPlayed = x.MatchesPlayed,
                     MatchResults = x.x.Select(y => new
                     {
-                        y.WinnerTeam,
-                        UserTeam = y.PlayerMatchStats.Single(pms => pms.SteamId == steamId).Team,
+                        y.WinnerTeam,                        
+                        UserTeam = y.UserTeam,
                     }).ToList(),
                 })
                 .First();
@@ -118,9 +124,8 @@ namespace MatchRetriever.ModelFactories
         /// <param name="maxFriends">Maximum number of friends returned</param>
         /// <returns></returns>
         /// 
-        private List<FriendsHistory> ClosestFriendsHistories(long playerId, List<long> matchIds, int minMatches = 0, int maxFriends = 0, int offset = 0)
+        private List<FriendsHistory> ClosestFriendsHistories(long playerId, List<long> matchIds, int minMatches, int maxFriends, int offset = 0)
         {
-
             List<FriendsHistory> friendsHistory = new List<FriendsHistory>();
 
             var playersInRecentMatches = _context.PlayerMatchStats
@@ -133,6 +138,7 @@ namespace MatchRetriever.ModelFactories
                 .ToDictionary(x => x.MatchId, x => x.Team);
 
             var friendsInRecentMatchesOnTheSameTeam = playersInRecentMatches
+                .Where(x => x.SteamId != playerId)
                 .Where(x => x.Team == playerTeamInMatch[x.MatchId]);
 
 
@@ -141,10 +147,9 @@ namespace MatchRetriever.ModelFactories
                 friendsHistory.Add(new FriendsHistory(playerId, friendId.Key, friendId.Select(x => x.MatchId).ToList()));
             }
 
-            // Show only friends with more then minMatches played together
+            // Show only friends with at least minMatches played together
             friendsHistory = friendsHistory
-                .Where(x => minMatches < x.MatchIds.Count).ToList();
-
+                .Where(x => minMatches <= x.MatchIds.Count).ToList();
 
             friendsHistory = friendsHistory.OrderByDescending(x => x.MatchIds.Count).ToList();
 
@@ -220,16 +225,6 @@ namespace MatchRetriever.ModelFactories
             res.HEsThrown = pms.Sum(x => x.HesUsed);
             res.SmokesThrown = pms.Sum(x => x.SmokesUsed);
 
-            return res;
-        }
-
-        private async Task<PlayerInfoModel> GetPlayerInfoModel(long steamId)
-        {
-            var res = new PlayerInfoModel();
-            var profile = await _steamUserOperator.GetUser(steamId);
-
-            res.steamUser = profile;
-            res.Rank = _context.CurrentRank(steamId);
             return res;
         }
     }

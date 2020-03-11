@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 using ZoneReader.Enums;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKills
@@ -19,11 +20,13 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
     {
         private readonly ISampleFactory<FireNadeSample> _sampleFactory;
         private readonly IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance> _zoneFactory;
+        private readonly IZoneReader _zoneReader;
 
         public FireNadeModelFactory(IServiceProvider sp) : base(sp)
         {
             _sampleFactory = sp.GetRequiredService<ISampleFactory<FireNadeSample>>();
             _zoneFactory = sp.GetRequiredService<IZonePerformanceFactory<FireNadeSample, FireNadeZonePerformance>>();
+            _zoneReader = sp.GetRequiredService<IZoneReader>();
         }
 
         /// <summary>
@@ -34,14 +37,14 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         /// <returns></returns>
         public async Task<FireNadeModel> GetModel(long steamId, string map, List<long> matchIds)
         {
-            var samples = await _sampleFactory.LoadPlayerSamples(steamId, map, matchIds);
+            var samples = await _sampleFactory.LoadPlayerSamples(steamId, matchIds);
             return new FireNadeModel
             {
                 PlayerId = steamId,
                 Map = map,
                 Samples = samples,
-                ZoneData = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds,MapZoneType.FireNade),
-                RecentMatchesAnalyzedCount = matchIds.Count,
+                ZonePerformanceSummary = await _zoneFactory.ZonePerformanceSummary(steamId, samples, map, matchIds,ZoneType.FireNade),
+                ZoneInfos = _zoneReader.GetZones(ZoneType.FireNade, map).Values(),
             };
         }
     }

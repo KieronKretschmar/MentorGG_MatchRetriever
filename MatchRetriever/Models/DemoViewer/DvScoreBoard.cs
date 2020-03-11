@@ -13,7 +13,7 @@ namespace MatchRetriever.Models.DemoViewer
         public int TerroristRounds { get; set; }
         public bool OriginalSide { get; set; }
 
-        public Dictionary<long,DvPlayerScoreboardEntry> PlayerScores { get; set; }
+        public Dictionary<long, PlayerScoreboardEntry> PlayerScores { get; set; }
 
     }
 }

@@ -7,6 +7,6 @@ namespace MatchRetriever.Models.GrenadesAndKills
 {
     public interface ILineupPerformance
     {
-        public int CategoryId { get; set; }
+        public int LineupId { get; set; }
     }
 }

@@ -5,10 +5,14 @@ using System.Threading.Tasks;
 
 namespace MatchRetriever.Enumerals
 {
+    /// <summary>
+    /// Available options for DemoViewerQuality.
+    /// The values of this enum are in order from low to high.
+    /// </summary>
     public enum DemoViewerQuality : byte
     {
-        Low = 1,
-        Medium = 2,
-        High = 3,
+        Low = 10,
+        Medium = 20,
+        High = 30,
     }
 }

@@ -1,4 +1,6 @@
-﻿using MatchRetriever.Models.DemoViewer.Objects;
+﻿using MatchRetriever.Enumerals;
+using MatchRetriever.Helpers;
+using MatchRetriever.Models.DemoViewer.Objects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,57 +9,58 @@ using System.Web;
 
 namespace MatchRetriever.Models.DemoViewer
 {
-    [JsonObject(MemberSerialization.OptIn)]
     public class DemoViewerRoundModel
     {
+        public DemoViewerConfig Config { get; set; }
+
         // Match Stats
-        public DvRoundStats RoundStats;
+        public DvRoundStats RoundStats { get; set; }
 
-        public List<DvPlayerRoundStats> PlayerRoundStats;
+        public List<DvPlayerRoundStats> PlayerRoundStats { get; set; }
 
-        public List<DvOverTimeStats> OverTimeStats;
+        public List<DvOverTimeStats> OverTimeStats { get; set; }
         
-        public DvScoreboard PartialScoreboard;
+        public DvScoreboard PartialScoreboard { get; set; }
 
-        public List<DvBotTakeOver> BotTakeOvers;
+        public List<DvBotTakeOver> BotTakeOvers { get; set; }
 
 
         // Gun related Match Stats
-        public List<DvDamage> Damages;
+        public List<DvDamage> Damages { get; set; }
 
-        public List<DvWeaponFired> WeaponFireds;
+        public List<DvWeaponFired> WeaponFireds { get; set; }
 
-        public Dictionary<string, List<DvWeaponReload>> WeaponReloads;
+        public Dictionary<string, List<DvWeaponReload>> WeaponReloads { get; set; }
 
-        public List<DvKill> Kills;
+        public List<DvKill> Kills { get; set; }
 
         // Other Match Stats
-        public DvBombPlant BombPlant;
+        public DvBombPlant BombPlant { get; set; }
 
-        public DvBombDefused BombDefused;
+        public DvBombDefused BombDefused { get; set; }
 
-        public DvBombExplosion BombExplosion;
+        public DvBombExplosion BombExplosion { get; set; }
 
-        public Dictionary<string, List<DvItemSaved>> ItemSaveds;
+        public Dictionary<string, List<DvItemSaved>> ItemSaveds { get; set; }
 
-        public Dictionary<string, List<DvItemDropped>> ItemDroppeds;
+        public Dictionary<string, List<DvItemDropped>> ItemDroppeds { get; set; }
 
-        public Dictionary<string, List<DvItemPickedUp>> ItemPickedUps;
+        public Dictionary<string, List<DvItemPickedUp>> ItemPickedUps { get; set; }
 
-        public Dictionary<string, List<DvPlayerPosition>> PlayerPositions;
+        public Dictionary<string, List<DvPlayerPosition>> PlayerPositions { get; set; }
 
         // Grenades
-        public List<DvFlash> Flashes;
+        public List<DvFlash> Flashes { get; set; }
 
-        public Dictionary<string, List<DvFlashed>> Flasheds;
+        public Dictionary<string, List<DvFlashed>> Flasheds { get; set; }
 
-        public List<DvHE> HEs;
+        public List<DvHE> HEs { get; set; }
 
-        public List<DvSmoke> Smokes;
+        public List<DvSmoke> Smokes { get; set; }
 
-        public List<DvDecoy> Decoys;
+        public List<DvDecoy> Decoys { get; set; }
 
-        public List<DvFireNade> FireNades;
+        public List<DvFireNade> FireNades { get; set; }
 
     }
 

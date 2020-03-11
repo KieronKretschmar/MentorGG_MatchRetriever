@@ -9,7 +9,7 @@ namespace MatchRetriever.ModelFactories
 {
     public interface IMatchesModelFactory
     {
-        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, int offset);
+        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, int count, int offset);
     }
 
     public class MatchesModelFactory : ModelFactoryBase, IMatchesModelFactory
@@ -18,27 +18,36 @@ namespace MatchRetriever.ModelFactories
         {
         }
 
-        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, int offset)
+        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, int count, int offset)
         {
             var res = new MatchesModel();
 
-            res.MatchInfos = await CreateMatchInfos(allowedMatchIds);
-
-            // Compute and censor the forbidden MatchInfos for all his matches that are not included in the allowedMatchIds he supplied
-            var allMatchIds = _context.PlayerMatchStats
+            // Create MatchInfos for the users matches regarding count and offset
+            var matchIds = _context.PlayerMatchStats
                 .Where(x => x.SteamId == steamId)
-                .Select(x => x.MatchId)
+                .OrderByDescending(x => x.MatchStats.MatchDate)
+                .Skip(offset)
+                .Take(count)
+                .Select(x=>x.MatchId)
                 .ToList();
-            var forbiddenMatchIds = allMatchIds.Except(allowedMatchIds).ToList();
-            var forbiddenMatchInfos = await CreateMatchInfos(forbiddenMatchIds);
-            forbiddenMatchInfos.ForEach(x => CensorHiddenMatch(x));
 
-            res.HiddenMatchInfos = forbiddenMatchInfos;
+            res.MatchInfos = await CreateMatchInfos(matchIds, count, offset);
+
+            // Censor the forbidden MatchInfos for all his matches that are not included in the allowedMatchIds supplied
+            var forbiddenMatchIds = matchIds.Except(allowedMatchIds).ToList();
+            
+            foreach (var item in res.MatchInfos)
+            {
+                if (forbiddenMatchIds.Contains(item.MatchId))
+                {
+                    CensorHiddenMatch(item);
+                }
+            }
 
             return res;
         }
 
-        private async Task<List<MatchInfo>> CreateMatchInfos(List<long> matchIds)
+        private async Task<List<MatchInfo>> CreateMatchInfos(List<long> matchIds, int count, int offset)
         {
             var matchInfos = new List<MatchInfo>();
             foreach (var matchId in matchIds)
@@ -54,10 +63,10 @@ namespace MatchRetriever.ModelFactories
                     playerEntries[player.Team].Add(await CreatePlayerScoreboardEntry(player));
                 }
 
-                var scoreboard = new Scoreboard { TeamInfo = new Dictionary<StartingFaction, TeamInfo>() };
+                var scoreboard = new Scoreboard { TeamInfos = new Dictionary<StartingFaction, TeamInfo>() };
                 foreach (var startingFaction in playerEntries.Keys)
                 {
-                    scoreboard.TeamInfo[startingFaction] = new TeamInfo
+                    scoreboard.TeamInfos[startingFaction] = new TeamInfo
                     {
                         TeamName = startingFaction.ToString(),
                         Icon = "",
@@ -81,7 +90,7 @@ namespace MatchRetriever.ModelFactories
             }
 
             // Assign user Profiles in one large query instead of multiple small ones for efficiency reasons
-            var allSteamIds = matchInfos.SelectMany(x => x.Scoreboard.TeamInfo.SelectMany(y => y.Value.Players.Select(z => z.SteamId)))
+            var allSteamIds = matchInfos.SelectMany(x => x.Scoreboard.TeamInfos.SelectMany(y => y.Value.Players.Select(z => z.SteamId)))
                 .ToList();
             var allPlayerProfiles = await _steamUserOperator.GetUsers(allSteamIds);
 
@@ -89,9 +98,9 @@ namespace MatchRetriever.ModelFactories
             for (int matchIndex = 0; matchIndex < matchInfos.Count; matchIndex++)
             {
                 var scoreboard = matchInfos[matchIndex].Scoreboard;
-                foreach (var team in scoreboard.TeamInfo.Keys)
+                foreach (var team in scoreboard.TeamInfos.Keys)
                 {
-                    var teamInfo = scoreboard.TeamInfo[team];
+                    var teamInfo = scoreboard.TeamInfos[team];
                     for (int playerIndex = 0; playerIndex < teamInfo.Players.Count; playerIndex++)
                     {
                         var entry = teamInfo.Players[playerIndex];

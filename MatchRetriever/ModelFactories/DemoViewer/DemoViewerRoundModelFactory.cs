@@ -1,8 +1,11 @@
 ﻿using MatchRetriever.Enumerals;
+using MatchRetriever.Helpers;
 using MatchRetriever.Helpers.Trajectories;
 using MatchRetriever.Models;
 using MatchRetriever.Models.DemoViewer;
 using MatchRetriever.Models.DemoViewer.Objects;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,18 +16,33 @@ namespace MatchRetriever.ModelFactories.DemoViewer
 {
     public interface IDemoViewerRoundModelFactory
     {
-        Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality quality);
+        Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality);
     }
 
     public class DemoViewerRoundModelFactory : ModelFactoryBase, IDemoViewerRoundModelFactory
     {
+        private readonly IDemoViewerConfigProvider _demoViewerConfigProvider;
+
         public DemoViewerRoundModelFactory(IServiceProvider sp) : base(sp)
         {
+            _demoViewerConfigProvider = sp.GetRequiredService<IDemoViewerConfigProvider>();
         }
 
-        public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality quality)
+        public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality)
         {
             var model = new DemoViewerRoundModel();
+
+            // Take the lower quality of [availableQuality, requestedQuality]
+            var availableFramesPerSecond = _context.MatchStats.Single(x => x.MatchId == matchId).Config.FramesPerSecond;
+            model.Config = _demoViewerConfigProvider.GetHighestAvailableConfig(requestedQuality, availableFramesPerSecond);
+
+            if(model.Config.Quality < requestedQuality)
+            {
+                _logger.LogWarning(
+                    $"Requested quality [ {requestedQuality} ] was not available for match #[ {matchId} ] and round [ {roundNumber} ], " +
+                    $"Probably because only [ {availableFramesPerSecond} ] FPS were available. Using quality [ {model.Config.Quality} ] instead.");
+            }
+
             // Match Stats
             var roundStats = _context.RoundStats.Single(x => x.MatchId == matchId && x.Round == roundNumber);
             var map = roundStats.MatchStats.Map;
@@ -144,7 +162,6 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                 }
             }
 
-            // TODO: The queries with groupBy might be improved by first specifying and loading all the required data and performing the Grouping afterwards
             model.ItemSaveds = roundStats.ItemSaved
                         // Filter out entries with Equipment=0. Does not make sense, seems to be a bug in DemoAnalyzer
                         .Where(x => x.Equipment != 0)
@@ -211,14 +228,22 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                         })
                         .ToList()
                         .GroupBy(x => x.PlayerId)
-                        .ToDictionary(x => x.Key.ToString(), g => g.Select(x => new DvPlayerPosition()
-                        {
-                            Time = x.Time,
-                            Weapon = x.Weapon,
-                            PlayerView = x.PlayerViewX,
-                            PlayerPos = x.PlayerPos,
-                        })
-                        .ToList());
+                        // Apply Filtering for quality
+                        .ToDictionary(
+                            x => x.Key.ToString(), 
+                            // Reduce frames to the first of each frame every (1/FPS) seconds
+                            g => g
+                            .GroupBy(x=>x.Time % (1000 / model.Config.FramesPerSecond))
+                            .Select(x=>x.First())
+                            .Select(x => new DvPlayerPosition()
+                            {
+                                Time = x.Time,
+                                Weapon = x.Weapon,
+                                PlayerView = x.PlayerViewX,
+                                PlayerPos = x.PlayerPos,
+                            })
+                            .ToList()
+                        );
 
             #endregion
 
@@ -305,22 +330,23 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             var ctStarterRounds = roundResults.Count(x => x.WinnerTeam == MatchEntities.Enums.StartingFaction.CtStarter);
             scoreboard.TerroristRounds = scoreboard.OriginalSide ? terroristStarterRounds : ctStarterRounds;
             scoreboard.CtRounds = scoreboard.OriginalSide ? ctStarterRounds : terroristStarterRounds;
-
+            
             // Load scores of all Players who were active this round, including bots.
             scoreboard.PlayerScores = _context.PlayerRoundStats
                 .Where(x => x.MatchId == matchId && x.Round == cutoffRound)
-                .ToDictionary(x => x.PlayerId, x => new DvPlayerScoreboardEntry
+                .Select(x => new PlayerScoreboardEntry
                 {
+                    SteamId = x.PlayerId,
                     Kills = x.RoundStartKills,
                     Deaths = x.RoundStartDeaths,
                     Assists = x.RoundStartAssists,
                     MVPs = x.RoundStartMvps,
                     DamageDealt = x.RoundStartDamage,
                     Score = x.RoundStartScore,
-                    Team = x.PlayerMatchStats.Team,
                     RankBeforeMatch = x.PlayerMatchStats.RankBeforeMatch,
                     RankAfterMatch = x.PlayerMatchStats.RankAfterMatch,
-                });
+                })
+                .ToDictionary(x=> x.SteamId, x=>x);
 
             // Add Profiles to PlayerScores with only one call of GetUsers
             var distinctSteamIds = scoreboard.PlayerScores.Select(x=>x.Key).ToList();

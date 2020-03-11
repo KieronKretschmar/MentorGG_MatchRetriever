@@ -1,5 +1,5 @@
 [submodule "matchdb"]
-	path = matchdb
+	path = MatchDb
 	url = git@gitlab.com:mentorgg/csgo/matchdb.git
 [submodule "EquipmentLib"]
 	path = EquipmentLib

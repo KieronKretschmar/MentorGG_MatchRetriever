@@ -14,7 +14,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
         }
 
-        public async Task<List<SmokeSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
+        public async Task<List<SmokeSample>> LoadPlayerSamples(long steamId, List<long> matchIds)
         {
             var playerName = (await _steamUserOperator.GetUser(steamId)).SteamName;
             var recentAttempts = _context.Smoke.Where(x => x.PlayerId == steamId && matchIds.Contains(x.MatchId))
@@ -31,7 +31,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     DetonationPos = smoke.DetonationPos,
                     ReleasePos = smoke.PlayerPos,
                     LineupId = smoke.LineUp,
-                    PlayerViewX = smoke.PlayerView.X,
+                    PlayerView = smoke.PlayerView,
                     Trajectory = JsonConvert.DeserializeObject<List<TrajectoryPoint>>(smoke.Trajectory),
                 })
                 .ToList();

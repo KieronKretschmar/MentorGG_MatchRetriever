@@ -15,20 +15,15 @@ namespace MatchRetriever.Models.GrenadesAndKills
         /// </summary>
         public int TaggedAssists { get; set; } = 0;
 
-        public override FireNadeZonePerformance Absorb(FireNadeZonePerformance other)
+        public override void Absorb(FireNadeZonePerformance other)
         {
-            var res = new FireNadeZonePerformance
-            {
-                ZoneId = ZoneId,
-                IsCtZone = IsCtZone,
-                SampleCount = SampleCount + other.SampleCount,
-                DamagingNadesCount = DamagingNadesCount + other.DamagingNadesCount,
-                AmountHealth = AmountHealth + other.AmountHealth,
-                TaggedAssists = TaggedAssists + other.TaggedAssists,
-                MaxDamage = Math.Max(MaxDamage, other.MaxDamage)
-            };
-
-            return res;
+            ZoneId = ZoneId;
+            IsCtZone = IsCtZone;
+            SampleCount = SampleCount + other.SampleCount;
+            DamagingNadesCount = DamagingNadesCount + other.DamagingNadesCount;
+            AmountHealth = AmountHealth + other.AmountHealth;
+            TaggedAssists = TaggedAssists + other.TaggedAssists;
+            MaxDamage = Math.Max(MaxDamage, other.MaxDamage);
         }
     }
 

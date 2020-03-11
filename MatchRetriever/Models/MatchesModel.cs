@@ -9,12 +9,8 @@ namespace MatchRetriever.Models
     public class MatchesModel
     {
         public List<MatchInfo> MatchInfos = new List<MatchInfo>();
-        public List<MatchInfo> HiddenMatchInfos = new List<MatchInfo>();
     }
-}
 
-namespace MatchRetriever
-{
     public class MatchInfo
     {
         public long MatchId { get; set; }
@@ -27,9 +23,9 @@ namespace MatchRetriever
         public Scoreboard Scoreboard;
     }
 
-    public struct Scoreboard
+    public class Scoreboard
     {
-        public Dictionary<StartingFaction, TeamInfo> TeamInfo { get; set; }
+        public Dictionary<StartingFaction, TeamInfo> TeamInfos { get; set; }
     }
 
     public class TeamInfo
@@ -40,10 +36,10 @@ namespace MatchRetriever
         public List<PlayerScoreboardEntry> Players { get; set; }
     }
 
-    public struct PlayerScoreboardEntry
+    public class PlayerScoreboardEntry
     {
         public long SteamId { get; set; }
-        public Helpers.SteamUserOperator.SteamUser Profile { get; set; }
+        public Helpers.SteamUser Profile { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }
         public int Assists { get; set; }

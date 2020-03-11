@@ -15,6 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
@@ -25,10 +26,6 @@
     <ProjectReference Include="..\matchdb\Database\Database.csproj" />
     <ProjectReference Include="..\matchdb\matchentities\MatchEntities\MatchEntities.csproj" />
     <ProjectReference Include="..\ZoneReader\ZoneReader\ZoneReader.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\DemoViewer\Objects\" />
   </ItemGroup>
 
 

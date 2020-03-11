@@ -15,7 +15,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         }
 
 
-        public async Task<List<FireNadeSample>> LoadPlayerSamples(long steamId, string map, List<long> matchIds)
+        public async Task<List<FireNadeSample>> LoadPlayerSamples(long steamId, List<long> matchIds)
         {
             var recentAttempts = new List<FireNadeSample>();
             var playerName = (await _steamUserOperator.GetUser(steamId)).SteamName;

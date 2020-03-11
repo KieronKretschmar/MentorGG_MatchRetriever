@@ -27,8 +27,8 @@ namespace MatchRetriever.Controllers.v1
             this._roundFactory = roundFactory;
         }
 
-        [HttpGet("match/{matchId}")]
-        // GET /v1/public/match/<matchId>
+        [HttpGet("watch/match/{matchId}")]
+        // GET /v1/public/watch/match/1
         public async Task<DemoViewerMatchModel> GetMatch(long matchId)
         {
             // Try to parse quality and default to Low quality if value is invalid 
@@ -36,8 +36,8 @@ namespace MatchRetriever.Controllers.v1
             return model;
         }
 
-        [HttpGet("match/{matchId}/round/{round}")]
-        // GET /v1/public/match/<matchId>/round/<round>
+        [HttpGet("watch/match/{matchId}/round/{round}")]
+        // GET /v1/public/watch/match/1/round/1
         public async Task<DemoViewerRoundModel> GetRound(long matchId, short round, DemoViewerQuality quality)
         {
             // Try to parse quality and default to Low quality if value is invalid 

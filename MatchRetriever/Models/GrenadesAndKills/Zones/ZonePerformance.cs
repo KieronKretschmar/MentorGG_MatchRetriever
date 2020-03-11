@@ -9,7 +9,6 @@ namespace MatchRetriever.Models.GrenadesAndKills
     /// <summary>
     /// Holds data about a player's performance (regarding a particular aspect of the game) in a Zone.
     /// </summary>
-
     public abstract class ZonePerformance<TZonePerformance> where TZonePerformance: ZonePerformance<TZonePerformance>
     {
         public int? ZoneId { get; set; }
@@ -21,6 +20,6 @@ namespace MatchRetriever.Models.GrenadesAndKills
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public abstract TZonePerformance Absorb(TZonePerformance other);
+        public abstract void Absorb(TZonePerformance other);
     }
 }

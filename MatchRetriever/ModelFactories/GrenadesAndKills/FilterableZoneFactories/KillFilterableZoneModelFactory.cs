@@ -37,12 +37,10 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                 var filterablePerformance = new FilterableZonePerformance<KillZonePerformance, KillFilterSetting>
                 {
                     FilterSettings = filter,
-                    ZonePerformances = await _zoneFactory.ZonePerformanceSummary(steamId, validSamples, map, matchIds,MapZoneType.Position)
+                    ZonePerformances = await _zoneFactory.ZonePerformanceSummary(steamId, validSamples, map, matchIds,ZoneType.Position)
                 };
                 filterablePerformancesList.Add(filterablePerformance);
             }
-
-
 
             return filterablePerformancesList;
         }

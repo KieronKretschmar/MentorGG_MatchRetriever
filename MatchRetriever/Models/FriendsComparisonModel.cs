@@ -1,9 +1,7 @@
-﻿using MatchEntities.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static MatchRetriever.Helpers.SteamUserOperator;
 
 namespace MatchRetriever.Models
 {
@@ -80,13 +78,6 @@ namespace MatchRetriever.Models
             this.OtherSteamId = friendId;
             this.MatchIds = matchIds;
         }
-    }
-
-
-    public struct PlayerInfoModel
-    {
-        public SteamUser steamUser { get; set; }
-        public MatchMakingRank Rank { get; set; }
     }
     #endregion
 

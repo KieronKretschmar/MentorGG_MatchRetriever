@@ -36,9 +36,12 @@ namespace MatchRetriever.ModelFactories
                 .OrderBy(x=>x.MatchDate)
                 .ToList();
 
+            var dailyLimitReachedToday = allMatches.Where(x => x.MatchDate.DayOfYear == DateTime.Now.DayOfYear).Count() >= dailyLimit;
+
             return new MatchSelectionModel
             {
-                Matches = filteredMatches
+                Matches = filteredMatches,
+                DailyLimitReachedToday = dailyLimitReachedToday
             };
         }
     }

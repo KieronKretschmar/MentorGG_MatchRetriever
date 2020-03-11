@@ -18,7 +18,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         where TSample : ISample
         where TZonePerformance : ZonePerformance<TZonePerformance>
     {
-        Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string map, List<long> matchIds, MapZoneType zoneType);
+        Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string map, List<long> matchIds, ZoneType zoneType);
+        Task<ZonePerformanceSummary<TZonePerformance>> AllMapsZonePerformanceSummaryAsync(long steamId, List<TSample> samples, List<long> matchIds, ZoneType zoneType);
     }
 
     public abstract class ZonePerformanceFactory<TSample, TZonePerformance> : ModelFactoryBase, IZonePerformanceFactory<TSample, TZonePerformance>
@@ -53,9 +54,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         /// <param name="map"></param>
         /// <param name="matchIds"></param>
         /// <returns></returns>
-        public async Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string mapString, List<long> matchIds, MapZoneType zoneType)
+        public async Task<ZonePerformanceSummary<TZonePerformance>> ZonePerformanceSummary(long steamId, List<TSample> samples, string map, List<long> matchIds, ZoneType zoneType)
         {
-            var map = Enum.Parse<ZoneMap>(mapString);
             var zones = _zoneReader.GetZones(zoneType, map).Values();
 
             // Start with PreAggregation summary
@@ -71,15 +71,30 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             return summary;
         }
 
+        public async Task<ZonePerformanceSummary<TZonePerformance>> AllMapsZonePerformanceSummaryAsync(long steamId, List<TSample> samples, List<long> matchIds, ZoneType zoneType)
+        {
+            // Start with PreAggregation summary
+            var summary = await PreAggregationZonePerformanceSummary(steamId, samples, matchIds);
+            var zones = _zoneReader.GetZones(zoneType).Values();
+
+            //Fill in zones without a performance
+            FillInEmptyPerformances(zones, summary);
+
+            // Iterate through all zones that have parent zones, i.e. all except the main zone (which includes all other zones and has depth=0)
+            // Starting from the deepest subzones and going up the zone-hierachy each zone's performance is added to its parent zone's performance.
+            AbsorbPerformancesIntoParentZones(zones, summary);
+
+            return summary;
+        }
 
         private void AbsorbPerformancesIntoParentZones(List<Zone> zones, ZonePerformanceSummary<TZonePerformance> summary)
         {
             foreach (var item in zones.OrderByDescending(x => x.ZoneDepth).Where(x => x.ZoneDepth > 0))
             {
                 // Add this zones performance towards the performance of its parent zone
-                var thisZonePerformance = summary.ZonePerformances[item.Id];
+                var thisZonePerformance = summary.ZonePerformances[item.ZoneId];
                 var parentZonePerformance = summary.ZonePerformances[item.ParentZoneId];
-                parentZonePerformance = parentZonePerformance.Absorb(thisZonePerformance);
+                parentZonePerformance.Absorb(thisZonePerformance);
             }
         }
 
@@ -87,9 +102,9 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
         {
             foreach (var zone in zones)
             {
-                if (!summary.ZonePerformances.ContainsKey(zone.Id))
+                if (!summary.ZonePerformances.ContainsKey(zone.ZoneId))
                 {
-                    summary.ZonePerformances[zone.Id] = new TZonePerformance { ZoneId = zone.Id, IsCtZone = zone.IsCt, SampleCount = 0 };
+                    summary.ZonePerformances[zone.ZoneId] = new TZonePerformance { ZoneId = zone.ZoneId, IsCtZone = zone.IsCt, SampleCount = 0 };
                 }
             }
         }

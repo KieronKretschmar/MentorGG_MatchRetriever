@@ -8,15 +8,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetriever", "MatchRetr
 		{43DA9AA9-3D98-4FE5-80BA-360057DE8FA5} = {43DA9AA9-3D98-4FE5-80BA-360057DE8FA5}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "matchdb\Database\Database.csproj", "{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "MatchDb\Database\Database.csproj", "{CE6D8A61-59AC-4581-B788-A82B6B76FB9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "matchdb\matchentities\MatchEntities\MatchEntities.csproj", "{64103898-868E-46D2-A443-12217260E99E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchEntities", "MatchDb\MatchEntities\MatchEntities\MatchEntities.csproj", "{64103898-868E-46D2-A443-12217260E99E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchRetrieverTestProject", "MatchRetrieverTestProject\MatchRetrieverTestProject.csproj", "{484E971B-6382-418E-9AB8-31BEA234006C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentLib", "EquipmentLib\EquipmentLib\EquipmentLib.csproj", "{B0A76AD2-FA5B-4590-9A80-F12765A7BFED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZoneReader", "ZoneReader\ZoneReader\ZoneReader.csproj", "{43DA9AA9-3D98-4FE5-80BA-360057DE8FA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62F874D1-2007-4748-B3BD-3AB681D6D717}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

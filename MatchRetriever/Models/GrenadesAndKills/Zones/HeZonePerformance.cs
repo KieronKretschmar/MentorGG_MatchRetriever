@@ -16,22 +16,17 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public int Kills { get; set; } = 0;
         public int MaxDamage { get; set; } = 0;
 
-        public override HeZonePerformance Absorb(HeZonePerformance h2)
+        public override void Absorb(HeZonePerformance h2)
         {
-            var res = new HeZonePerformance
-            {
-                ZoneId = ZoneId,
-                IsCtZone = IsCtZone,
-                SampleCount = SampleCount + h2.SampleCount,
-                DamagingNadesCount = DamagingNadesCount + h2.DamagingNadesCount,
-                VictimCount = VictimCount + h2.VictimCount,
-                AmountHealth = AmountHealth + h2.AmountHealth,
-                AmountDamagePotential = AmountDamagePotential + h2.AmountDamagePotential,
-                AmountArmor = AmountArmor + h2.AmountArmor,
-                MaxDamage = Math.Max(MaxDamage, h2.MaxDamage)
-            };
-
-            return res;
+            ZoneId = ZoneId;
+            IsCtZone = IsCtZone;
+            SampleCount = SampleCount + h2.SampleCount;
+            DamagingNadesCount = DamagingNadesCount + h2.DamagingNadesCount;
+            VictimCount = VictimCount + h2.VictimCount;
+            AmountHealth = AmountHealth + h2.AmountHealth;
+            AmountDamagePotential = AmountDamagePotential + h2.AmountDamagePotential;
+            AmountArmor = AmountArmor + h2.AmountArmor;
+            MaxDamage = Math.Max(MaxDamage, h2.MaxDamage);
         }
     }
 }

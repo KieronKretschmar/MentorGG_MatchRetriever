@@ -25,8 +25,8 @@ namespace MatchRetriever.Misplays
             var map = _context.MatchStats.Single(x => x.MatchId == matchId).Map;
 
             //TODO OPTIMIZATION Fix zone loading for each match
-            var smokeZones = _zoneReader.GetSmokeZones(Enum.Parse<ZoneReader.Enums.ZoneMap>(map, true));
-            var idLineups = smokeZones.IdLineUps;
+            var smokeZones = _zoneReader.GetLineups(ZoneReader.Enums.LineupType.Smoke, Enum.Parse<ZoneReader.Enums.Map>(map, true));
+            var lineups = smokeZones.Lineups;
 
             var failedSmokes = _context.Smoke
                 .Where(x => x.MatchId == matchId && x.PlayerId == steamId && x.Result == MatchEntities.Enums.TargetResult.Miss)
@@ -39,7 +39,7 @@ namespace MatchRetriever.Misplays
                     Time = x.Time,
                     PlayerId = steamId,
                     LineupId = x.LineUp,
-                    LineupName = idLineups[x.LineUp].Name
+                    LineupName = lineups[x.LineUp].Name
                 })
                 .Select(x => x as Misplay)
                 .ToList();

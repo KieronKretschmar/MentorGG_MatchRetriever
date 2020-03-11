@@ -81,7 +81,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
             #endregion
 
             // summarize data for each DetonationZone
-            var zonePerformancesPreAggregate = samples
+            performance.ZonePerformances = samples
                 .GroupBy(x => x.ZoneId)
                 .Select(x => new
                 {
