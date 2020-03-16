@@ -74,6 +74,8 @@ namespace MatchRetriever
                     {
                         options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase");
                     });
+
+                    Console.WriteLine("WARNING: Running InMemory Database!");
             }
 
             #region Read environment variables
