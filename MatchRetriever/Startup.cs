@@ -176,7 +176,7 @@ namespace MatchRetriever
             {
                 if (STEAMUSEROPERATOR_URI != null)
                 {
-                    return new SteamUserOperator(services.GetService<ILogger>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
+                    return new SteamUserOperator(services.GetService<ILogger<SteamUserOperator>>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
                 }
                 else
                 {
