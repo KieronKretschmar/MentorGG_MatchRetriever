@@ -21,9 +21,9 @@ namespace MatchRetriever.Helpers
     {
         private readonly HttpClient Client;
         private readonly string steamUserOperatorUri;
-        private readonly ILogger _logger;
+        private readonly ILogger<SteamUserOperator> _logger;
 
-        public SteamUserOperator(ILogger logger, string steamUserOperatorUri)
+        public SteamUserOperator(ILogger<SteamUserOperator> logger, string steamUserOperatorUri)
         {
             Client = new HttpClient();
             this.steamUserOperatorUri = steamUserOperatorUri;
