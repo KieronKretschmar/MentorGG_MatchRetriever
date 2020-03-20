@@ -2,6 +2,7 @@
 using MatchRetriever.Helpers.Trajectories;
 using MatchRetriever.Models.GrenadesAndKills;
 using MatchRetriever.Models.GrenadesAndKillsOverviews;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -9,17 +10,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ZoneReader;
 
 namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
 {
     public class SmokeOverviewModelFactory : BaseOverviewModelFactory<SmokeOverviewMapSummary>
     {
+        private readonly IZoneReader _zoneReader;
+
         public SmokeOverviewModelFactory(IServiceProvider sp) : base(sp)
         {
-
+            _zoneReader = sp.GetRequiredService<IZoneReader>();
         }
 
-        protected override async Task<SmokeOverviewMapSummary> GetSummary(long steamId, List<long> matchIds)
+        protected override async Task<SmokeOverviewMapSummary> GetSummary(long steamId, string map, List<long> matchIds)
         {
             // Load Buys
             var buyList = _context.ItemPickedUp
@@ -47,6 +51,9 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                 })
                 .ToList();
 
+            // Load lineupCount
+            var lineupCount = _zoneReader.GetLineups(ZoneReader.Enums.LineupType.Smoke, map).Lineups.Count();
+
             var summary = new SmokeOverviewMapSummary
             {
                 BuysAsCt = buyList.Count(x => x.IsCt),
@@ -58,7 +65,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                 CompletedCategories = samples
                     .Where(x => x.Result == MatchEntities.Enums.TargetResult.Inside)
                     .Select(x=>x.LineUp).Distinct().Count(),
-                TotalCategories = samples.Select(x => x.LineUp).Distinct().Count()
+                TotalCategories = lineupCount
             };
 
             return summary;

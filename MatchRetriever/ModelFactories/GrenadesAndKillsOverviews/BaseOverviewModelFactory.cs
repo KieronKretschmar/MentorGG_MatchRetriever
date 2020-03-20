@@ -54,7 +54,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                     .Select(x => x.MatchId)
                     .ToList();
 
-                var summary = await GetSummary(playerId, mapMatchIds);
+                var summary = await GetSummary(playerId, map, mapMatchIds);
                 mapSummaries.Add(map, summary);
             }
             return mapSummaries;
@@ -67,7 +67,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
         /// <param name="map"></param>
         /// <param name="matchIds">Matches played on this map</param>
         /// <returns></returns>
-        protected abstract Task<TMapSummary> GetSummary(long playerId, List<long> matchIds);
+        protected abstract Task<TMapSummary> GetSummary(long playerId, string map, List<long> matchIds);
 
     }
 }
