@@ -42,7 +42,7 @@ namespace MatchRetriever.Helpers
 
             try
             {
-                var queryString = steamUserOperatorUri + "/users?steamIds=" + String.Join(steamIds.ToString(), ',');
+                var queryString = steamUserOperatorUri + "/users?steamIds=" + String.Join(',', steamIds.Select(x=>x.ToString()));
                 var response = await Client.GetAsync(queryString);
 
                 // throw exception if response is not succesful
