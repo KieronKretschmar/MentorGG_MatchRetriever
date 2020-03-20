@@ -45,6 +45,7 @@ namespace MatchRetriever.Helpers
             // Check if the argument value is null or empty
             if (String.IsNullOrEmpty(value))
             {
+                bindingContext.Result = ModelBindingResult.Success(new List<long>());
                 return Task.CompletedTask;
             }
 

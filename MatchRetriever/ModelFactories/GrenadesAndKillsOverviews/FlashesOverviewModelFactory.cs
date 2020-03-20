@@ -19,7 +19,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
 
         }
 
-        protected override async Task<FlashOverviewMapSummary> GetSummary(long steamId, List<long> matchIds)
+        protected override async Task<FlashOverviewMapSummary> GetSummary(long steamId, string map, List<long> matchIds)
         {
             var summary = new FlashOverviewMapSummary();
 

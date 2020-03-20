@@ -20,7 +20,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
 
         }
 
-        protected async override Task<KillOverviewMapSummary> GetSummary(long steamId, List<long> matchIds)
+        protected async override Task<KillOverviewMapSummary> GetSummary(long steamId, string map, List<long> matchIds)
         {
             var summary = new KillOverviewMapSummary();
 
