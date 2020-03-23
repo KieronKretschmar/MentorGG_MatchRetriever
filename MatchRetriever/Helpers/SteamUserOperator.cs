@@ -38,6 +38,11 @@ namespace MatchRetriever.Helpers
         /// <returns></returns>
         public async Task<List<SteamUser>> GetUsers(List<long> steamIds)
         {
+            if(steamIds.Count == 0)
+            {
+                return new List<SteamUser>();
+            }
+
             steamIds = steamIds.Distinct().ToList();
 
             try
