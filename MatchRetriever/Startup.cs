@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Database;
 using EquipmentLib;
 using MatchRetriever.Helpers;
+using MatchRetriever.Middleware;
 using MatchRetriever.Misplays;
 using MatchRetriever.ModelFactories;
 using MatchRetriever.ModelFactories.DemoViewer;
@@ -222,6 +223,8 @@ namespace MatchRetriever
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseEndpoints(endpoints =>
             {
