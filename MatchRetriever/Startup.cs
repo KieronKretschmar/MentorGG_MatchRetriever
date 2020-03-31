@@ -236,12 +236,6 @@ namespace MatchRetriever
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MatchRetriever");
             });
             #endregion
-
-            // migrate if this is not an inmemory database
-            if (services.GetRequiredService<MatchContext>().Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-            {
-                services.GetRequiredService<MatchContext>().Database.Migrate();
-            }
         }
     }
 }
