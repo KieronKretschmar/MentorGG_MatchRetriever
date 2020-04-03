@@ -49,7 +49,7 @@ namespace MatchRetriever.ModelFactories
             var signum = showBest ? 1 : -1;
             var importantPerformances = performances
                 .Where(x=> allZones.Single(y=>y.ZoneId == x.ZoneId).ZoneDepth > 0)
-                .OrderBy(x => signum * EstimatedKd(x, priorAlpha, priorBeta))
+                .OrderByDescending(x => signum * EstimatedKd(x, priorAlpha, priorBeta))
                 .Take(count)
                 .ToList();
 
