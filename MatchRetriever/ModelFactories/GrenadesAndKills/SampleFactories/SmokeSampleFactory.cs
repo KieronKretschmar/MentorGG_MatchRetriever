@@ -25,6 +25,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     SteamId = smoke.PlayerId,
                     PlayerName = playerName,
                     Round = smoke.Round,
+                    Time = smoke.Time,
                     UserIsCt = smoke.IsCt,
                     TargetId = smoke.Target,
                     Result = smoke.Result,

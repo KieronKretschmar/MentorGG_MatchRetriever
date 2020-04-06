@@ -27,6 +27,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     SteamId = flash.PlayerId,
                     PlayerName = playerName,
                     Round = flash.Round,
+                    Time = flash.Time,
                     UserIsCt = flash.IsCt,
                     ZoneId = flash.DetonationZoneByTeam,
                     Flasheds = flash.Flashed.Select(flashed => new FlashSample.Flashed

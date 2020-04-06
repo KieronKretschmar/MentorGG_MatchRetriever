@@ -15,6 +15,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public string PlayerName { get; set; }
         public long GrenadeId { get; set; }
         public short Round { get; set; }
+        public long Time { get; set; }
         public bool UserIsCt { get; set; }
         public Vector3 ReleasePos { get; set; }
         public Vector3 DetonationPos { get; set; }

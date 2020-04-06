@@ -13,6 +13,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
         string PlayerName { get; set; }
         long MatchId { get; set; }
         short Round { get; set; }
+        long Time {get; set;}
         bool UserIsCt { get; set; }
     }
 }

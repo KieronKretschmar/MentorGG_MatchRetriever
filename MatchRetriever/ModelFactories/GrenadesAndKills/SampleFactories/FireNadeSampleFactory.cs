@@ -34,6 +34,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     PlayerName = playerName,
                     GrenadeId = grenade.GrenadeId,
                     Round = grenade.Round,
+                    Time = grenade.Time,
                     UserIsCt = grenade.IsCt,
                     ZoneId = grenade.DetonationZoneByTeam,
                     Victims = grenade.Damage.GroupBy(dmg => dmg.VictimId).Select(g => new FireNadeSample.FireNadeVictim
