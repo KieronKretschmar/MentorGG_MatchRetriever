@@ -12,6 +12,7 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public long MatchId { get; set; }
         public long KillId { get; set; }
         public short Round { get; set; }
+        public long Time { get; set;}
         public long SteamId { get; set; }
         public string PlayerName { get; set; }
         public long VictimId { get; set; }

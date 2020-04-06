@@ -24,6 +24,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     MatchId = he.MatchId,
                     GrenadeId = he.GrenadeId,
                     Round = he.Round,
+                    Time = he.Time,
                     SteamId = he.PlayerId,
                     PlayerName = playerName,
                     UserIsCt = he.IsCt,
