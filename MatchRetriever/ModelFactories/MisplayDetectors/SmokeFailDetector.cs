@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using ZoneReader;
@@ -14,18 +15,29 @@ namespace MatchRetriever.Misplays
     public class SmokeFailDetector : Subdetector<SmokeFail>, ISmokeFailDetector
     {
         private IZoneReader _zoneReader;
+        private ILogger<SmokeFailDetector> _logger;
 
         public SmokeFailDetector(IServiceProvider sp) : base(sp)
         {
             _zoneReader = sp.GetRequiredService<IZoneReader>();
+            _logger = sp.GetRequiredService<ILogger<SmokeFailDetector>>();
         }
 
         public override ISituationCollection ComputeMisplays(long steamId, long matchId)
         {
             var map = _context.MatchStats.Single(x => x.MatchId == matchId).Map;
 
+            //If the map could not be parsed to the enum, return an empty collection.
+            //This is the case if no lineup or zones are defined for a map
+            if (!Enum.TryParse(map, true, out ZoneReader.Enums.Map mapFromEnum))
+            {
+                _logger.LogInformation($"Received SmokeFailDetector request for map {map} and match {matchId}. No zones are defined for this map," +
+                    $"\n returning empty misplay colllection");
+                return new SituationCollection<SmokeFail>();
+            }
+
             //TODO OPTIMIZATION Fix zone loading for each match
-            var smokeZones = _zoneReader.GetLineups(ZoneReader.Enums.LineupType.Smoke, Enum.Parse<ZoneReader.Enums.Map>(map, true));
+            var smokeZones = _zoneReader.GetLineups(ZoneReader.Enums.LineupType.Smoke, mapFromEnum);
             var lineups = smokeZones.Lineups;
 
             var failedSmokes = _context.Smoke

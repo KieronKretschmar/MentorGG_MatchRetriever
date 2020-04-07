@@ -234,7 +234,10 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                             // Reduce frames to the first of each frame every (1/FPS) seconds
                             g => g
                             .GroupBy(x=>x.Time % (1000 / model.Config.FramesPerSecond))
-                            .Select(x=>x.First())
+                            // Take last (!) available frame of each interval
+                            // Reason: Non-moving players do not generate PlayerPosition entries, and missing the last position 
+                            // of a player before stillstand would lead to him appearing in the wrong position until he moves again
+                            .Select(x=>x.Last())
                             .Select(x => new DvPlayerPosition()
                             {
                                 Time = x.Time,
