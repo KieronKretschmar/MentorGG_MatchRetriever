@@ -35,13 +35,15 @@ namespace MatchRetrieverTestProject
             // Create MatchStats with known MatchDates
             var matches = new List<MatchStats>
             {
-                new MatchStats{MatchId = 1, MatchDate = firstDay.AddDays(0)},
-                new MatchStats{MatchId = 2, MatchDate = firstDay.AddDays(1.1)},
-                new MatchStats{MatchId = 3, MatchDate = firstDay.AddDays(1.2)},
-                new MatchStats{MatchId = 4, MatchDate = firstDay.AddDays(1.3)},
-                new MatchStats{MatchId = 5, MatchDate = firstDay.AddDays(1.6)}, // With dailyLimit=3, this one is supposed to be ignored
-                new MatchStats{MatchId = 6, MatchDate = firstDay.AddDays(2.0)},
-                new MatchStats{MatchId = 7, MatchDate = firstDay.AddDays(3.0)},
+                new MatchStats{MatchId = 1, MatchDate = firstDay.AddDays(0)}, // allowed (none before)
+                new MatchStats{MatchId = 2, MatchDate = firstDay.AddDays(1.1)}, // allowed (none before)
+                new MatchStats{MatchId = 3, MatchDate = firstDay.AddDays(1.2)}, // allowed (only 2 allowed within 24h)
+                new MatchStats{MatchId = 4, MatchDate = firstDay.AddDays(1.3)}, // allowed (only 2,3 allowed within 24h)
+                new MatchStats{MatchId = 5, MatchDate = firstDay.AddDays(1.6)}, // ignored (2,3,4 allowed within 24h)
+                new MatchStats{MatchId = 6, MatchDate = firstDay.AddDays(2.0)}, // ignored (2,3,4 allowed within 24h)
+                new MatchStats{MatchId = 7, MatchDate = firstDay.AddDays(2.15)}, // allowed (only 3,4 allowed within 24h)
+                new MatchStats{MatchId = 8, MatchDate = firstDay.AddDays(2.17)}, // ignored (3,4,7 allowed within 24h)
+                new MatchStats{MatchId = 9, MatchDate = firstDay.AddDays(2.25)}, // allowed (only 4,7 allowed within 24h)
             };
             context.MatchStats.AddRange(matches);
             // Create PlayerMatchStats
@@ -59,9 +61,8 @@ namespace MatchRetrieverTestProject
             var model = await factory.GetModel(steamId, dailyLimit);
 
             //// Assert
-
-            // Check that all matches except #4 are returned
-            CollectionAssert.AreEqual(new List<long> { 1, 2, 3, 4, 6, 7 }, model.Matches.Select(x => x.MatchId).ToList());
+            // Check that the correct matches are returned
+            CollectionAssert.AreEqual(new List<long> { 1, 2, 3, 4, 7, 9 }, model.Matches.Select(x => x.MatchId).ToList());
         }
     }
 }

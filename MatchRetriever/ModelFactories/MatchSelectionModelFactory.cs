@@ -17,6 +17,13 @@ namespace MatchRetriever.ModelFactories
         {
         }
 
+        /// <summary>
+        /// Returns the allowed matches for the user.
+        /// Each match that was played by the user with less than n=dailyLimit allowed matches within a 24h our timeframe before it, is allowed.
+        /// </summary>
+        /// <param name="steamId"></param>
+        /// <param name="dailyLimit"></param>
+        /// <returns></returns>
         public async Task<MatchSelectionModel> GetModel(long steamId, int dailyLimit)
         {
             var allMatches = _context.PlayerMatchStats.Where(x => x.SteamId == steamId)
@@ -29,19 +36,23 @@ namespace MatchRetriever.ModelFactories
                 })
                 .ToList();
 
-            // apply the daily limit
-            var filteredMatches = allMatches.GroupBy(x => x.MatchDate.DayOfYear)
-                .OrderByDescending(x => x.Key)
-                .SelectMany(x => x.OrderBy(y => y.MatchDate).Take(dailyLimit))
-                .OrderBy(x=>x.MatchDate)
-                .ToList();
+            // Apply the daily limit
+            List<MatchSelectionModel.Match> allowedMatches = new List<MatchSelectionModel.Match>();
+            foreach (var match in allMatches)
+            {
+                // Add all matches for which none more than dailyLimit allowed matches were played within the 24h before
+                if(allowedMatches.Count(x=> match.MatchDate.AddDays(-1) <= x.MatchDate && x.MatchDate < match.MatchDate) < dailyLimit)
+                {
+                    allowedMatches.Add(match);
+                }
+            }
 
-            var dailyLimitReachedToday = allMatches.Where(x => x.MatchDate.DayOfYear == DateTime.Now.DayOfYear).Count() >= dailyLimit;
+            var dailyLimitReached = allowedMatches.Where(x => x.MatchDate.AddDays(-1) <= DateTime.Now).Count() >= dailyLimit;
 
             return new MatchSelectionModel
             {
-                Matches = filteredMatches,
-                DailyLimitReachedToday = dailyLimitReachedToday
+                Matches = allowedMatches,
+                DailyLimitReached = dailyLimitReached
             };
         }
     }
