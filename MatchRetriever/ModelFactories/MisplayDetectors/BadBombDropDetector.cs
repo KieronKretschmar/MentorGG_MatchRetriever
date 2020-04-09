@@ -39,12 +39,17 @@ namespace MatchRetriever.Misplays
 
 
             // Compute data required for ClosestTeammateDistance
-            var playerTeam = _context.PlayerMatchStats
-                .Single(x => x.MatchId == matchId && x.SteamId == steamId)
-                .Team;
+            var playerStats = _context.PlayerMatchStats
+                .SingleOrDefault(x => x.MatchId == matchId && x.SteamId == steamId);
+
+            // If playerstats is null, return an empty list
+            if (playerStats == null)
+            {
+                return new SituationCollection<BadBombDrop>();
+            }
 
             var teammateSteamIds = _context.PlayerMatchStats
-                .Where(x => x.MatchId == matchId && x.Team == playerTeam && x.SteamId != steamId)
+                .Where(x => x.MatchId == matchId && x.Team == playerStats.Team && x.SteamId != steamId)
                 .Select(x => x.SteamId)
                 .ToList();
 
