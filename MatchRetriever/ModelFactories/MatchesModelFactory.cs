@@ -9,7 +9,7 @@ namespace MatchRetriever.ModelFactories
 {
     public interface IMatchesModelFactory
     {
-        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, int count, int offset);
+        Task<MatchesModel> GetModel(long steamId, List<long> matchIds, List<long> ignoredMatchIds, int count, int offset);
     }
 
     public class MatchesModelFactory : ModelFactoryBase, IMatchesModelFactory
@@ -18,13 +18,13 @@ namespace MatchRetriever.ModelFactories
         {
         }
 
-        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, int count, int offset)
+        public async Task<MatchesModel> GetModel(long steamId, List<long> allowedMatchIds, List<long> ignoredMatchIds, int count, int offset)
         {
             var res = new MatchesModel();
 
             // Create MatchInfos for the users matches regarding count and offset
             var matchIds = _context.PlayerMatchStats
-                .Where(x => x.SteamId == steamId)
+                .Where(x => x.SteamId == steamId && !ignoredMatchIds.Contains(x.MatchId))
                 .OrderByDescending(x => x.MatchStats.MatchDate)
                 .Skip(offset)
                 .Take(count)
