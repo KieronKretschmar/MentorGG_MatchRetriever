@@ -62,6 +62,10 @@ namespace MatchRetriever.Models.DemoViewer
 
         public List<DvFireNade> FireNades { get; set; }
 
+        public struct DemoViewerConfig
+        {
+            public DemoViewerQuality Quality { get; set; }
+            public double FramesPerSecond { get; set; }
+        }
     }
-
 }

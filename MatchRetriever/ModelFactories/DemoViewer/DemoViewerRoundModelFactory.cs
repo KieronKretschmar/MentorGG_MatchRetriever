@@ -21,28 +21,29 @@ namespace MatchRetriever.ModelFactories.DemoViewer
 
     public class DemoViewerRoundModelFactory : ModelFactoryBase, IDemoViewerRoundModelFactory
     {
-        private readonly IDemoViewerConfigProvider _demoViewerConfigProvider;
-
         public DemoViewerRoundModelFactory(IServiceProvider sp) : base(sp)
         {
-            _demoViewerConfigProvider = sp.GetRequiredService<IDemoViewerConfigProvider>();
         }
 
+        /// <summary>
+        /// Returns the DemoViewerRoundModel.
+        /// </summary>
+        /// <param name="matchId"></param>
+        /// <param name="roundNumber"></param>
+        /// <param name="requestedQuality">Currently unused</param>
+        /// <returns></returns>
         public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality)
         {
             var model = new DemoViewerRoundModel();
 
-            // Take the lower quality of [availableQuality, requestedQuality]
-            var availableFramesPerSecond = _context.MatchStats.Single(x => x.MatchId == matchId).Config.FramesPerSecond;
-            model.Config = _demoViewerConfigProvider.GetHighestAvailableConfig(requestedQuality, availableFramesPerSecond);
-
-            if(model.Config.Quality < requestedQuality)
-            {
-                _logger.LogWarning(
-                    $"Requested quality [ {requestedQuality} ] was not available for match #[ {matchId} ] and round [ {roundNumber} ], " +
-                    $"Probably because only [ {availableFramesPerSecond} ] FPS were available. Using quality [ {model.Config.Quality} ] instead.");
-            }
-
+            // Take all the fps available
+            var availableConfig = _context.MatchStats.Single(x => x.MatchId == matchId).Config;
+            model.Config = new DemoViewerRoundModel.DemoViewerConfig
+            { 
+                Quality = requestedQuality,
+                FramesPerSecond = availableConfig.FramesPerSecond
+            };
+            
             // Match Stats
             var roundStats = _context.RoundStats.Single(x => x.MatchId == matchId && x.Round == roundNumber);
             var map = roundStats.MatchStats.Map;
@@ -228,16 +229,9 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                         })
                         .ToList()
                         .GroupBy(x => x.PlayerId)
-                        // Apply Filtering for quality
                         .ToDictionary(
                             x => x.Key.ToString(), 
-                            // Reduce frames to the first of each frame every (1/FPS) seconds
                             g => g
-                            .GroupBy(x=>x.Time % (1000 / model.Config.FramesPerSecond))
-                            // Take last (!) available frame of each interval
-                            // Reason: Non-moving players do not generate PlayerPosition entries, and missing the last position 
-                            // of a player before stillstand would lead to him appearing in the wrong position until he moves again
-                            .Select(x=>x.Last())
                             .Select(x => new DvPlayerPosition()
                             {
                                 Time = x.Time,

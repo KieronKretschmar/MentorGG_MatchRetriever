@@ -192,7 +192,6 @@ namespace MatchRetriever
             {
                 return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
             });
-            services.AddSingleton<IDemoViewerConfigProvider, DemoViewerConfigProvider>();
             services.AddSingleton<IZoneReader, FileReader>(services =>
             {
                 return new FileReader(services.GetService<ILogger<FileReader>>(), ZONEREADER_RESOURCE_PATH);
