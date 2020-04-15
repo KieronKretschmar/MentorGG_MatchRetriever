@@ -10,6 +10,11 @@ namespace MatchRetriever.Models
     {
         public List<Match> Matches{ get; set; }
         public bool DailyLimitReached { get; set; }
+
+        /// <summary>
+        /// If DailyLimitReached is true, then this is the time after which the next match will be allowed again.
+        /// </summary>
+        public DateTime DailyLimitEnds { get; set; }
         public struct Match
         {
             public long MatchId { get; set; }

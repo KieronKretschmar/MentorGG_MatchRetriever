@@ -48,11 +48,13 @@ namespace MatchRetriever.ModelFactories
             }
 
             var dailyLimitReached = allowedMatches.Where(x => x.MatchDate.AddDays(-1) <= DateTime.Now).Count() >= dailyLimit;
+            DateTime dailyLimitEnds = dailyLimitReached ? allowedMatches.OrderByDescending(x=>x.MatchDate).Skip(dailyLimit - 1).First().MatchDate.AddDays(1) : DateTime.MinValue;
 
             return new MatchSelectionModel
             {
                 Matches = allowedMatches,
-                DailyLimitReached = dailyLimitReached
+                DailyLimitReached = dailyLimitReached,
+                DailyLimitEnds = dailyLimitEnds
             };
         }
     }
