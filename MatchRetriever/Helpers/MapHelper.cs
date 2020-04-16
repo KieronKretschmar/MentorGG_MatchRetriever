@@ -19,7 +19,7 @@ namespace MatchRetriever.Helpers
             { "de_cbble", new Map(false, 700000) },
             { "de_train", new Map(true, 800000) },
             { "de_aztec", new Map(false, 900000) },
-            { "de_vertigo", new Map(false, 1100000) },
+            { "de_vertigo", new Map(true, 1100000) },
             { "de_dust", new Map(false, 1200000) },
             { "cs_italy", new Map(false, 1300000) },
             { "cs_office", new Map(false, 1400000) },
