@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2020-04-22
 ### Added
 - Change MatchSelection algorithm back to 24h limit resetting at midnight UTC
+- Change DateTimeHandling to UTC
 
 ## [1.2.0] - 2020-04-22
 ### Added
