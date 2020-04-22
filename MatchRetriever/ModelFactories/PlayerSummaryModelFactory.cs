@@ -1,4 +1,6 @@
 ﻿using Database;
+using MatchEntities.Enums;
+using MatchRetriever.Enumerals;
 using MatchRetriever.Models;
 using System;
 using System.Collections.Generic;
@@ -26,32 +28,34 @@ namespace MatchRetriever.ModelFactories
             var matches = _context.PlayerMatchStats
                 .Where(x => x.SteamId == steamId)
                 .OrderByDescending(x => x.MatchStats.MatchDate)
-                .Select(x => new
-                {
-                    x.MatchStats.MatchDate,
-                    x.MatchStats.Source,
-                    x.MatchStats.Map,
-                    x.RankBeforeMatch,
-                    x.RankAfterMatch,
-                    x.HltvRating1,
-                    x.RealDeaths,
-                    x.RealKills,
-                    x.HsKills,
-                    PlayerMatchOutcome = x.MatchStats.WinnerTeam == MatchEntities.Enums.StartingFaction.Spectate
-                        ? WinTieLose.Tie
-                        : x.MatchStats.WinnerTeam == x.Team
-                            ? WinTieLose.Win
-                            : WinTieLose.Lose,
+                .Select(x => new PlayerSummaryModel.PlayerMatchSummary
+                {                    
+                    MatchDate = x.MatchStats.MatchDate,
+                    Source = x.MatchStats.Source,
+                    Map = x.MatchStats.Map,
+                    RankBeforeMatch = x.RankBeforeMatch,
+                    RankAfterMatch = x.RankAfterMatch,
+                    HltvRating1 = x.HltvRating1,
+                    Deaths = x.RealDeaths,
+                    Kills = x.RealKills,
+                    HsKills = x.HsKills,
+                    PlayerMatchOutcome = x.MatchStats.WinnerTeam == StartingFaction.Spectate
+                                            ? WinTieLose.Tie
+                                            : x.MatchStats.WinnerTeam == x.Team
+                                                ? WinTieLose.Win
+                                                : WinTieLose.Lose
                 })
                 .ToList();
+
+            model.Matches = matches;
 
             model.GamesWon = matches.Count(x => x.PlayerMatchOutcome == WinTieLose.Win);
             model.GamesLost = matches.Count(x => x.PlayerMatchOutcome == WinTieLose.Lose);
             model.GamesTied = matches.Count(x => x.PlayerMatchOutcome == WinTieLose.Tie);
             model.AverageHltvRating = matches.Any() ? matches.Average(x => x.HltvRating1) : 0;
-            model.Kills = matches.Select(x => (int?)x.RealKills).Sum() ?? 0;
+            model.Kills = matches.Select(x => (int?)x.Kills).Sum() ?? 0;
             model.HsKills = matches.Select(x => (int?)x.HsKills).Sum() ?? 0;
-            model.Deaths = matches.Select(x => (int?)x.RealDeaths).Sum() ?? 0;
+            model.Deaths = matches.Select(x => (int?)x.Deaths).Sum() ?? 0;
 
             // MatchmakingRank related
             var matchmakingMatches = matches
@@ -91,13 +95,6 @@ namespace MatchRetriever.ModelFactories
             }
 
             return model;
-        }
-
-        private enum WinTieLose : byte
-        {
-            Win,
-            Tie,
-            Lose,
         }
     }
 }
