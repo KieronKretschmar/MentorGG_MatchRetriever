@@ -52,6 +52,7 @@ namespace MatchRetriever
                     // Serialize longs (steamIds) as strings
                     x.SerializerSettings.Converters.Add(new LongToStringConverter());
                     x.SerializerSettings.Converters.Add(new PolygonConverter());
+                    x.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
                 });
 
             services.AddLogging(services =>

@@ -19,7 +19,7 @@ namespace MatchRetriever.ModelFactories
 
         /// <summary>
         /// Returns the allowed matches for the user.
-        /// Each match that was played by the user with less than n=dailyLimit allowed matches within a 24h our timeframe before it, is allowed.
+        /// Users are allowed `dailyLimit` matches for each day, with the reset occuring at 00:00 UTC.
         /// </summary>
         /// <param name="steamId"></param>
         /// <param name="dailyLimit"></param>
@@ -36,25 +36,26 @@ namespace MatchRetriever.ModelFactories
                 })
                 .ToList();
 
-            // Apply the daily limit
-            List<MatchSelectionModel.Match> allowedMatches = new List<MatchSelectionModel.Match>();
-            foreach (var match in allMatches)
-            {
-                // Add all matches for which none more than dailyLimit allowed matches were played within the 24h before
-                if(allowedMatches.Count(x=> match.MatchDate.AddDays(-1) <= x.MatchDate && x.MatchDate < match.MatchDate) < dailyLimit)
-                {
-                    allowedMatches.Add(match);
-                }
-            }
+            // apply the daily limit
+            var allowedMatches = allMatches.GroupBy(x => x.MatchDate.ToUniversalTime().DayOfYear)
+                .OrderByDescending(x => x.Key)
+                .SelectMany(x => x
+                    .OrderBy(y => y.MatchDate)
+                    .Take(dailyLimit))
+                .OrderBy(x=>x.MatchDate)
+                .ToList();
 
-            var dailyLimitReached = allowedMatches.Where(x => x.MatchDate.AddDays(-1) <= DateTime.Now).Count() >= dailyLimit;
-            DateTime dailyLimitEnds = dailyLimitReached ? allowedMatches.OrderByDescending(x=>x.MatchDate).Skip(dailyLimit - 1).First().MatchDate.AddDays(1) : DateTime.MinValue;
+            var dailyLimitReached = allMatches
+                .Where(x => x.MatchDate.ToUniversalTime().DayOfYear == DateTime.Now.ToUniversalTime().DayOfYear)
+                .Count() > dailyLimit;
+
+            DateTime dailyLimitEnds = DateTime.Now.AddDays(1).ToUniversalTime();
 
             return new MatchSelectionModel
             {
                 Matches = allowedMatches,
                 DailyLimitReached = dailyLimitReached,
-                DailyLimitEnds = dailyLimitEnds
+                DailyLimitEnds = dailyLimitEnds,
             };
         }
     }
