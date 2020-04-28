@@ -64,7 +64,6 @@ namespace MatchRetriever
                 {
                     o.TimestampFormat = "[yyyy-MM-dd HH:mm:ss zzz] ";
                 });
-                services.AddDebug();
             });
             #endregion
 
