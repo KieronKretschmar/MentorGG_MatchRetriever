@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Database;
 using EquipmentLib;
+using MatchRetriever.Configuration;
 using MatchRetriever.Helpers;
 using MatchRetriever.Middleware;
 using MatchRetriever.Misplays;
@@ -146,6 +147,12 @@ namespace MatchRetriever
             services.AddTransient<IOverviewModelFactory<SmokeOverviewMapSummary>, SmokeOverviewModelFactory>();
             services.AddTransient<IOverviewModelFactory<KillOverviewMapSummary>, KillOverviewModelFactory>();
 
+
+            #endregion
+
+            # region Subscription Configuration
+
+            services.AddTransient<SubscriptionConfigLoader>();
 
             #endregion
 
