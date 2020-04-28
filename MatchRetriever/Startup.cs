@@ -203,15 +203,19 @@ namespace MatchRetriever
             });
             #endregion
 
-            // Enable versioning
-            // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
+            #region MVC
             services.AddMvc();
+            #endregion
+
+            #region Version
+            // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
             services.AddApiVersioning(o =>
             {
                 o.ReportApiVersions = true;
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(1, 0);
             });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
