@@ -45,6 +45,7 @@ namespace MatchRetriever
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Controllers
             services.AddControllers()
                 .AddNewtonsoftJson(x => 
                 {
@@ -54,7 +55,9 @@ namespace MatchRetriever
                     x.SerializerSettings.Converters.Add(new PolygonConverter());
                     x.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
                 });
+            #endregion
 
+            #region Logging
             services.AddLogging(services =>
             {
                 services.AddConsole(o =>
@@ -63,7 +66,9 @@ namespace MatchRetriever
                 });
                 services.AddDebug();
             });
+            #endregion
 
+            #region MatchData Mysql
             // if a connectionString is set use mysql, else use InMemory
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
@@ -79,6 +84,7 @@ namespace MatchRetriever
 
                     Console.WriteLine("WARNING: Running InMemory Database!");
             }
+            #endregion
 
             #region Read environment variables
             var STEAMUSEROPERATOR_URI = Configuration.GetValue<string>("STEAMUSEROPERATOR_URI");
@@ -106,7 +112,6 @@ namespace MatchRetriever
                 options.EnableAnnotations();
             });
             #endregion
-
 
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
