@@ -7,10 +7,16 @@ using Newtonsoft.Json.Linq;
 
 namespace MatchRetriever.Configuration
 {
+    public interface ISubscriptionConfigLoader
+    {
+        SubscriptionSettings SettingFromSubscriptionType(SubscriptionType subscriptionType);
+        SubscriptionConfig Config { get; }
+    }
+
     /// <summary>
     /// Responsible for loading the User Subscription Config.
     /// </summary>
-    public class SubscriptionConfigLoader
+    public class SubscriptionConfigLoader: ISubscriptionConfigLoader
     {
         /// <summary>
         /// Location of th configuration file

@@ -152,7 +152,7 @@ namespace MatchRetriever
 
             # region Subscription Configuration
 
-            services.AddSingleton<SubscriptionConfigLoader>();
+            services.AddSingleton<ISubscriptionConfigLoader, SubscriptionConfigLoader>();
 
             #endregion
 
