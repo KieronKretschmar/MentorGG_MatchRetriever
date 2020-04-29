@@ -13,3 +13,5 @@ Retrieve data from Match Database.
 
 ## Additional Information
 - Upon Startup, this project runs migrations on MatchDb.
+
+- A SubscriptionConfig file is expected at `/app/config/subscriptions.json`
