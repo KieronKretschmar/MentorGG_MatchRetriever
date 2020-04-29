@@ -55,7 +55,13 @@ namespace MatchRetriever.ModelFactories
 
         #endregion
 
-        matches = ApplyInaccessibleLimit(matches, config.MatchAccessDurationInDays);
+        # region Apply Inaccessible Limit
+        // If the value of MatchAccessDurationInDays is NOI -1, apply the limit.
+        if (config.MatchAccessDurationInDays != -1)
+        {
+            matches = ApplyInaccessibleLimit(matches, config.MatchAccessDurationInDays);
+        }
+        #endregion
 
         #region Apply Daily Limit
         // If the value of DailyMatchesLimit is NOI -1, apply the limit.
