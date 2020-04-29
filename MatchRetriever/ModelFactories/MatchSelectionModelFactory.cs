@@ -38,6 +38,7 @@ namespace MatchRetriever.ModelFactories
             Matches = null,
             DailyLimitReached = false,
             DailyLimitEnds = DateTime.MaxValue,
+            InaccessibleBefore = DateTime.MinValue,
         };
 
         var config = _subscriptionConfigLoader.SettingFromSubscriptionType(subscriptionType);
@@ -59,7 +60,11 @@ namespace MatchRetriever.ModelFactories
         // If the value of MatchAccessDurationInDays is NOI -1, apply the limit.
         if (config.MatchAccessDurationInDays != -1)
         {
-            matches = ApplyInaccessibleLimit(matches, config.MatchAccessDurationInDays);
+            // Subtract the matchAccessDurationInDays from NOW.
+            matchSelectionModel.InaccessibleBefore = DateTime.Now.Subtract(
+                TimeSpan.FromDays(config.MatchAccessDurationInDays));
+
+            matches = ApplyInaccessibleLimit(matches, matchSelectionModel.InaccessibleBefore);
         }
         #endregion
 
@@ -84,17 +89,13 @@ namespace MatchRetriever.ModelFactories
     }
 
     /// <summary>
-    /// Limits matches to a access duration in days.
+    /// Returns only matches that happen after inaccessibleBefore.
     /// </summary>
     /// <param name="matches">Matches to limit</param>
-    /// <param name="matchAccessDurationInDays"></param>
+    /// <param name="inaccessibleBefore"></param>
     /// <returns></returns>
-    public List<MatchSelectionModel.Match> ApplyInaccessibleLimit(List<MatchSelectionModel.Match> matches, int matchAccessDurationInDays)
+    public List<MatchSelectionModel.Match> ApplyInaccessibleLimit(List<MatchSelectionModel.Match> matches, DateTime inaccessibleBefore)
     {
-        // Subtract the matchAccessDurationInDays from NOW.
-        DateTime inaccessibleBefore = DateTime.Now.Subtract(
-            TimeSpan.FromDays(matchAccessDurationInDays));
-
         return matches
             .Where(x => x.MatchDate >= inaccessibleBefore)
             .ToList();
