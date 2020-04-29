@@ -40,7 +40,10 @@ namespace MatchRetriever.Configuration
             ILogger<SubscriptionConfigLoader> logger)
         {
             this._logger = logger;
-            Config = LoadConfig();            
+            Config = LoadConfig();
+
+            _logger.LogInformation(
+                $"Loaded SubscriptionConfig [ { JsonConvert.SerializeObject(Config) }]");
         }
 
         /// <summary>
@@ -52,10 +55,13 @@ namespace MatchRetriever.Configuration
             {
                 case SubscriptionType.Free:
                     return Config.Free;
+
                 case SubscriptionType.Premium:
                     return Config.Premium;
+
                 case SubscriptionType.Ultimate:
                     return Config.Ultimate;
+
                 default:
                     throw new InvalidOperationException("Unknown SubscriptionType!");
             }
