@@ -15,7 +15,7 @@ namespace MatchRetriever.Configuration
         /// <summary>
         /// Location of th configuration file
         /// </summary>
-        public const string CONFIG_PATH = "/app/config/subscriptions.json";
+        private const string CONFIG_PATH = "/app/config/subscriptions.json";
 
         /// <summary>
         /// The SubscriptionConfig instance.
