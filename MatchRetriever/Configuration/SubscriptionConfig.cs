@@ -1,5 +1,9 @@
 namespace MatchRetriever.Configuration
 {
+    /// <summary>
+    /// A Configuration model representing the SubscriptionConfiguration object to be mounted
+    /// inside the container by Kubernetes.
+    /// </summary>
     public class SubscriptionConfig
     {
         public SubscriptionSettings Free { get; set; }
