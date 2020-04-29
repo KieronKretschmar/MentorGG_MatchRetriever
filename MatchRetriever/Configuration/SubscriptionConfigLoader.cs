@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using MatchRetriever.Enumerals;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -34,6 +35,24 @@ namespace MatchRetriever.Configuration
         {
             this._logger = logger;
             Config = LoadConfig();            
+        }
+
+        /// <summary>
+        /// Return the corresponding SubscriptionSetting for a SubscriptionType
+        /// </summary>
+        public SubscriptionSettings SettingFromSubscriptionType(SubscriptionType subscriptionType)
+        {
+            switch (subscriptionType)
+            {
+                case SubscriptionType.Free:
+                    return Config.Free;
+                case SubscriptionType.Premium:
+                    return Config.Premium;
+                case SubscriptionType.Ultimate:
+                    return Config.Ultimate;
+                default:
+                    throw new InvalidOperationException("Unknown SubscriptionType!");
+            }
         }
 
         /// <summary>
