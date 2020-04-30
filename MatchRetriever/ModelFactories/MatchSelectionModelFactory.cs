@@ -76,7 +76,7 @@ namespace MatchRetriever.ModelFactories
 
             matchSelectionModel.DailyLimitReached = matches
                 .Where(x => x.MatchDate.ToUniversalTime().DayOfYear == DateTime.Now.ToUniversalTime().DayOfYear)
-                .Count() > config.DailyMatchesLimit;
+                .Count() >= config.DailyMatchesLimit;
 
             matchSelectionModel.DailyLimitEnds = DateTime.Now.AddDays(1).ToUniversalTime();
         }
