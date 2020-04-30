@@ -68,7 +68,7 @@ namespace MatchRetriever
             });
             #endregion
 
-            #region MatchData Mysql
+            #region MatchData MySQL
             // if a connectionString is set use mysql, else use InMemory
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
@@ -84,17 +84,6 @@ namespace MatchRetriever
 
                     Console.WriteLine("WARNING: Running InMemory Database!");
             }
-            #endregion
-
-            #region Read environment variables
-            var STEAMUSEROPERATOR_URI = Configuration.GetValue<string>("STEAMUSEROPERATOR_URI");
-            var EQUIPMENT_CSV_DIRECTORY = Configuration.GetValue<string>("EQUIPMENT_CSV_DIRECTORY");
-            if(EQUIPMENT_CSV_DIRECTORY == null)
-                throw new ArgumentNullException("The environment variable EQUIPMENT_CSV_DIRECTORY has not been set.");
-            var EQUIPMENT_ENDPOINT = Configuration.GetValue<string>("EQUIPMENT_ENDPOINT");
-            var ZONEREADER_RESOURCE_PATH = Configuration.GetValue<string>("ZONEREADER_RESOURCE_PATH");
-            if (ZONEREADER_RESOURCE_PATH == null)
-                throw new ArgumentNullException("The environment variable ZONEREADER_RESOURCE_PATH has not been set.");
             #endregion
 
             #region Swagger
@@ -196,32 +185,40 @@ namespace MatchRetriever
             #endregion
 
             #region Add Helper services          
-            services.AddSingleton<ISteamUserOperator>(services =>
+
+            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_STEAM_USER_OPERATOR", false))
             {
-                if (STEAMUSEROPERATOR_URI != null)
+                var STEAMUSEROPERATOR_URI = GetRequiredEnvironmentVariable<string>(Configuration, "STEAMUSEROPERATOR_URI");
+                services.AddSingleton<ISteamUserOperator>(x =>
                 {
-                    return new SteamUserOperator(services.GetService<ILogger<SteamUserOperator>>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
-                }
-                else
-                {
-                    Console.WriteLine("STEAMUSEROPERATOR_URI not provided. Using Mock instead. This should not happen in production.");
-                    return new MockSteamUserOperator();
-                }
+                    return new SteamUserOperator(x.GetService<ILogger<SteamUserOperator>>(), STEAMUSEROPERATOR_URI);
+                });
+            }
+            else
+            {
+                Console.WriteLine(
+                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
+                services.AddSingleton<ISteamUserOperator, MockSteamUserOperator>();
+            }
+
+            var EQUIPMENT_CSV_DIRECTORY = GetRequiredEnvironmentVariable<string>(Configuration, "EQUIPMENT_CSV_DIRECTORY");
+            var EQUIPMENT_ENDPOINT = GetOptionalEnvironmentVariable<string>(Configuration, "EQUIPMENT_ENDPOINT", null);
+            services.AddSingleton<IEquipmentProvider, EquipmentProvider>(x =>
+            {
+                return new EquipmentProvider(
+                    x.GetService<ILogger<EquipmentProvider>>(),
+                    EQUIPMENT_CSV_DIRECTORY,
+                    EQUIPMENT_ENDPOINT);
             });
 
-            services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
-            {
-                return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
-            });
+            var ZONEREADER_RESOURCE_PATH = GetRequiredEnvironmentVariable<string>(Configuration, "ZONEREADER_RESOURCE_PATH");
             services.AddSingleton<IZoneReader, FileReader>(services =>
             {
                 return new FileReader(services.GetService<ILogger<FileReader>>(), ZONEREADER_RESOURCE_PATH);
             });
             #endregion
 
-            #region MVC
             services.AddMvc();
-            #endregion
 
             #region Version
             // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/

@@ -9,7 +9,8 @@ Retrieve data from Match Database.
 - `EQUIPMENT_ENDPOINT` : Optional Url to an endpoint supplying data used by EquipmentLib.
 
 **Mocking**
-- `MOCK_SUBSCRIPTION_LOADER` : <bool> Option to mock the SubscriptionConfigLoader
+- `MOCK_SUBSCRIPTION_LOADER` : <bool> Option to mock the SubscriptionConfigLoader.
+- `MOCK_STEAM_USER_OPERATOR` : <bool> Option to mock the SteamUserOperator.
 
 [\*] *Required*
 
