@@ -152,7 +152,16 @@ namespace MatchRetriever
 
             # region Subscription Configuration
 
-            services.AddSingleton<ISubscriptionConfigLoader, SubscriptionConfigLoader>();
+            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_SUBSCRIPTION_LOADER", false))
+            {
+                services.AddSingleton<ISubscriptionConfigLoader, SubscriptionConfigLoader>();
+            }
+            else
+            {
+                Console.WriteLine(
+                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
+                services.AddSingleton<ISubscriptionConfigLoader, MockedSubscriptionConfigLoader>();
+            }
 
             #endregion
 
