@@ -41,7 +41,7 @@ namespace MatchRetriever.ModelFactories
                 InaccessibleBefore = DateTime.MinValue,
             };
 
-            var config = _subscriptionConfigLoader.SettingFromSubscriptionType(subscriptionType);
+            var config = _subscriptionConfigLoader.Config.SettingsFromSubscriptionType(subscriptionType);
 
             #region Select All Matches
             var matches = _context.PlayerMatchStats.Where(x => x.SteamId == steamId)

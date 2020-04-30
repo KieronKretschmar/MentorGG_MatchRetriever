@@ -1,3 +1,6 @@
+using System;
+using MatchRetriever.Enumerals;
+
 namespace MatchRetriever.Configuration
 {
     /// <summary>
@@ -11,6 +14,27 @@ namespace MatchRetriever.Configuration
         public SubscriptionSettings Premium { get; set; }
 
         public SubscriptionSettings Ultimate { get; set; }
+
+        /// <summary>
+        /// Return the corresponding SubscriptionSettings for a SubscriptionType
+        /// </summary>
+        public SubscriptionSettings SettingsFromSubscriptionType(SubscriptionType subscriptionType)
+        {
+            switch (subscriptionType)
+            {
+                case SubscriptionType.Free:
+                    return Free;
+
+                case SubscriptionType.Premium:
+                    return Premium;
+
+                case SubscriptionType.Ultimate:
+                    return Ultimate;
+
+                default:
+                    throw new InvalidOperationException("Unknown SubscriptionType!");
+            }
+        }
 
     }
 

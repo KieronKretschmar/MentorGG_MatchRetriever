@@ -9,7 +9,6 @@ namespace MatchRetriever.Configuration
 {
     public interface ISubscriptionConfigLoader
     {
-        SubscriptionSettings SettingFromSubscriptionType(SubscriptionType subscriptionType);
         SubscriptionConfig Config { get; }
     }
 
@@ -44,27 +43,6 @@ namespace MatchRetriever.Configuration
 
             _logger.LogInformation(
                 $"Loaded SubscriptionConfig [ { JsonConvert.SerializeObject(Config) }]");
-        }
-
-        /// <summary>
-        /// Return the corresponding SubscriptionSetting for a SubscriptionType
-        /// </summary>
-        public SubscriptionSettings SettingFromSubscriptionType(SubscriptionType subscriptionType)
-        {
-            switch (subscriptionType)
-            {
-                case SubscriptionType.Free:
-                    return Config.Free;
-
-                case SubscriptionType.Premium:
-                    return Config.Premium;
-
-                case SubscriptionType.Ultimate:
-                    return Config.Ultimate;
-
-                default:
-                    throw new InvalidOperationException("Unknown SubscriptionType!");
-            }
         }
 
         /// <summary>
