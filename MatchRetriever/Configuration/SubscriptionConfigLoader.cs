@@ -66,4 +66,44 @@ namespace MatchRetriever.Configuration
             }
         }
     }
+
+    /// <summary>
+    /// Mock Subscription Config Loader, For testing.
+    /// </summary>
+    public class MockedSubscriptionConfigLoader : ISubscriptionConfigLoader
+    {
+        private SubscriptionConfig defaultConfig => new SubscriptionConfig 
+        {
+            Free = new SubscriptionSettings {
+                    DailyMatchesLimit = 3,
+                    MatchAccessDurationInDays = 14,
+                    PositionFramesPerSecond = 1
+            },
+            Premium = new SubscriptionSettings {
+                    DailyMatchesLimit = 82,
+                    MatchAccessDurationInDays = -1,
+                    PositionFramesPerSecond = 4
+            },
+            Ultimate = new SubscriptionSettings {
+                    DailyMatchesLimit = -1,
+                    MatchAccessDurationInDays = -1,
+                    PositionFramesPerSecond = 8
+            }
+        };
+        public SubscriptionConfig Config {get;}
+
+        /// <summary>
+        /// Create a MockedSubscriptionConfigLoader with a default configuration.
+        /// </summary>
+        public MockedSubscriptionConfigLoader(){
+            Config = defaultConfig;
+        }
+
+        /// <summary>
+        /// Create a MockedSubscriptionConfigLoader with a defined configuration.
+        /// </summary>
+        public MockedSubscriptionConfigLoader(SubscriptionConfig subscriptionConfig){
+            Config = subscriptionConfig;
+        }
+    }
 }

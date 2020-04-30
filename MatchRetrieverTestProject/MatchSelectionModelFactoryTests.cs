@@ -4,7 +4,6 @@ using MatchRetriever;
 using MatchRetriever.Configuration;
 using MatchRetriever.Enumerals;
 using MatchRetriever.ModelFactories;
-using MatchRetrieverTestProject.Mocks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,15 +27,6 @@ namespace MatchRetrieverTestProject
             var team = MatchEntities.Enums.StartingFaction.CtStarter;
             var firstDay = DateTime.Parse("2020-01-01");
             
-            var config = new SubscriptionConfig
-            {
-                Free = new SubscriptionSettings {
-                    DailyMatchesLimit = 3,
-                    MatchAccessDurationInDays = 14,
-                    PositionFramesPerSecond = 1
-                }
-            };
-
             // Create serviceProvider with inmemory context
             var services = TestHelper.GetMoqFactoryServiceCollection("TestGetModel");
             var sp = services.BuildServiceProvider();
@@ -68,7 +58,7 @@ namespace MatchRetrieverTestProject
             await context.SaveChangesAsync();
 
             // Run
-            var factory = new MatchSelectionModelFactory(sp, new MockedSubscriptionConfigLoader(config));
+            var factory = new MatchSelectionModelFactory(sp, new MockedSubscriptionConfigLoader());
             var model = await factory.GetModel(steamId, SubscriptionType.Free);
 
             // Assert
