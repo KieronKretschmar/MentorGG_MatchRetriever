@@ -255,5 +255,48 @@ namespace MatchRetriever
             });
             #endregion
         }
+
+        #region Environment Variable Retrieval
+
+        /// <summary>
+        /// Attempt to retrieve an Environment Variable
+        /// Throws ArgumentNullException is not found.
+        /// </summary>
+        /// <typeparam name="T">Type to retreive</typeparam>
+        private static T GetRequiredEnvironmentVariable<T>(IConfiguration config, string key)
+        {
+            T value = config.GetValue<T>(key);
+            if (value == null)
+            {
+                throw new ArgumentNullException(
+                    $"{key} is missing, Configure the `{key}` environment variable.");
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Attempt to retrieve an Environment Variable
+        /// Returns default value if not found.
+        /// </summary>
+        /// <typeparam name="T">Type to retreive</typeparam>
+        private static T GetOptionalEnvironmentVariable<T>(IConfiguration config, string key, T defaultValue)
+        {
+            var stringValue = config.GetSection(key).Value;
+            try
+            {
+                T value = (T) Convert.ChangeType(stringValue, typeof(T), System.Globalization.CultureInfo.InvariantCulture);
+                return value;
+            }
+            catch (InvalidCastException e)
+            {
+                Console.WriteLine($"Env var [ {key} ] not specified. Defaulting to [ {defaultValue} ]");
+                return defaultValue;
+            }
+        }
+
+        #endregion
     }
 }
