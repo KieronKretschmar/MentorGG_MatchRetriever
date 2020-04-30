@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MatchRetriever.Enumerals;
 using MatchRetriever.Helpers;
 using MatchRetriever.ModelFactories;
 using MatchRetriever.ModelFactories.GrenadesAndKills;
@@ -30,15 +31,16 @@ namespace MatchRetriever.Controllers.v1
         }
 
         /// <summary>
-        /// Returns the user's matches in the database, censoring those above his/her daily limit.
+        /// Returns the user's matches in the database.
+        /// Limiting the returned info based on the subscriptionType.
         /// </summary>
         /// <param name="steamId"></param>
-        /// <param name="dailyLimit"></param>
+        /// <param name="subscriptionType"></param>
         /// <returns></returns>
         [HttpGet("single/{steamId}/matchselection")]
-        public async Task<MatchSelectionModel> GetMatchSelection(long steamId, int dailyLimit)
+        public async Task<MatchSelectionModel> GetMatchSelection(long steamId, SubscriptionType subscriptionType)
         {
-            var model = await _modelFactory.GetModel(steamId, dailyLimit);
+            var model = await _modelFactory.GetModel(steamId, subscriptionType);
             return model;
         }
     }

@@ -23,6 +23,7 @@ namespace MatchRetriever.ModelFactories
             var res = new MatchesModel();
 
             // Create MatchInfos for the users matches regarding count and offset
+            // This considers all known matches.
             var matchIds = _context.PlayerMatchStats
                 .Where(x => x.SteamId == steamId && !ignoredMatchIds.Contains(x.MatchId))
                 .OrderByDescending(x => x.MatchStats.MatchDate)

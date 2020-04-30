@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Database;
 using EquipmentLib;
+using MatchRetriever.Configuration;
 using MatchRetriever.Helpers;
 using MatchRetriever.Middleware;
 using MatchRetriever.Misplays;
@@ -45,6 +46,7 @@ namespace MatchRetriever
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Controllers
             services.AddControllers()
                 .AddNewtonsoftJson(x => 
                 {
@@ -54,16 +56,19 @@ namespace MatchRetriever
                     x.SerializerSettings.Converters.Add(new PolygonConverter());
                     x.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
                 });
+            #endregion
 
+            #region Logging
             services.AddLogging(services =>
             {
                 services.AddConsole(o =>
                 {
                     o.TimestampFormat = "[yyyy-MM-dd HH:mm:ss zzz] ";
                 });
-                services.AddDebug();
             });
+            #endregion
 
+            #region MatchData MySQL
             // if a connectionString is set use mysql, else use InMemory
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
@@ -79,16 +84,6 @@ namespace MatchRetriever
 
                     Console.WriteLine("WARNING: Running InMemory Database!");
             }
-
-            #region Read environment variables
-            var STEAMUSEROPERATOR_URI = Configuration.GetValue<string>("STEAMUSEROPERATOR_URI");
-            var EQUIPMENT_CSV_DIRECTORY = Configuration.GetValue<string>("EQUIPMENT_CSV_DIRECTORY");
-            if(EQUIPMENT_CSV_DIRECTORY == null)
-                throw new ArgumentNullException("The environment variable EQUIPMENT_CSV_DIRECTORY has not been set.");
-            var EQUIPMENT_ENDPOINT = Configuration.GetValue<string>("EQUIPMENT_ENDPOINT");
-            var ZONEREADER_RESOURCE_PATH = Configuration.GetValue<string>("ZONEREADER_RESOURCE_PATH");
-            if (ZONEREADER_RESOURCE_PATH == null)
-                throw new ArgumentNullException("The environment variable ZONEREADER_RESOURCE_PATH has not been set.");
             #endregion
 
             #region Swagger
@@ -106,7 +101,6 @@ namespace MatchRetriever
                 options.EnableAnnotations();
             });
             #endregion
-
 
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
@@ -145,6 +139,21 @@ namespace MatchRetriever
 
             #endregion
 
+            # region Subscription Configuration
+
+            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_SUBSCRIPTION_LOADER", false))
+            {
+                services.AddSingleton<ISubscriptionConfigProvider, SubscriptionConfigLoader>();
+            }
+            else
+            {
+                Console.WriteLine(
+                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
+                services.AddSingleton<ISubscriptionConfigProvider, MockedSubscriptionConfigLoader>();
+            }
+
+            #endregion
+
             #region Add other ModelFactories
             services.AddTransient<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
             services.AddTransient<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
@@ -176,38 +185,50 @@ namespace MatchRetriever
             #endregion
 
             #region Add Helper services          
-            services.AddSingleton<ISteamUserOperator>(services =>
+
+            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_STEAM_USER_OPERATOR", false))
             {
-                if (STEAMUSEROPERATOR_URI != null)
+                var STEAMUSEROPERATOR_URI = GetRequiredEnvironmentVariable<string>(Configuration, "STEAMUSEROPERATOR_URI");
+                services.AddSingleton<ISteamUserOperator>(x =>
                 {
-                    return new SteamUserOperator(services.GetService<ILogger<SteamUserOperator>>(), Configuration.GetValue<string>("STEAMUSEROPERATOR_URI"));
-                }
-                else
-                {
-                    Console.WriteLine("STEAMUSEROPERATOR_URI not provided. Using Mock instead. This should not happen in production.");
-                    return new MockSteamUserOperator();
-                }
+                    return new SteamUserOperator(x.GetService<ILogger<SteamUserOperator>>(), STEAMUSEROPERATOR_URI);
+                });
+            }
+            else
+            {
+                Console.WriteLine(
+                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
+                services.AddSingleton<ISteamUserOperator, MockSteamUserOperator>();
+            }
+
+            var EQUIPMENT_CSV_DIRECTORY = GetRequiredEnvironmentVariable<string>(Configuration, "EQUIPMENT_CSV_DIRECTORY");
+            var EQUIPMENT_ENDPOINT = GetOptionalEnvironmentVariable<string>(Configuration, "EQUIPMENT_ENDPOINT", null);
+            services.AddSingleton<IEquipmentProvider, EquipmentProvider>(x =>
+            {
+                return new EquipmentProvider(
+                    x.GetService<ILogger<EquipmentProvider>>(),
+                    EQUIPMENT_CSV_DIRECTORY,
+                    EQUIPMENT_ENDPOINT);
             });
 
-            services.AddSingleton<IEquipmentProvider, EquipmentProvider>(services =>
-            {
-                return new EquipmentProvider(services.GetService<ILogger<EquipmentProvider>>(), EQUIPMENT_CSV_DIRECTORY, EQUIPMENT_ENDPOINT);
-            });
+            var ZONEREADER_RESOURCE_PATH = GetRequiredEnvironmentVariable<string>(Configuration, "ZONEREADER_RESOURCE_PATH");
             services.AddSingleton<IZoneReader, FileReader>(services =>
             {
                 return new FileReader(services.GetService<ILogger<FileReader>>(), ZONEREADER_RESOURCE_PATH);
             });
             #endregion
 
-            // Enable versioning
-            // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
             services.AddMvc();
+
+            #region Version
+            // See https://dotnetcoretutorials.com/2017/01/17/api-versioning-asp-net-core/
             services.AddApiVersioning(o =>
             {
                 o.ReportApiVersions = true;
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(1, 0);
             });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -217,8 +238,6 @@ namespace MatchRetriever
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -240,5 +259,48 @@ namespace MatchRetriever
             });
             #endregion
         }
+
+        #region Environment Variable Retrieval
+
+        /// <summary>
+        /// Attempt to retrieve an Environment Variable
+        /// Throws ArgumentNullException is not found.
+        /// </summary>
+        /// <typeparam name="T">Type to retreive</typeparam>
+        private static T GetRequiredEnvironmentVariable<T>(IConfiguration config, string key)
+        {
+            T value = config.GetValue<T>(key);
+            if (value == null)
+            {
+                throw new ArgumentNullException(
+                    $"{key} is missing, Configure the `{key}` environment variable.");
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Attempt to retrieve an Environment Variable
+        /// Returns default value if not found.
+        /// </summary>
+        /// <typeparam name="T">Type to retreive</typeparam>
+        private static T GetOptionalEnvironmentVariable<T>(IConfiguration config, string key, T defaultValue)
+        {
+            var stringValue = config.GetSection(key).Value;
+            try
+            {
+                T value = (T) Convert.ChangeType(stringValue, typeof(T), System.Globalization.CultureInfo.InvariantCulture);
+                return value;
+            }
+            catch (InvalidCastException e)
+            {
+                Console.WriteLine($"Env var [ {key} ] not specified. Defaulting to [ {defaultValue} ]");
+                return defaultValue;
+            }
+        }
+
+        #endregion
     }
 }

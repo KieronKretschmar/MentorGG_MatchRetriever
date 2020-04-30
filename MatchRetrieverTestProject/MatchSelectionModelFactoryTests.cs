@@ -1,6 +1,8 @@
 using Database;
 using MatchEntities;
 using MatchRetriever;
+using MatchRetriever.Configuration;
+using MatchRetriever.Enumerals;
 using MatchRetriever.ModelFactories;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +21,12 @@ namespace MatchRetrieverTestProject
         [TestMethod]
         public async Task TestGetModel()
         {
-            //// Arrange
+            // Arrange
             // Settings
             var steamId = 100;
             var team = MatchEntities.Enums.StartingFaction.CtStarter;
             var firstDay = DateTime.Parse("2020-01-01");
-            var dailyLimit = 3;
-
+            
             // Create serviceProvider with inmemory context
             var services = TestHelper.GetMoqFactoryServiceCollection("TestGetModel");
             var sp = services.BuildServiceProvider();
@@ -56,11 +57,11 @@ namespace MatchRetrieverTestProject
             context.PlayerMatchStats.AddRange(playerMatchStats);
             await context.SaveChangesAsync();
 
-            //// Run
-            var factory = new MatchSelectionModelFactory(sp);
-            var model = await factory.GetModel(steamId, dailyLimit);
+            // Run
+            var factory = new MatchSelectionModelFactory(sp, new MockedSubscriptionConfigLoader());
+            var model = await factory.GetModel(steamId, SubscriptionType.Free);
 
-            //// Assert
+            // Assert
             // Check that the correct matches are returned
             CollectionAssert.AreEqual(new List<long> { 1, 2, 3, 4, 7, 9 }, model.Matches.Select(x => x.MatchId).ToList());
         }
