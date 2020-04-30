@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MatchRetriever.Configuration
 {
-    public interface ISubscriptionConfigLoader
+    public interface ISubscriptionConfigProvider
     {
         SubscriptionConfig Config { get; }
     }
@@ -15,7 +15,7 @@ namespace MatchRetriever.Configuration
     /// <summary>
     /// Responsible for loading the User Subscription Config.
     /// </summary>
-    public class SubscriptionConfigLoader: ISubscriptionConfigLoader
+    public class SubscriptionConfigLoader: ISubscriptionConfigProvider
     {
         /// <summary>
         /// Location of th configuration file
@@ -70,7 +70,7 @@ namespace MatchRetriever.Configuration
     /// <summary>
     /// Mock Subscription Config Loader, For testing.
     /// </summary>
-    public class MockedSubscriptionConfigLoader : ISubscriptionConfigLoader
+    public class MockedSubscriptionConfigLoader : ISubscriptionConfigProvider
     {
         private SubscriptionConfig defaultConfig => new SubscriptionConfig 
         {

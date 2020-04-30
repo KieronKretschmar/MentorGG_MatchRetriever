@@ -15,11 +15,11 @@ namespace MatchRetriever.ModelFactories
 
     public class MatchSelectionModelFactory : ModelFactoryBase, IMatchSelectionModelFactory
     {
-        public ISubscriptionConfigLoader _subscriptionConfigLoader;
+        public ISubscriptionConfigProvider _subscriptionConfigLoader;
 
         public MatchSelectionModelFactory(
             IServiceProvider sp,
-            ISubscriptionConfigLoader subscriptionConfigLoader) : base(sp)
+            ISubscriptionConfigProvider subscriptionConfigLoader) : base(sp)
         {
             _subscriptionConfigLoader = subscriptionConfigLoader;
         }

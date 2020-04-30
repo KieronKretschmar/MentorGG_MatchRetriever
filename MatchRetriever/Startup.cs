@@ -143,13 +143,13 @@ namespace MatchRetriever
 
             if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_SUBSCRIPTION_LOADER", false))
             {
-                services.AddSingleton<ISubscriptionConfigLoader, SubscriptionConfigLoader>();
+                services.AddSingleton<ISubscriptionConfigProvider, SubscriptionConfigLoader>();
             }
             else
             {
                 Console.WriteLine(
                     "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
-                services.AddSingleton<ISubscriptionConfigLoader, MockedSubscriptionConfigLoader>();
+                services.AddSingleton<ISubscriptionConfigProvider, MockedSubscriptionConfigLoader>();
             }
 
             #endregion
