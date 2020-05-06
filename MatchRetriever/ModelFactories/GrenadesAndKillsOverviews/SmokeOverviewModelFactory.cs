@@ -32,12 +32,9 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
                     && matchIds.Contains(x.MatchId)
                     && x.Equipment == MatchEntities.Enums.EquipmentElement.Smoke
                     && x.Buy)
-                .GroupBy(x => x.IsCt)
-                .Select(x => new
-                {
-                    IsCt = x.Key,
-                    Count = x.Count()
-                })
+                .Select(x => x.IsCt)
+                .ToList()
+                .GroupBy(x => x)
                 .ToList();
 
             // Load samples
@@ -56,8 +53,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
 
             var summary = new SmokeOverviewMapSummary
             {
-                BuysAsCt = buyList.Count(x => x.IsCt),
-                BuysAsTerrorist = buyList.Count(x => !x.IsCt),
+                BuysAsCt = buyList.SingleOrDefault(x => x.Key)?.Count() ?? 0,
+                BuysAsTerrorist = buyList.SingleOrDefault(x => !x.Key)?.Count() ?? 0,
                 SuccessfulLineupAttempts = samples.Where(x=>x.LineUp > 0).Count(),
                 FailedLineupAttempts = samples.Where(x=>x.LineUp > 0 && x.Result == MatchEntities.Enums.TargetResult.Miss).Count(),
                 UsagesAsCt = samples.Count(x=>x.IsCt),
