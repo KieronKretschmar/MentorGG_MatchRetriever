@@ -78,7 +78,7 @@ namespace MatchRetriever.ModelFactories
                     .Where(x => x.MatchDate.ToUniversalTime().DayOfYear == DateTime.Now.ToUniversalTime().DayOfYear)
                     .Count() >= config.DailyMatchesLimit;
 
-                matchSelectionModel.DailyLimitEnds = DateTime.Now.AddDays(1).ToUniversalTime();
+                matchSelectionModel.DailyLimitEnds = DateTime.Now.ToUniversalTime().Date.AddDays(1);
             }
             #endregion
 

@@ -25,7 +25,8 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKillsOverviews
             var summary = new FireNadeOverviewMapSummary();
 
             // Buys
-            var buyList = _context.ItemPickedUp.Where(x =>
+            var buyList = _context.ItemPickedUp
+                .Where(x =>
                     x.PlayerId == steamId
                     && matchIds.Contains(x.MatchId)
                     && (x.Equipment == MatchEntities.Enums.EquipmentElement.Incendiary
