@@ -59,8 +59,9 @@ namespace MatchRetriever.ModelFactories
             if (config.MatchAccessDurationInDays != -1)
             {
                 // Subtract the matchAccessDurationInDays from NOW.
-                matchSelectionModel.InaccessibleBefore = DateTime.Now.Subtract(
-                    TimeSpan.FromDays(config.MatchAccessDurationInDays));
+                matchSelectionModel.InaccessibleBefore = DateTime.Now
+                    .ToUniversalTime()
+                    .Subtract(TimeSpan.FromDays(config.MatchAccessDurationInDays));
 
                 allowedMatches = ApplyInaccessibleLimit(allowedMatches, matchSelectionModel.InaccessibleBefore);
             }
