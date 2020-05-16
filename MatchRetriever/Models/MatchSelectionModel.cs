@@ -14,6 +14,11 @@ namespace MatchRetriever.Models
         public List<Match> Matches{ get; set; }
 
         /// <summary>
+        /// Number of matches of the user in the database, but inaccessible for the user due to their subscription state.
+        /// </summary>
+        public int InaccessibleMatches { get; set; }
+
+        /// <summary>
         /// Whether or not the user reached his daily analysis limit for today. Matches played until 
         /// the reset occurs (Midnight UTC) will be inaccessible.
         /// </summary>
@@ -28,6 +33,15 @@ namespace MatchRetriever.Models
         /// Matches where the MatchDate comes before this DateTime are inaccessible due to the users subscription state.
         /// </summary>
         public DateTime InaccessibleBefore {get; set;}
+
+        public MatchSelectionModel()
+        {
+            Matches = null;
+            InaccessibleMatches = 0;
+            DailyLimitReached = false;
+            DailyLimitEnds = DateTime.MaxValue;
+            InaccessibleBefore = DateTime.MinValue;
+        }
 
         /// <summary>
         /// Holds metadata for an accessible match.
