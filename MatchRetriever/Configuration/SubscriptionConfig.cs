@@ -43,8 +43,5 @@ namespace MatchRetriever.Configuration
         public int MatchAccessDurationInDays { get; set; }
 
         public int DailyMatchesLimit { get; set; }
-
-        public int PositionFramesPerSecond { get; set; }
-          
     }
 }
