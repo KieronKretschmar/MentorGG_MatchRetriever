@@ -75,19 +75,16 @@ namespace MatchRetriever.Configuration
         private SubscriptionConfig defaultConfig => new SubscriptionConfig 
         {
             Free = new SubscriptionSettings {
-                    DailyMatchesLimit = 3,
                     MatchAccessDurationInDays = 14,
-                    PositionFramesPerSecond = 1
+                    DailyMatchesLimit = 3,
             },
             Premium = new SubscriptionSettings {
-                    DailyMatchesLimit = 82,
-                    MatchAccessDurationInDays = -1,
-                    PositionFramesPerSecond = 4
+                    MatchAccessDurationInDays = 82,
+                    DailyMatchesLimit = -1,
             },
             Ultimate = new SubscriptionSettings {
-                    DailyMatchesLimit = -1,
                     MatchAccessDurationInDays = -1,
-                    PositionFramesPerSecond = 8
+                    DailyMatchesLimit = -1,
             }
         };
         public SubscriptionConfig Config {get;}

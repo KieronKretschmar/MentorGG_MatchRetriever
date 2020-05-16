@@ -33,18 +33,13 @@ namespace MatchRetriever.ModelFactories
         /// <returns></returns>
         public async Task<MatchSelectionModel> GetModel(long steamId, SubscriptionType subscriptionType)
         {
-            MatchSelectionModel matchSelectionModel = new MatchSelectionModel
-            {
-                Matches = null,
-                DailyLimitReached = false,
-                DailyLimitEnds = DateTime.MaxValue,
-                InaccessibleBefore = DateTime.MinValue,
-            };
+            MatchSelectionModel matchSelectionModel = new MatchSelectionModel();
 
             var config = _subscriptionConfigLoader.Config.SettingsFromSubscriptionType(subscriptionType);
 
+
             #region Select All Matches
-            var matches = _context.PlayerMatchStats.Where(x => x.SteamId == steamId)
+            var allMatches = _context.PlayerMatchStats.Where(x => x.SteamId == steamId)
                 .Select(x => new MatchSelectionModel.Match
                 {
                     MatchId = x.MatchId,
@@ -56,15 +51,19 @@ namespace MatchRetriever.ModelFactories
 
             #endregion
 
+            // Start with all matches and apply filters
+            var allowedMatches = allMatches;
+
             # region Apply Inaccessible Limit
             // If the value of MatchAccessDurationInDays is NOI -1, apply the limit.
             if (config.MatchAccessDurationInDays != -1)
             {
                 // Subtract the matchAccessDurationInDays from NOW.
-                matchSelectionModel.InaccessibleBefore = DateTime.Now.Subtract(
-                    TimeSpan.FromDays(config.MatchAccessDurationInDays));
+                matchSelectionModel.InaccessibleBefore = DateTime.Now
+                    .ToUniversalTime()
+                    .Subtract(TimeSpan.FromDays(config.MatchAccessDurationInDays));
 
-                matches = ApplyInaccessibleLimit(matches, matchSelectionModel.InaccessibleBefore);
+                allowedMatches = ApplyInaccessibleLimit(allowedMatches, matchSelectionModel.InaccessibleBefore);
             }
             #endregion
 
@@ -72,9 +71,9 @@ namespace MatchRetriever.ModelFactories
             // If the value of DailyMatchesLimit is NOI -1, apply the limit.
             if (config.DailyMatchesLimit != -1)
             {
-                matches = ApplyDailyLimit(matches, config.DailyMatchesLimit);
+                allowedMatches = ApplyDailyLimit(allowedMatches, config.DailyMatchesLimit);
 
-                matchSelectionModel.DailyLimitReached = matches
+                matchSelectionModel.DailyLimitReached = allMatches
                     .Where(x => x.MatchDate.ToUniversalTime().DayOfYear == DateTime.Now.ToUniversalTime().DayOfYear)
                     .Count() >= config.DailyMatchesLimit;
 
@@ -82,7 +81,8 @@ namespace MatchRetriever.ModelFactories
             }
             #endregion
 
-            matchSelectionModel.Matches = matches;
+            matchSelectionModel.Matches = allowedMatches;
+            matchSelectionModel.InaccessibleMatches = allMatches.Count - allowedMatches.Count;
             return matchSelectionModel;
 
 
