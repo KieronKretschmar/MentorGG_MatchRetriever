@@ -102,6 +102,21 @@ namespace MatchRetriever
             });
             #endregion
 
+            # region Subscription Configuration
+
+            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_SUBSCRIPTION_LOADER", false))
+            {
+                services.AddSingleton<ISubscriptionConfigProvider, SubscriptionConfigLoader>();
+            }
+            else
+            {
+                Console.WriteLine(
+                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
+                services.AddSingleton<ISubscriptionConfigProvider, MockedSubscriptionConfigLoader>();
+            }
+
+            #endregion
+
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
             services.AddTransient<IFireNadeModelFactory, FireNadeModelFactory>();
@@ -139,21 +154,6 @@ namespace MatchRetriever
 
             #endregion
 
-            # region Subscription Configuration
-
-            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_SUBSCRIPTION_LOADER", false))
-            {
-                services.AddSingleton<ISubscriptionConfigProvider, SubscriptionConfigLoader>();
-            }
-            else
-            {
-                Console.WriteLine(
-                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
-                services.AddSingleton<ISubscriptionConfigProvider, MockedSubscriptionConfigLoader>();
-            }
-
-            #endregion
-
             #region Add other ModelFactories
             services.AddTransient<IPlayerInfoModelFactory, PlayerInfoModelFactory>();
             services.AddTransient<IMatchSelectionModelFactory, MatchSelectionModelFactory>();
@@ -162,6 +162,7 @@ namespace MatchRetriever
             services.AddTransient<IDemoViewerMatchModelFactory, DemoViewerMatchModelFactory>();
             services.AddTransient<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
             services.AddTransient<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
+            services.AddTransient<IMatchDataSetFactory, MatchDataSetFactory>();
             #endregion
 
             #region Misplay detectors
