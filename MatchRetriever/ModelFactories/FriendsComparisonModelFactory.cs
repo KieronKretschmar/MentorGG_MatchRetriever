@@ -42,7 +42,7 @@ namespace MatchRetriever.ModelFactories
             var rowData = new ComparisonRowData
             {
                 MatchesPlayed = matchIds.Count,
-                OtherPlayerInfo = await _playerInfoModelFactory.GetModel(otherId),
+                OtherPlayerInfo = await _playerInfoModelFactory.GetModel(otherId, false),
                 UserData = getBriefComparisonPlayerData(steamId, matchIds),
                 OtherData = getBriefComparisonPlayerData(otherId, matchIds),
             };

@@ -10,8 +10,8 @@ namespace MatchRetriever.Helpers
 {
     public interface ISteamUserOperator
     {
-        Task<SteamUser> GetUser(long steamId, bool forceRefresh);
-        Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh);
+        Task<SteamUser> GetUser(long steamId, bool forceRefresh = false);
+        Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh = false);
     }
 
     /// <summary>
