@@ -33,11 +33,12 @@ namespace MatchRetriever.Controllers.v1
         /// Returns metadata about a player, e.g. his SteamName and CSGO Rank.
         /// </summary>
         /// <param name="steamId"></param>
+        /// <param name="forceRefresh"></param>
         /// <returns></returns>
         [HttpGet("single/{steamId}/playerinfo")]
-        public async Task<PlayerInfoModel> GetPlayerInfo(long steamId)
+        public async Task<PlayerInfoModel> GetPlayerInfo(long steamId, bool forceRefresh = false)
         {
-            var model = await _playerinfoModelFactory.GetModel(steamId);
+            var model = await _playerinfoModelFactory.GetModel(steamId, forceRefresh);
             return model;
         }
     }

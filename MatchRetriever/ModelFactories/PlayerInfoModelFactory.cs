@@ -9,7 +9,7 @@ namespace MatchRetriever.ModelFactories
 {
     public interface IPlayerInfoModelFactory
     {
-        Task<PlayerInfoModel> GetModel(long steamId);
+        Task<PlayerInfoModel> GetModel(long steamId, bool forceRefresh);
     }
 
     public class PlayerInfoModelFactory : ModelFactoryBase, IPlayerInfoModelFactory
@@ -18,10 +18,10 @@ namespace MatchRetriever.ModelFactories
         {
         }
 
-        public async Task<PlayerInfoModel> GetModel(long steamId)
+        public async Task<PlayerInfoModel> GetModel(long steamId, bool forceRefresh)
         {
             var res = new PlayerInfoModel();
-            var profile = await _steamUserOperator.GetUser(steamId);
+            var profile = await _steamUserOperator.GetUser(steamId, forceRefresh);
 
             res.SteamUser = profile;
             res.Rank = _context.CurrentRank(steamId);
