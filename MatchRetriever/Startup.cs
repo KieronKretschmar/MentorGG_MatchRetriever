@@ -117,6 +117,11 @@ namespace MatchRetriever
 
             #endregion
 
+            #region HTTP Clients
+            // Add HTTP clients for communication with other services in the cluster
+            services.AddConnectedHttpService(ConnectedServices.SteamUserOperator, Configuration, "STEAMUSEROPERATOR_URI");
+            #endregion
+
             #region Add ModelFactories for GrenadeAndKills
             // ModelFactories with dependencies ...
             services.AddTransient<IFireNadeModelFactory, FireNadeModelFactory>();
@@ -186,21 +191,7 @@ namespace MatchRetriever
             #endregion
 
             #region Add Helper services          
-
-            if (!GetOptionalEnvironmentVariable<bool>(Configuration, "MOCK_STEAM_USER_OPERATOR", false))
-            {
-                var STEAMUSEROPERATOR_URI = GetRequiredEnvironmentVariable<string>(Configuration, "STEAMUSEROPERATOR_URI");
-                services.AddSingleton<ISteamUserOperator>(x =>
-                {
-                    return new SteamUserOperator(x.GetService<ILogger<SteamUserOperator>>(), STEAMUSEROPERATOR_URI);
-                });
-            }
-            else
-            {
-                Console.WriteLine(
-                    "WARNING: SubscriptionConfigLoader is mocked and will return mocked values!");
-                services.AddSingleton<ISteamUserOperator, MockSteamUserOperator>();
-            }
+            services.AddTransient<ISteamUserOperator, SteamUserOperator>();
 
             var EQUIPMENT_CSV_DIRECTORY = GetRequiredEnvironmentVariable<string>(Configuration, "EQUIPMENT_CSV_DIRECTORY");
             var EQUIPMENT_ENDPOINT = GetOptionalEnvironmentVariable<string>(Configuration, "EQUIPMENT_ENDPOINT", null);
