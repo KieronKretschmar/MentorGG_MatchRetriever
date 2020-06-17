@@ -10,8 +10,8 @@ namespace MatchRetriever.Helpers
 {
     public interface ISteamUserOperator
     {
-        Task<SteamUser> GetUser(long steamId);
-        Task<List<SteamUser>> GetUsers(List<long> steamIds);
+        Task<SteamUser> GetUser(long steamId, bool forceRefresh);
+        Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh);
     }
 
     /// <summary>
@@ -35,8 +35,9 @@ namespace MatchRetriever.Helpers
         /// </summary>
         /// <exception cref="HttpRequestException"></exception>
         /// <param name="steamIds"></param>
+        /// <param name="forceRefresh"></param>
         /// <returns></returns>
-        public async Task<List<SteamUser>> GetUsers(List<long> steamIds)
+        public async Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh)
         {
             if(steamIds.Count == 0)
             {
@@ -47,7 +48,7 @@ namespace MatchRetriever.Helpers
 
             try
             {
-                var queryString = steamUserOperatorUri + "/users?steamIds=" + String.Join(',', steamIds.Select(x=>x.ToString()));
+                var queryString = steamUserOperatorUri + $"/users?steamIds={String.Join(',', steamIds.Select(x=>x.ToString()))}&forceRefresh={forceRefresh}";
                 var response = await Client.GetAsync(queryString);
 
                 // throw exception if response is not succesful
@@ -78,9 +79,9 @@ namespace MatchRetriever.Helpers
         /// <exception cref="HttpRequestException"></exception>
         /// <param name="steamIds"></param>
         /// <returns></returns>
-        public async Task<SteamUser> GetUser(long steamId)
+        public async Task<SteamUser> GetUser(long steamId, bool forceRefresh)
         {
-            return (await GetUsers(new List<long> { steamId })).Single();
+            return (await GetUsers(new List<long> { steamId }, forceRefresh)).Single();
         }
     }
 
@@ -116,15 +117,15 @@ namespace MatchRetriever.Helpers
 
     public class MockSteamUserOperator : ISteamUserOperator
     {
-        public async Task<SteamUser> GetUser(long steamId)
+        public async Task<SteamUser> GetUser(long steamId, bool forceRefresh)
         {
             return new SteamUser(steamId);
         }
 
-        public async Task<List<SteamUser>> GetUsers(List<long> steamIds)
+        public async Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh)
         {
             var list = steamIds.Distinct()
-                .Select(async x => await GetUser(x))
+                .Select(async x => await GetUser(x, forceRefresh))
                 .Select(x => x.Result).ToList();
             return list;
         }
