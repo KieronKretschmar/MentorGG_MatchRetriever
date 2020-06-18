@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MatchRetriever.Enumerals;
-using MatchRetriever.Helpers;
 using MatchRetriever.ModelFactories;
-using MatchRetriever.ModelFactories.GrenadesAndKills;
-using MatchRetriever.ModelFactories.GrenadesAndKillsOverviews;
 using MatchRetriever.Models;
-using MatchRetriever.Models.GrenadesAndKills;
-using MatchRetriever.Models.GrenadesAndKillsOverviews;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
