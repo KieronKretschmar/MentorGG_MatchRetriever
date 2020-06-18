@@ -168,6 +168,7 @@ namespace MatchRetriever
             services.AddTransient<IDemoViewerRoundModelFactory, DemoViewerRoundModelFactory>();
             services.AddTransient<IPlayerSummaryModelFactory, PlayerSummaryModelFactory>();
             services.AddTransient<IMatchDataSetFactory, MatchDataSetFactory>();
+            services.AddTransient<IPlayerInMatchModelFactory, PlayerInMatchModelFactory>();
             #endregion
 
             #region Misplay detectors

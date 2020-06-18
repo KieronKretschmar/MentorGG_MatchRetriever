@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.3.1] - 2020-06-17
 ### Added
 - `forceRefresh` param to PlayerInfo endpoint
+- New endpoint match/{matchId}/players 
 
 ## [2.2.0] - 2020-06-08
 ### Added
