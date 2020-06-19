@@ -19,15 +19,16 @@ namespace MatchRetriever.Helpers
     /// </summary>
     public class SteamUserOperator : ISteamUserOperator
     {
-        private readonly HttpClient Client;
-        private readonly string steamUserOperatorUri;
         private readonly ILogger<SteamUserOperator> _logger;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public SteamUserOperator(ILogger<SteamUserOperator> logger, string steamUserOperatorUri)
+        public SteamUserOperator(
+            ILogger<SteamUserOperator> logger,
+            IHttpClientFactory clientFactory
+            )
         {
-            Client = new HttpClient();
-            this.steamUserOperatorUri = steamUserOperatorUri;
             _logger = logger;
+            _clientFactory = clientFactory;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace MatchRetriever.Helpers
         /// <returns></returns>
         public async Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh)
         {
-            if(steamIds.Count == 0)
+            if (steamIds.Count == 0)
             {
                 return new List<SteamUser>();
             }
@@ -48,15 +49,14 @@ namespace MatchRetriever.Helpers
 
             try
             {
-                var queryString = steamUserOperatorUri + $"/users?steamIds={String.Join(',', steamIds.Select(x=>x.ToString()))}&forceRefresh={forceRefresh}";
-                var response = await Client.GetAsync(queryString);
+                var client = _clientFactory.CreateClient(ConnectedServices.SteamUserOperator);
 
-                // throw exception if response is not succesful
-                if (!response.IsSuccessStatusCode)
-                {
-                    var msg = $"Getting users from SteamUserOperator failed for query [ {queryString} ]. Response: {response}";
-                    throw new HttpRequestException(msg);
-                }
+                HttpRequestMessage message = new HttpRequestMessage(
+                    HttpMethod.Get,
+                    $"users?steamIds={String.Join(',', steamIds.Select(x => x.ToString()))}&forceRefresh={forceRefresh}");
+
+                var response = await client.SendAsync(message);
+
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -103,7 +103,7 @@ namespace MatchRetriever.Helpers
             SteamId = steamId;
             ImageUrl = null;
 
-            if(steamId > 0)
+            if (steamId > 0)
             {
                 SteamName = steamId.ToString();
             }
@@ -111,23 +111,6 @@ namespace MatchRetriever.Helpers
             {
                 SteamName = "Bot";
             }
-        }
-    }
-    
-
-    public class MockSteamUserOperator : ISteamUserOperator
-    {
-        public async Task<SteamUser> GetUser(long steamId, bool forceRefresh)
-        {
-            return new SteamUser(steamId);
-        }
-
-        public async Task<List<SteamUser>> GetUsers(List<long> steamIds, bool forceRefresh)
-        {
-            var list = steamIds.Distinct()
-                .Select(async x => await GetUser(x, forceRefresh))
-                .Select(x => x.Result).ToList();
-            return list;
         }
     }
 }

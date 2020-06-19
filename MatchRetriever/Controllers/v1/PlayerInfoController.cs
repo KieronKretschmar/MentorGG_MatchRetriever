@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MatchRetriever.Helpers;
+﻿using System.Threading.Tasks;
 using MatchRetriever.ModelFactories;
-using MatchRetriever.ModelFactories.GrenadesAndKills;
-using MatchRetriever.ModelFactories.GrenadesAndKillsOverviews;
 using MatchRetriever.Models;
-using MatchRetriever.Models.GrenadesAndKills;
-using MatchRetriever.Models.GrenadesAndKillsOverviews;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -25,8 +16,8 @@ namespace MatchRetriever.Controllers.v1
 
         public PlayerInfoController(ILogger<PlayerInfoController> logger, IPlayerInfoModelFactory playerinfoModelFactory)
         {
-            this._logger = logger;
-            this._playerinfoModelFactory = playerinfoModelFactory;
+            _logger = logger;
+            _playerinfoModelFactory = playerinfoModelFactory;
         }
 
         /// <summary>

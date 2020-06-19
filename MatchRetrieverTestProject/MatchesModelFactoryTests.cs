@@ -1,9 +1,6 @@
 using Database;
 using MatchEntities;
-using MatchRetriever;
 using MatchRetriever.ModelFactories;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -21,7 +18,7 @@ namespace MatchRetrieverTestProject
         {
             //// Arrange
             // Settings
-            var allMatchIds = Enumerable.Range(1, 9).Select(x=> (long)x).ToList();
+            var allMatchIds = Enumerable.Range(1, 9).Select(x => (long)x).ToList();
             var steamId = 100;
             var team = MatchEntities.Enums.StartingFaction.CtStarter;
             var forbiddenMatchIds = allMatchIds.OrderBy(x => Guid.NewGuid()).Take(3).ToList();
@@ -48,7 +45,7 @@ namespace MatchRetrieverTestProject
 
             //// Run
             var factory = new MatchesModelFactory(sp);
-            var model = await factory.GetModel(steamId, allowedMatchids, allMatchIds.Count, 0);
+            var model = await factory.GetModel(steamId, allowedMatchids, forbiddenMatchIds, allMatchIds.Count, 0);
 
             //// Assert
             var allowedMatchIdsReturned = model.MatchInfos.Select(x => x.MatchId).ToList();
@@ -56,7 +53,7 @@ namespace MatchRetrieverTestProject
             Assert.AreEqual(allMatchIds.Count(), model.MatchInfos.Count());
 
             // Assert that all hidden matches' matchids are censored
-            Assert.IsTrue(model.MatchInfos.Where(x=>forbiddenMatchIds.Contains(x.MatchId)).All(x => x.MatchId == -1));
+            Assert.IsTrue(model.MatchInfos.Where(x => forbiddenMatchIds.Contains(x.MatchId)).All(x => x.MatchId == -1));
 
             // Assert that all matches have exactly the one scoreboard entry we created at the beginning of this test
             Assert.IsTrue(model.MatchInfos.All(x => x.Scoreboard.TeamInfos[team].Players.Single().SteamId == steamId));
@@ -75,6 +72,7 @@ namespace MatchRetrieverTestProject
             var allMatchIds = Enumerable.Range(1, matchesInDb).Select(x => (long)x).ToList();
             var steamId = 100;
             var team = MatchEntities.Enums.StartingFaction.CtStarter;
+            var ignoredMatchIds = new List<long>();
 
             // Create serviceProvider with inmemory context
             var services = TestHelper.GetMoqFactoryServiceCollection("TestGetModel");
@@ -97,13 +95,13 @@ namespace MatchRetrieverTestProject
 
             //// Run
             var factory = new MatchesModelFactory(sp);
-            var model = await factory.GetModel(steamId, allMatchIds, count, offset);
+            var model = await factory.GetModel(steamId, allMatchIds, ignoredMatchIds, count, offset);
 
             //// Assert
             var expectedMatchesCount = Math.Min(count, Math.Max(0, matchesInDb - offset));
             Assert.AreEqual(model.MatchInfos.Count, expectedMatchesCount);
             // Assert that offset works
-            if(offset <= matchesInDb)
+            if (offset <= matchesInDb)
             {
                 Assert.AreEqual(allMatchIds[offset], model.MatchInfos.First().MatchId);
             }
