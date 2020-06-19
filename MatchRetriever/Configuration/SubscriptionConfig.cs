@@ -11,6 +11,8 @@ namespace MatchRetriever.Configuration
     {
         public SubscriptionSettings Free { get; set; }
 
+        public SubscriptionSettings Influencer { get; set; }
+
         public SubscriptionSettings Premium { get; set; }
 
         public SubscriptionSettings Ultimate { get; set; }
@@ -25,6 +27,9 @@ namespace MatchRetriever.Configuration
                 case SubscriptionType.Free:
                     return Free;
 
+                case SubscriptionType.Influencer:
+                    return Influencer;
+
                 case SubscriptionType.Premium:
                     return Premium;
 
@@ -38,10 +43,16 @@ namespace MatchRetriever.Configuration
 
     }
 
+
     public class SubscriptionSettings
     {
         public int MatchAccessDurationInDays { get; set; }
 
         public int DailyMatchesLimit { get; set; }
+
+        /// <summary>
+        /// Number of rounds at the start and end of each half (excl. overtime) for which the user may access Situations.
+        /// </summary>
+        public int FirstAndLastRoundsForSituations { get; set; }
     }
 }

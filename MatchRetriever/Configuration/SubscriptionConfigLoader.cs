@@ -72,21 +72,34 @@ namespace MatchRetriever.Configuration
     /// </summary>
     public class MockedSubscriptionConfigLoader : ISubscriptionConfigProvider
     {
-        private SubscriptionConfig defaultConfig => new SubscriptionConfig 
+        private SubscriptionConfig defaultConfig => new SubscriptionConfig
         {
-            Free = new SubscriptionSettings {
-                    MatchAccessDurationInDays = 14,
-                    DailyMatchesLimit = 3,
+            Free = new SubscriptionSettings
+            {
+                MatchAccessDurationInDays = 14,
+                DailyMatchesLimit = 3,
+                FirstAndLastRoundsForSituations = 1,
             },
-            Premium = new SubscriptionSettings {
-                    MatchAccessDurationInDays = 82,
-                    DailyMatchesLimit = -1,
+            Influencer = new SubscriptionSettings
+            {
+                MatchAccessDurationInDays = 14,
+                DailyMatchesLimit = 3,
+                FirstAndLastRoundsForSituations = 2,
             },
-            Ultimate = new SubscriptionSettings {
-                    MatchAccessDurationInDays = -1,
-                    DailyMatchesLimit = -1,
+            Premium = new SubscriptionSettings
+            {
+                MatchAccessDurationInDays = 82,
+                DailyMatchesLimit = -1,
+                FirstAndLastRoundsForSituations = -1,
+            },
+            Ultimate = new SubscriptionSettings
+            {
+                MatchAccessDurationInDays = -1,
+                DailyMatchesLimit = -1,
+                FirstAndLastRoundsForSituations = -1,
             }
         };
+
         public SubscriptionConfig Config {get;}
 
         /// <summary>
