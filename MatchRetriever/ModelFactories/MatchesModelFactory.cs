@@ -120,15 +120,15 @@ namespace MatchRetriever.ModelFactories
             var res = new PlayerScoreboardEntry
             {
                 SteamId = playerStats.SteamId,
-                Assists = playerStats.AssistCount,
+                Assists = playerStats.RealAssists,
                 DamageDealt = playerStats.Damage,
-                Deaths = playerStats.DeathCount,
+                Deaths = playerStats.RealDeaths,
                 EnemiesFlashed = playerStats.Flashed.Count(x => x.TeamAttack == false),
-                Kills = playerStats.KillCount,
+                Kills = playerStats.RealKills,
                 MVPs = playerStats.RealMvps,
                 RankAfterMatch = playerStats.RankAfterMatch,
                 RankBeforeMatch = playerStats.RankBeforeMatch,
-                Score = playerStats.Score,
+                Score = playerStats.RealScore,
                 //Profile = await _steamUserOperator.GetUser(playerStats.SteamId),
             };
 
