@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatchEntities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,5 +15,14 @@ namespace MatchRetriever.Enumerals
         Low = 10,
         Medium = 20,
         High = 30,
+
+    }
+
+    public static class AnalyzerQualityExtensions
+    {
+        public static DemoViewerQuality ToDemoViewerQuality(this AnalyzerQuality analyzerQuality)
+        {
+            return (DemoViewerQuality)analyzerQuality;
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace MatchRetriever.ModelFactories.DemoViewer
 {
     public interface IDemoViewerRoundModelFactory
     {
-        Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality);
+        Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber);
     }
 
     public class DemoViewerRoundModelFactory : ModelFactoryBase, IDemoViewerRoundModelFactory
@@ -32,7 +32,7 @@ namespace MatchRetriever.ModelFactories.DemoViewer
         /// <param name="roundNumber"></param>
         /// <param name="requestedQuality">Currently unused</param>
         /// <returns></returns>
-        public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber, DemoViewerQuality requestedQuality)
+        public async Task<DemoViewerRoundModel> GetModel(long matchId, short roundNumber)
         {
             var model = new DemoViewerRoundModel();
 
@@ -40,7 +40,7 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             var availableConfig = _context.MatchStats.Single(x => x.MatchId == matchId).Config;
             model.Config = new DemoViewerRoundModel.DemoViewerConfig
             { 
-                Quality = requestedQuality,
+                Quality = availableConfig.Quality.ToDemoViewerQuality(),
                 FramesPerSecond = availableConfig.FramesPerSecond
             };
             

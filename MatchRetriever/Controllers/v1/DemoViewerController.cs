@@ -45,14 +45,12 @@ namespace MatchRetriever.Controllers.v1
         /// </summary>
         /// <param name="matchId"></param>
         /// <param name="round"></param>
-        /// <param name="quality"></param>
+        /// <param name="quality">Currently ignored, as the highest available quality is returned.</param>
         /// <returns></returns>
         [HttpGet("watch/match/{matchId}/round/{round}")]
         public async Task<DemoViewerRoundModel> GetRound(long matchId, short round, DemoViewerQuality quality)
         {
-            // Try to parse quality and default to Low quality if value is invalid 
-            var demoViewerQuality = Enum.IsDefined(typeof(DemoViewerQuality), quality) ? (DemoViewerQuality)quality : DemoViewerQuality.Low;
-            var model = await _roundFactory.GetModel(matchId, round, demoViewerQuality);
+            var model = await _roundFactory.GetModel(matchId, round);
             return model;
         }
     }
