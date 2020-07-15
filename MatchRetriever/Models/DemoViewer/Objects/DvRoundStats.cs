@@ -20,7 +20,7 @@ namespace MatchRetriever.Models.DemoViewer.Objects
         public bool BombPlanted;
 
         [JsonProperty]
-        public byte WinType;
+        public WinType WinType;
 
         [JsonProperty]
         public int RoundTime;
