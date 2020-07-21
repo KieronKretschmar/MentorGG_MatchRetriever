@@ -132,7 +132,7 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             #region Other ingame events
 
             // Other Match Stats
-            var bombPlant = roundStats.BombPlant;
+            var bombPlant = roundStats.BombPlant.SingleOrDefault(x=>x.Success);
             if (bombPlant != null)
             {
                 model.BombPlant = new DvBombPlant
@@ -143,7 +143,7 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                     Pos = bombPlant.Pos,
                 };
 
-                var bombDefused = roundStats.BombDefused;
+                var bombDefused = roundStats.BombDefused.SingleOrDefault(x => x.Success);
                 if (bombDefused != null)
                 {
                     model.BombDefused = new DvBombDefused
