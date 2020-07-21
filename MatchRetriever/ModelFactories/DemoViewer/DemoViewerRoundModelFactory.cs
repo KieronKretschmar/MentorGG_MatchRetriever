@@ -36,8 +36,9 @@ namespace MatchRetriever.ModelFactories.DemoViewer
         {
             var model = new DemoViewerRoundModel();
 
+            var matchStats = _context.MatchStats.Single(x => x.MatchId == matchId);
             // Take all the fps available
-            var availableConfig = _context.MatchStats.Single(x => x.MatchId == matchId).Config;
+            var availableConfig = matchStats.Config;
             model.Config = new DemoViewerRoundModel.DemoViewerConfig
             { 
                 Quality = availableConfig.Quality.ToDemoViewerQuality(),
@@ -46,8 +47,8 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             
             // Match Stats
             var roundStats = _context.RoundStats.Single(x => x.MatchId == matchId && x.Round == roundNumber);
-            var map = roundStats.MatchStats.Map;
-            var matchDate = roundStats.MatchStats.MatchDate;
+            var map = matchStats.Map;
+            var matchDate = matchStats.MatchDate;
 
             #region General tables
 
@@ -132,36 +133,10 @@ namespace MatchRetriever.ModelFactories.DemoViewer
             #region Other ingame events
 
             // Other Match Stats
-            var bombPlant = roundStats.BombPlant.SingleOrDefault(x=>x.Success);
-            if (bombPlant != null)
-            {
-                model.BombPlant = new DvBombPlant
-                {
-                    Time = bombPlant.Time,
-                    PlayerId = bombPlant.Time.ToString(),
-                    Site = bombPlant.Site,
-                    Pos = bombPlant.Pos,
-                };
-
-                var bombDefused = roundStats.BombDefused.SingleOrDefault(x => x.Success);
-                if (bombDefused != null)
-                {
-                    model.BombDefused = new DvBombDefused
-                    {
-                        Time = bombDefused.Time,
-                        PlayerId = bombDefused.PlayerId.ToString(),
-                    };
-                }
-
-                var bombExplosion = roundStats.BombExplosion;
-                if (bombExplosion != null)
-                {
-                    model.BombExplosion = new DvBombExplosion
-                    {
-                        Time = bombExplosion.Time,
-                    };
-                }
-            }
+            model.DroppedBombPositions = roundStats.DroppedBombPosition.ToList();
+            model.BombPlants = roundStats.BombPlant.ToList();
+            model.BombDefuseds = roundStats.BombDefused.ToList();
+            model.BombExplosion = roundStats.BombExplosion;
 
             model.ItemSaveds = roundStats.ItemSaved
                         // Filter out entries with Equipment=0. Does not make sense, seems to be a bug in DemoAnalyzer
@@ -242,9 +217,15 @@ namespace MatchRetriever.ModelFactories.DemoViewer
                             .ToList()
                         );
 
+            model.PlayerJumps = roundStats.PlayerJump
+                        .GroupBy(x => x.PlayerId)
+                        .ToDictionary(
+                            x => x.Key.ToString(),
+                            g => g.ToList());
+
             #endregion
 
-            #region Grenades
+                            #region Grenades
 
             // Grenades
             model.Decoys = roundStats.Decoy.Select(x => new DvDecoy
