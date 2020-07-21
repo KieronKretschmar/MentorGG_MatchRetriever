@@ -32,7 +32,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     PlayerPos = x.PlayerPos,
                     VictimPos = x.VictimPos,
 
-                    FilterSettings = new KillFilterSetting(x.Time < x.RoundStats.BombPlant.Time ? KillFilterSetting.PlantFilterStatus.AfterPlant : KillFilterSetting.PlantFilterStatus.NotYetPlanted),
+                    FilterSettings = new KillFilterSetting(x.Time < x.RoundStats.BombPlant.SingleOrDefault(x => x.Success).Time ? KillFilterSetting.PlantFilterStatus.AfterPlant : KillFilterSetting.PlantFilterStatus.NotYetPlanted),
                     UserWinner = x.VictimId != steamId, // False if suicide
                     UserIsCt = (x.PlayerId == steamId) ? x.IsCt : x.IsCt == x.TeamKill, // (x.IsCT == x.TeamKill) <=> VictimIsCT
                 })
