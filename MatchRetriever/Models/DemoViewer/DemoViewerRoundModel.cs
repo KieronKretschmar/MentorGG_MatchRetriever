@@ -1,4 +1,5 @@
-﻿using MatchRetriever.Enumerals;
+﻿using MatchEntities;
+using MatchRetriever.Enumerals;
 using MatchRetriever.Helpers;
 using MatchRetriever.Models.DemoViewer.Objects;
 using Newtonsoft.Json;
@@ -35,11 +36,13 @@ namespace MatchRetriever.Models.DemoViewer
         public List<DvKill> Kills { get; set; }
 
         // Other Match Stats
-        public DvBombPlant BombPlant { get; set; }
+        public List<DroppedBombPosition> DroppedBombPositions { get; set; }
 
-        public DvBombDefused BombDefused { get; set; }
+        public List<BombPlant> BombPlants { get; set; }
 
-        public DvBombExplosion BombExplosion { get; set; }
+        public List<BombDefused> BombDefuseds { get; set; }
+
+        public BombExplosion BombExplosion { get; set; }
 
         public Dictionary<string, List<DvItemSaved>> ItemSaveds { get; set; }
 
@@ -48,6 +51,8 @@ namespace MatchRetriever.Models.DemoViewer
         public Dictionary<string, List<DvItemPickedUp>> ItemPickedUps { get; set; }
 
         public Dictionary<string, List<DvPlayerPosition>> PlayerPositions { get; set; }
+
+        public Dictionary<string, List<PlayerJump>> PlayerJumps { get; set; }
 
         // Grenades
         public List<DvFlash> Flashes { get; set; }
