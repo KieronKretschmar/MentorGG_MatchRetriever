@@ -30,7 +30,7 @@ namespace MatchRetriever.ModelFactories.GrenadesAndKills
                     Time = flash.Time,
                     UserIsCt = flash.IsCt,
                     ZoneId = flash.DetonationZoneByTeam,
-                    Flasheds = flash.Flashed.Select(flashed => new FlashSample.Flashed
+                    Flasheds = flash.Flashed.Select(flashed => new FlashSample.FlashedSample
                     {
                         VictimPos = flashed.VictimPos,
                         TimeFlashed = flashed.TimeFlashed,
