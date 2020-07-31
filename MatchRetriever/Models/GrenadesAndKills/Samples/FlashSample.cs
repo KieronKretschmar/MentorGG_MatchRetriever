@@ -13,8 +13,8 @@ namespace MatchRetriever.Models.GrenadesAndKills
         public string Id => $"Flash-{MatchId}-{GrenadeId}";
         public int ZoneId { get; set; }
 
-        public List<Flashed> Flasheds { get; set; }
-        public struct Flashed
+        public List<FlashedSample> Flasheds { get; set; }
+        public struct FlashedSample
         {
             public Vector3 VictimPos { get; set; }
             public int TimeFlashed { get; set; }
