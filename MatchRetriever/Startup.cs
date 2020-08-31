@@ -73,7 +73,12 @@ namespace MatchRetriever
             var connString = Configuration.GetValue<string>("MYSQL_CONNECTION_STRING");
             if (connString != null)
             {
-                services.AddDbContext<Database.MatchContext>(o =>  o.UseLazyLoadingProxies().UseMySql(connString));
+                services.AddDbContext<Database.MatchContext>(o =>  o.UseLazyLoadingProxies().UseMySql(
+                        connString,
+                        options =>
+                        {
+                            options.EnableRetryOnFailure();
+                        }));
             }
             else
             {
